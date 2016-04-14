@@ -1,6 +1,6 @@
 # diviner
 *noun* | di_vin_er | *a person who uses special powers to predict future events*
-![water](images/water)
+![water](images/water.jpeg)
 
 ## Purpose
 diviner is a github hosted clinical risk model library whose single purpose is
@@ -19,3 +19,9 @@ as possible. The minimal requirements are that each folder have a README.md file
 and contain at least one machine-readable representation of the model. This can
 range from SAS macros, to Dockerfile's that help expose the model through
 RESTful APIs.
+
+## Disclaimer
+**USE AT YOUR OWN RISK**. This repository is provided as an academic exercise
+in the best possible way to store and disseminate risk algorithms. It is possible
+that some algorithms are not implemented 100% accurately. Therefore, please use
+at your own risk.
