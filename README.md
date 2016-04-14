@@ -1,6 +1,6 @@
-# diviner
-*noun* | di_vin_er | *a person who uses special powers to predict future events*
-![water](images/water.jpeg)
+# dori
+DOI tagged repotisory of Clinical Risk Models
+![water](images/dori.jpeg)
 
 ## Purpose
 diviner is a github hosted clinical risk model library whose single purpose is
