@@ -1,11 +1,11 @@
 # dori
 DOI tagged repotisory of Clinical Risk Models
-![water](images/dori.jpeg)
+![water](images/dori_tail.jpeg)
 
 ## Purpose
-diviner is a github hosted clinical risk model library whose single purpose is
+dori is a github hosted clinical risk model library whose single purpose is
 to corral as many clinical risk models as possible and experiment with the best
-possible way to tag and disseminate the inherent algorithms.
+possible way to tag and disseminate the algorithms.
 
 ## Repository Structure
 To help catalog these models, each model will be stored in it's own folder where
@@ -14,11 +14,10 @@ publication, it must be linked to a DOI of some sort. We recommend following the
 github guidelines for [making your code citable](https://guides.github.com/activities/citable-code/).
 
 ## Folder Structure
-To try to be as flexible as possible, each folder will have as little structure
+Trying to be as flexible as possible, each folder will have as little structure
 as possible. The minimal requirements are that each folder have a README.md file
 and contain at least one machine-readable representation of the model. This can
-range from SAS macros, to Dockerfile's that help expose the model through
-RESTful APIs.
+range from SAS macros, to R object stores, to python machine learning pipelines.
 
 ## Disclaimer
 **USE AT YOUR OWN RISK**. This repository is provided as an academic exercise
