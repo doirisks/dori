@@ -1,5 +1,5 @@
 # dori
-DOI tagged repotisory of Clinical Risk Models
+DOI tagged repository of Clinical Risk Models
 ![water](images/dori_tail.jpeg)
 
 ## Purpose
