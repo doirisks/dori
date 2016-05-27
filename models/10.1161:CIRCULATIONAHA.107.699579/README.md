@@ -1,5 +1,5 @@
 # 10.1161/CIRCULATIONAHA.107.699579
-General Cardiovascular Risk Profile for Use in Primary Care
+2007 General Cardiovascular Risk Profile for Use in Primary Care
 Framingham Heart Study
 
 ##RESTful API
