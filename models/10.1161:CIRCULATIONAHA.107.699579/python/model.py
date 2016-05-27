@@ -2,7 +2,7 @@
 model.py
 by Ted Morin
 
-contains a function to predict risks using beta coefficients from 
+contains a function to predict 10-year CVD risks using beta coefficients from 
 10.1161/CIRCULATIONAHA.107.699579
 General Cardiovascular Risk Profile for Use in Primary Care
 Framingham Heart Study
