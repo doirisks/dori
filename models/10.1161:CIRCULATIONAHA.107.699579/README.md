@@ -2,10 +2,10 @@
 General Cardiovascular Risk Profile for Use in Primary Care
 Framingham Heart Study
 
-## RESTful API
-###TODO
+##RESTful API
+TODO
 
-Example python code
+##Example python code
 ```
 #unpickles function
 model_obj = open("model_obj.p","rb")
