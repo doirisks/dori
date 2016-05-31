@@ -11,19 +11,7 @@ function expects parameters of
 "ismale" "antihypertensive medication use" "age" "total colesterol" "HDL cholesterol" "SBD" "Smoking" "Diabetes"
                                            years      mg/dL               mg/dL       mm Hg
   bool                  bool             int/float   int/float          int/float   int/float  bool      bool
-"""
-
-## a class to handle a vector of parameters
-#def model_vec(ismale,antihyp,age,totchol,hdlchol,sbp, smoke,diabet):    
-#    # checks if input is a vector
-#    if type(ismale) == type([]):
-#        self.output = []
-#        for i in range(len(ismale)):
-#            self.output.append( model(ismale,antihyp,age,totchol,hdlchol,sbp, smoke,diabet) )
-#    else :
-#        self.output = model(ismale,antihyp,age,totchol,hdlchol,sbp, smoke,diabet)
-#    return self.output
-        
+"""        
         
 def model(ismale,antihyp,age,totchol,hdlchol,sbp, smoke,diabet):
     
