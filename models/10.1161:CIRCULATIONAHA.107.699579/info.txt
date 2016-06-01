@@ -1,0 +1,16 @@
+10.1161/CIRCULATIONAHA.107.699579
+
+TRIPOD 1
+General Cardiovascular Risk Profile for Use in Primary Care
+Framingham Heart Study
+
+TRIPOD 7a
+Sex, age, total cholesterol, HDL cholesterol, SBP, Smoking, Diabetes, hypertensive medication use
+
+TRIPOD 10
+cox regression: regression coefficients in paper, Table 2
+logarithms taken of all quantitative variables
+different beta values used depending on sex.
+different SBP betas used depending on hypertensive medication use
+
+# a full TRIPOD checklist includes more information, but this is the information relevant to the model calculations

@@ -1,4 +1,0 @@
-cmodel
-model
-p1
-.
