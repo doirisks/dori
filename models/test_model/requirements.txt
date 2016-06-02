@@ -1,0 +1,3 @@
+ pickle
+ sklearn==0.17.1
+ numpy==1.10.4
