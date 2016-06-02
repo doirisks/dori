@@ -1,0 +1,29 @@
+10.1016:S0140-6736(09)60443-8
+
+TRIPOD 1
+2010 Development of a Risk Score for Atrial Fibrillation in the Community
+The Framingham Heart Study
+
+TRIPOD 6a
+Atrial fibrillation 10Y risk: C3176365
+
+TRIPOD 7a
+Sex, age (years), Body Mass Index, Systolic Blood Pressure, Treatment for hypertension, PR interval, Significant Murmur, Prevalent Heart Failure, Age Squared, Male gender times age squared, Age times murmur, Age times prevalent heart failure
+Age Squared, Male gender times age squared, Age times murmur, Age times prevalent heart failure are calculated from existing predictors.
+
+sex (male = True):categorical: C28421 C1522384
+age:quantitative: C0804405
+Body Mass Index:quantitative: C1542867 C1305855
+SBD (systolic blood pressure):quantitative: C0488055
+antihypertensive medication use:categorical: C0684167
+PR Interval (seconds):quantitative: C0488345 C1714548
+Valvular Heart Disease (Significant Murmur):categorical: C1963123 C0018824 C1854775 CL495106 C1968632 C1556324 C1556323 C1556322 C1556321 
+(unclear from paper what Grade of VHD is considered significant)
+Prevalent Heart Failure:categorical: C0018801 C3262556 C3262557 C2739352 CL480241 C2735648 C1716746 C2708655 CL480241 C2317056 C0264714 C2732951 C2732748 C2711480 C0235527 
+(WARNING: submitting more than one criterium in this category may cause other criteria to be ignored)
+
+TRIPOD 10
+Cox regression on predictors
+
+TRIPOD 18
+"The proposed risk score has been developed and validated in a white, middle-aged to elderly cohort. We note that the scheme may not be generalizable to younger individuals as we had too few young adults with AF. Additionally, it is well known that the incidence of AF differs in other ethnicities. Whereas other cardiovascular risk scores developed in Framingham perform well in independent cohorts, we acknowledge that our AF risk score must be validated, and potentially recalibrated in other ethnicities/races. Similarly, secular trends, with increasing incidence in AF over time has been reported. If the risk factors or incidence of AF change over time, the risk function may need to be recalibrated. We acknowledge that data were prospectively collected, but retrospectively analyzed. Critically, the external validity of the risk function has to be proven prospectively in independent samples."
