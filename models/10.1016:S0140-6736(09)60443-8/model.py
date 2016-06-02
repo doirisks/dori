@@ -77,7 +77,6 @@ def model(ismale, age, bmi, sbp, antihyp, pr_intv, sigmurm, phf):
     # dot product
     value = np.dot(values, betas)
     
-    print value,xbar_value
     # calculate using cox regression model
     risk = 1.0 - np.power(s0, np.exp(value - xbar_value)); 
     # cap at .3 
