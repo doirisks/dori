@@ -1,0 +1,15 @@
+10.1016:S0140-6736(09)60443-8
+Development of a Risk Score for Atrial Fibrillation in the Community
+
+NECESSARY
+
+sex (male = True):categorical: C28421 C1522384
+age:quantitative: C0804405
+Body Mass Index:quantitative: C1542867 C1305855
+SBD (systolic blood pressure):quantitative: C0488055
+antihypertensive medication use:categorical: C0684167
+PR Interval (seconds):quantitative: C0488345 C1714548
+Valvular Heart Disease (Significant Murmur):categorical: C1963123 C0018824 C1854775 CL495106 C1968632 C1556324 C1556323 C1556322 C1556321 # unclear from paper what Grade of VHD is considered significant
+Prevalent Heart Failure:categorical: C0018801 C3262556 C3262557 C2739352 CL480241 C2735648 C1716746 C2708655 CL480241 C2317056 C0264714 C2732951 C2732748 C2711480 C0235527 C1716746 C0018802 C1960707 CL476237 C0264724 C0264720 C0264721 # submitting more than one criterium in this category may cause other criteria to be ignored
+
+

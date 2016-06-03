@@ -1,0 +1,46 @@
+10.1161/CIRCULATIONAHA.108.816694
+Predicting the Thirty-year Risk of Cardiovascular Disease
+
+NUMBER 4
+
+NECESSARY a
+
+sex (male = True):categorical: C28421 C1522384
+age:quantitative: C0804405
+SBD (systolic blood pressure):quantitative: C0488055
+antihypertensive medication use:categorical: C0684167
+smoking:categorical: C3496611 C3169448 C3169633 C3166155 C1519386
+diabetes:categorical: C1315719 C3171857 C0363687 C0363688 C3171856 C0359086
+total cholesterol:quantitative: C0364708 C1954202
+HDL cholesterol:quantitative: C0364221 C0801309
+
+NECESSARY b
+
+sex (male = True):categorical: C28421 C1522384
+age:quantitative: C0804405
+SBD (systolic blood pressure):quantitative: C0488055
+antihypertensive medication use:categorical: C0684167
+smoking:categorical: C3496611 C3169448 C3169633 C3166155 C1519386
+diabetes:categorical: C1315719 C3171857 C0363687 C0363688 C3171856 C0359086
+total cholesterol:quantitative: C0364708 C1954202
+HDL cholesterol:quantitative: C0364221 C0801309
+
+NECESSARY c
+
+sex (male = True):categorical: C28421 C1522384
+age:quantitative: C0804405
+SBD (systolic blood pressure):quantitative: C0488055
+antihypertensive medication use:categorical: C0684167
+smoking:categorical: C3496611 C3169448 C3169633 C3166155 C1519386
+diabetes:categorical: C1315719 C3171857 C0363687 C0363688 C3171856 C0359086
+Body Mass Index:quantitative: C1542867 C1305855
+
+NECESSARY d
+
+sex (male = True):categorical: C28421 C1522384
+age:quantitative: C0804405
+SBD (systolic blood pressure):quantitative: C0488055
+antihypertensive medication use:categorical: C0684167
+smoking:categorical: C3496611 C3169448 C3169633 C3166155 C1519386
+diabetes:categorical: C1315719 C3171857 C0363687 C0363688 C3171856 C0359086
+Body Mass Index:quantitative: C1542867 C1305855
