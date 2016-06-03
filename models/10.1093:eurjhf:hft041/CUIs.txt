@@ -3,9 +3,9 @@ Risk Assessment for Incident Heart Failure in Individuals with Atrial Fibrillati
 
 NECESSARY
 
-Age:quantitative:
-BMI:quantitative:
-Left Ventricular Hypertrophy:categorical:
+Age:quantitative: C0804405
+Body Mass Index:quantitative: C1542867 C1305855
+Left Ventricular Hypertrophy:categorical: C3484363
 Diabetes:categorical: C1315719 C3171857 C0363687 C0363688 C3171856 C0359086
 Valvular Heart Disease (Significant Murmur):categorical: C1963123 C0018824 C1854775 CL495106 C1968632 C1556324 C1556323 C1556322 C1556321 # unclear from paper what Grade of VHD is considered significant
-Prevalent Myocardial Infarction:categorical:
+Prevalent Myocardial Infarction:categorical: C2926063
