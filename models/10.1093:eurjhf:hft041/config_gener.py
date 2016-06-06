@@ -18,7 +18,7 @@ config['outcome'] = 'NOCUI: 10Y risk of C0018802' #NCI Metathesaurus CUI
 config['predictors'] = {}
 config['predictors']['function_inputs'] = ['Age','Body Mass Index','Left Ventricular Hypertrophy','Diabetes','Valvular Heart Disease (Significant Murmur)','Prevalent Myocardial Infarction'
 ] #named parameters in the submitted function
-config['predictors']['cuis'] = ['C080440','C1542867','C348436','C1315719','C1963123','C292606'] #mapping to NCI Metathesaurus CUI's
+config['predictors']['cuis'] = ['C0804405','C1542867','C3484363','C1315719','C1963123','C2926063'] #mapping to NCI Metathesaurus CUI's
 config['predictors']['labels'] = ['Quantitative','Quantitative','Categorical','Categorical','Categorical','Categorical'] #labels that would be helpful to elicit responses from humans
 config['model_env_requirements_file'] = '' #name of a requirements file that determines how to recreate model environment
 config['model_development_data'] = {}

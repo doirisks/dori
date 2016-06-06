@@ -17,7 +17,7 @@ config['target_population'] = 'C0001675' #NCI Metathesaurus CUI
 config['outcome'] = 'C3176186' #NCI Metathesaurus CUI
 config['predictors'] = {}
 config['predictors']['function_inputs'] = ['Sex (Male = True)','Antihypertensive Medication Use','Age','Total Cholesterol','Hdl Cholesterol','Sbd (Systolic Blood Pressure)','Smoking','Diabetes'] #named parameters in the submitted function
-config['predictors']['cuis'] = ['C28421','C068416','C080440','C0364708','C0364221','C048805','C3496611','C1315719'] #mapping to NCI Metathesaurus CUI's
+config['predictors']['cuis'] = ['C28421','C0684167','C0804405','C0364708','C0364221','C0488055','C3496611','C1315719'] #mapping to NCI Metathesaurus CUI's
 config['predictors']['labels'] = ['Categorical','Categorical','Quantitative', 'Quantitative','Quantitative','Quantitative','Categorical','Categorical'] #labels that would be helpful to elicit responses from humans
 config['model_env_requirements_file'] = '' #name of a requirements file that determines how to recreate model environment
 config['model_development_data'] = {}

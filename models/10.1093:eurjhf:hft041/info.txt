@@ -11,15 +11,6 @@ TRIPOD 7a (clearly defined predictors)
 Predictors are Age, Body Mass Index, Left Ventricular Hypertrophy, Diabetes, Significant Murmur (), Prevalent Myocardial Infarction (Heart Attack), and Age times Prevalent Myocardial Infarction
 Age times Prevalent Myocardial Infarction is calculated from inputs.
 
-Age:quantitative:
-BMI:quantitative:
-Left Ventricular Hypertrophy:categorical:
-diabetes:categorical: C1315719 C3171857 C0363687 C0363688 C3171856 C0359086
-Valvular Heart Disease (Significant Murmur):categorical: C1963123 C0018824 C1854775 CL495106 C1968632 C1556324 C1556323 C1556322 C1556321 # unclear from paper what Grade of VHD is considered significant
-
-Prevalent Myocardial Infarction:categorical:
-Age times Prevalent Myocardial Infarction:quantitative: (no CUI)
-
 TRIPOD 10 (statistical analysis methods)
 Cox regression on predictors 
 N.B. A more complete model was discussed in the paper, but has NOT been implemented.
