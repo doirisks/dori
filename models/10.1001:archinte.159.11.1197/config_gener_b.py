@@ -16,9 +16,9 @@ config['predictive_ability']['ucl'] = []
 config['target_population'] = 'aged 45 through 94' #NCI Metathesaurus CUI
 config['outcome'] = '' #NCI Metathesaurus CUI
 config['predictors'] = {}
-config['predictors']['function_inputs'] = ["ismale", "age", "LVH", "heart rate", "systolic bp", "Coronary Heart Disease", "valve disease", "diabetes", "bmi"] #named parameters in the submitted function
-config['predictors']['cuis'] = [] #mapping to NCI Metathesaurus CUI's
-config['predictors']['labels'] = ['','','','','','','','',''] #labels that would be helpful to elicit responses from humans
+config['predictors']['function_inputs'] = ["sex", "age", "LVH", "heart rate", "systolic bp", "Coronary Heart Disease", "valve disease", "diabetes", "bmi"] #named parameters in the submitted function
+config['predictors']['cuis'] = ['C28421','C0804405','C3484363','C0488794', 'C0488055', 'C2926063', 'C1963123','C1315719','C1542867'] #mapping to NCI Metathesaurus CUI's
+config['predictors']['labels'] = ['Male = True','range: 45 to 94','Left Ventricular Hypertrophy','units of bpm','myocardial infarction', 'significant murmur', 'diabetes','units of kg/m^2'] #labels that would be helpful to elicit responses from humans
 config['model_env_requirements_file'] = '' #name of a requirements file that determines how to recreate model environment
 config['model_development_data'] = {}
 config['model_development_data']['sample_size'] = '15267'
