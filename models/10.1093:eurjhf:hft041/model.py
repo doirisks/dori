@@ -45,5 +45,5 @@ def model(age, bmi, lvh, diabetic, sigmurm, pmi):
     # calculate using cox regression model
     risk = 1.0 - np.power(s0, np.exp(value - xbar_value)); 
     # cap at .45, justified in paper: "we truncated the upper risk estimate at..."
-    #if (risk > .45) : risk = .45         
+    if (risk > .45) : risk = .45         
     return risk
