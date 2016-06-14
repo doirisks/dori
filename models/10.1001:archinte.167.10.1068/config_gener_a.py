@@ -2,7 +2,6 @@
 """
 
 """
-# incomplete 6-13
 
 
 #The purpose of this script is to create a starting place for generating a 
