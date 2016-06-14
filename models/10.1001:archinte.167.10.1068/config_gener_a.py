@@ -20,7 +20,7 @@ config['predictive_ability']['metric'] = []
 config['predictive_ability']['value'] = []
 config['predictive_ability']['lcl'] = []
 config['predictive_ability']['ucl'] = []
-config['target_population'] = 'Non-Diabetic Adults' #NCI Metathesaurus CUI
+config['target_population'] = 'Non-Diabetic Adults, C0205847' #NCI Metathesaurus CUI
 config['outcome'] = 'C1716742' #NCI Metathesaurus CUI
 config['predictors'] = {}
 config['predictors']['function_inputs'] = ["Sex", "Age",  "Systolic BP", "Diastolic BP", "BMI", "HDL-C", "Triglycerides",  "Fasting Glucose", "Parental History of DM", "Antihypertensive Medication Use"] #named parameters in the submitted function
@@ -36,7 +36,7 @@ config['model_object']['object_name'] = '' #name of the model as stored as an ob
 config['model_object']['language'] = 'python' #currently only supports python, R
 
 import json
-with open('config.json','w') as output:
+with open('config_a.json','w') as output:
     json.dump(config,output)
 
 

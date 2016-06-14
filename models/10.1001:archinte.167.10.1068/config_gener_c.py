@@ -23,9 +23,9 @@ config['predictive_ability']['ucl'] = []
 config['target_population'] = 'Non-Diabetic Adults, C0205847' #NCI Metathesaurus CUI
 config['outcome'] = 'C1716742' #NCI Metathesaurus CUI
 config['predictors'] = {}
-config['predictors']['function_inputs'] = ["Sex", "Age",  "Systolic BP", "Diastolic BP", "BMI", "HDL-C", "Triglycerides",  "Fasting Glucose", "Parental History of DM", "Antihypertensive Medication Use"] #named parameters in the submitted function
-config['predictors']['cuis'] = ['C28421','C0804405','C0488055','C0488052','C1542867','C0364221','C0364714', 'C0363687', 'C1313937','C0684167'] #mapping to NCI Metathesaurus CUI's
-config['predictors']['labels'] = ['Male = True','years','mm Hg','mm Hg','kg/m^2','mg/dL','mg/dL','mg/dL','y/n','y/n'] #labels that would be helpful to elicit responses from humans
+config['predictors']['function_inputs'] = ["Sex", "Age",  "Systolic BP", "Diastolic BP", "Waist Circumference", "HDL-C", "Triglycerides",  "Fasting Glucose", "Parental History of DM", "Antihypertensive Medication Use"] #named parameters in the submitted function
+config['predictors']['cuis'] = ['C28421','C0804405','C0488055','C0488052','C2734066','C0364221','C0364714', 'C0363687', 'C1313937','C0684167'] #mapping to NCI Metathesaurus CUI's
+config['predictors']['labels'] = ['Male = True','years','mm Hg','mm Hg','cm','mg/dL','mg/dL','mg/dL','y/n','y/n'] #labels that would be helpful to elicit responses from humans
 config['model_env_requirements_file'] = '' #name of a requirements file that determines how to recreate model environment
 config['model_development_data'] = {}
 config['model_development_data']['sample_size'] = '3140'
@@ -36,7 +36,7 @@ config['model_object']['object_name'] = '' #name of the model as stored as an ob
 config['model_object']['language'] = 'python' #currently only supports python, R
 
 import json
-with open('config_b.json','w') as output:
+with open('config_c.json','w') as output:
     json.dump(config,output)
 
 

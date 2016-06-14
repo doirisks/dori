@@ -8,14 +8,14 @@ contains example code for 8-year Diabtes Mellitus risks by beta coefficients and
 Framingham Heart Study
 """
 
-from model_d import model
+from model_e import model
 
 "Male Sex" "Age" "Systolic BP" "Diastolic BP" "Height" "Weight" "Waist Circ" "HDL-C" "Triglycerides" "Fasting Glucose" "Parental History of DM" "Antihypertensive Medication Use"
 
 def bmi(inches,pounds):
     return 703.0704*pounds/(inches*inches)
 
-# far from complete!
+# NOT IMPLEMENTED: INPUTS ARE STILL FOR MODEL_D. TODO
 
 toscore = []                                        # incomplete comments
 toscore.append( [1,63,125,79,72,200,90,45,54,95,1,1] ) #m,63yrs,125sbp, 79dbp,72in,200lb, parent, treated
@@ -34,5 +34,6 @@ scores = []
 print "Risks"
 for i in range(len(toscore)):
     bmi_i = bmi(toscore[i][4],toscore[i][5])
+    # TODO does not include enough inputs for model_e function
     scores.append( model(toscore[i][0],toscore[i][1],toscore[i][2],toscore[i][3],bmi_i, toscore[i][6], toscore[i][7],toscore[i][8],toscore[i][9],toscore[i][10],toscore[i][11]) )
     print "%.3f" % (float(scores[i])*100.)

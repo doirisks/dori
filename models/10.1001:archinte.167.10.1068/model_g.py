@@ -15,16 +15,12 @@ function expects parameters of:
   bool  int/float  int/float     int/float   int/float     i/f         i/f        i/f                i/f 
 
 function expects parameters of (continued):
-"Parental History of DM" "Antihypertensive Medication Use" "2-Hour Insulin Level" "Fasting Insulin Level" 
-
-    bool                            bool                            float/int            float/int
-    
-function expects parameters of (continued):
-"C-reactive Protein Levels" "Gutt Insulin Sensitivity Index" "HOMA Insulin Resistance Index" "HOMA beta-cell Index"
-
-        float/int                       float/int                       float/int                   float/int
+"Parental History of DM" "Antihypertensive Medication Use" "HOMA Insulin Resistance Index" "HOMA beta-cell Index"
+                                                          
+    bool                            bool                            float/int                   float/int
 """  
-def model(ismale,age,sbp,dbp,bmi,waistcirc,hdl,tri,glucose,parent,trtbp, ogtt, fastinsul, guttinsul, homainsul, homebeta):
+# COMPLEX MODELS ARE INCOMPLETE: UNCHECKED + PERCENTILE VALUES NOT LISTED
+def model(ismale,age,sbp,dbp,bmi,waistcirc,hdl,tri,glucose,parent,trtbp, homainsul, homabeta):
     # imports
     import numpy as np
 
@@ -49,8 +45,8 @@ def model(ismale,age,sbp,dbp,bmi,waistcirc,hdl,tri,glucose,parent,trtbp, ogtt, f
         0,                            #Fasting insulin level >75th percentile                   # Not included
         0,                            #C-reactive protein level >75th percentile                # Not included
         0,                            #Log Gutt insulin sensitivity index <25th percentile      # Not included
-        0.3117538611,                 #Log HOMA insulin resistance index >75th percentile       # TODO
-        0.2741578493,                 #HOMA beta-cell index <25th percentile                    # TODO
+        0.3117538611,                 #Log HOMA insulin resistance index >75th percentile       # TODO impossible?
+        0.2741578493,                 #HOMA beta-cell index <25th percentile                    # TODO impossible?
     ])
     
     # determining factors:
@@ -104,6 +100,17 @@ def model(ismale,age,sbp,dbp,bmi,waistcirc,hdl,tri,glucose,parent,trtbp, ogtt, f
     # Fasting glucose
     if glucose >= 100:
         values[13] = 1
+        
+    #Log HOMA insulin resistance index >75th percentile
+    homainsul = np.log(homainsul)
+    crit_homainsul = 1000000            # real value unknown TODO
+    if homainsul > crit_homainsul:
+        values[18] = 1
+    
+    #HOMA beta-cell index <25th percentile
+    crit_homabeta = -1000000                # real value unknown TODO
+    if homabeta < crit_homabeta:
+        values[19] = 1
     
     # dot betas and values
     z = np.dot(betas,np.array(values))
