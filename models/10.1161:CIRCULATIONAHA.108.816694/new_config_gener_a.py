@@ -128,11 +128,7 @@ columns = [models_table.DOI,models_table.papertitle, models_table.modeltitle, mo
 
 
 for i in range(len(modvalues)):
-    print modvalues[i]
     modvalues[i] = modvalues[i].replace("'","''")
-    print modvalues[i]
-
-print len(modvalues)
 
 insertion = models_table.insert(columns = columns, values = [modvalues])
 
@@ -141,7 +137,6 @@ model_tup = tuple(insertion)
 query = model_tup[0].replace('%s',"'%s'").replace('"','')
 
 query = query % tuple(model_tup[1])
-print query
 
 #query = format(model_tup[0],*model_tup[1])
 
