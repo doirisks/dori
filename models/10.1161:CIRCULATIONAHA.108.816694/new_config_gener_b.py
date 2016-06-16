@@ -66,6 +66,84 @@ config['predictive_ability']['value'] = []
 config['predictive_ability']['lcl'] = []
 config['predictive_ability']['ucl'] = []
 
+config_name = 'config_b'
+
+# dump json config file
 import json
-with open('config_b.json','w') as output:
+with open(config_name + '.json','w') as output:
     json.dump(config,output)
+
+# dump sql config file 
+import sql
+sqlfile = open(config_name + '.sql','w')
+models_table = sql.Table('models')
+
+modvalues = [
+    config['id']['DOI'],
+    config['id']['papertitle'],
+    config['id']['modeltitle'],
+    config['id']['yearofpub'],
+    str(config['id']['authors']),
+    
+    str(config['population']['must']),
+    str(config['population']['mustnot']),
+    str(config['population']['mustCUI']),
+    str(config['population']['mustnotCUI']),
+    
+    str(config['input']['name']),
+    str(config['input']['description']),
+    str(config['input']['CUI']),
+    str(config['input']['units']),
+    str(config['input']['datatype']),
+    str(config['input']['upper']),
+    str(config['input']['lower']),
+    
+    config['output']['name'],
+    config['output']['outcomeName'],
+    config['output']['outcomeTime'],
+    config['output']['CUI'],
+    config['output']['outcomeCUI'],
+    
+    str(config['data']['filename']),
+    str(config['data']['fileurl']),
+    str(config['data']['datumname']),
+    str(config['data']['datum']),
+    
+    config['model']['language'],
+    str(config['model']['uncompiled']),
+    str(config['model']['compiled']),
+    config['model']['dependList'],
+    str(config['model']['example']),
+    
+    str(config['model_category']),
+    str(config['predictive_ability']['type']),
+    str(config['predictive_ability']['metric']),
+    str(config['predictive_ability']['value']),
+    str(config['predictive_ability']['lcl']),
+    str(config['predictive_ability']['ucl'])
+]
+
+
+columns = [models_table.DOI,models_table.papertitle, models_table.modeltitle, models_table.yearofpub,  models_table.authors, models_table.must, models_table.mustnot,models_table.mustCUI, models_table.mustnotCUI,  models_table.inpname, models_table.inpdesc, models_table.inpCUI,models_table.inpunits,models_table.inpdatatype, models_table.upper, models_table.lower, models_table.output, models_table.outcome,models_table.outcometime, models_table.outputCUI, models_table.outcomeCUI, models_table.filename,models_table.filepointer, models_table.datumname,models_table.datum, models_table.language,models_table.uncompiled,models_table.compiled,models_table.dependList,models_table.example, models_table.model_category,models_table.type,models_table.metric,models_table.value, models_table.lcl, models_table.ucl]
+
+
+for i in range(len(modvalues)):
+    print modvalues[i]
+    modvalues[i] = modvalues[i].replace("'","''")
+    print modvalues[i]
+
+print len(modvalues)
+
+insertion = models_table.insert(columns = columns, values = [modvalues])
+
+
+model_tup = tuple(insertion)
+query = model_tup[0].replace('%s',"'%s'").replace('"','')
+
+query = query % tuple(model_tup[1])
+print query
+
+#query = format(model_tup[0],*model_tup[1])
+
+sqlfile.write(query)
+sqlfile.close()
