@@ -73,6 +73,4 @@ CREATE TABLE `models` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `models` 
-
 
