@@ -25,7 +25,7 @@ config['population']['mustnotCUI'] = ['C1832387']   # CUIs for unacceptable     
 config['input'] = {}
 config['input']['name'] = ["Sex", "Age",  "Systolic BP", "Diastolic BP", "BMI",'Waist Circumference', "HDL-C", "Triglycerides",  "Fasting Glucose", "Parental History of DM", "Antihypertensive Medication Use"]     
 config['input']['description'] = [] 
-config['input']['CUI'] = ['C28421','C0804405','C0488055','C0488052','C1542867','C2734066','C0364221', 'C0364714', 'C0363687', 'C1313937','C0684167']
+config['input']['CUI'] = ['C0086582','C0804405','C0488055','C0488052','C1542867','C2734066','C0364221', 'C0364714', 'C0363687', 'C1313937','C0684167']
 config['input']['units'] = ['m=T','years','mmHg','mmHg','kg/m^2','cm','mg/dL','mg/dL','mg/dL','','']
 config['input']['datatype'] = ['bool','float','float','float','float','float', 'float','float','float', 'int','bool'] 
 config['input']['upper'] = ['','','','','','','','','126','2','']
@@ -82,20 +82,20 @@ modvalues = [
     config['id']['papertitle'],
     config['id']['modeltitle'],
     config['id']['yearofpub'],
-    str(config['id']['authors']),
+    json.dumps(config['id']['authors']),
     
-    str(config['population']['must']),
-    str(config['population']['mustnot']),
-    str(config['population']['mustCUI']),
-    str(config['population']['mustnotCUI']),
+    json.dumps(config['population']['must']),
+    json.dumps(config['population']['mustnot']),
+    json.dumps(config['population']['mustCUI']),
+    json.dumps(config['population']['mustnotCUI']),
     
-    str(config['input']['name']),
-    str(config['input']['description']),
-    str(config['input']['CUI']),
-    str(config['input']['units']),
-    str(config['input']['datatype']),
-    str(config['input']['upper']),
-    str(config['input']['lower']),
+    json.dumps(config['input']['name']),
+    json.dumps(config['input']['description']),
+    json.dumps(config['input']['CUI']),
+    json.dumps(config['input']['units']),
+    json.dumps(config['input']['datatype']),
+    json.dumps(config['input']['upper']),
+    json.dumps(config['input']['lower']),
     
     config['output']['name'],
     config['output']['outcomeName'],
@@ -103,23 +103,23 @@ modvalues = [
     config['output']['CUI'],
     config['output']['outcomeCUI'],
     
-    str(config['data']['filename']),
-    str(config['data']['fileurl']),
-    str(config['data']['datumname']),
-    str(config['data']['datum']),
+    json.dumps(config['data']['filename']),
+    json.dumps(config['data']['fileurl']),
+    json.dumps(config['data']['datumname']),
+    json.dumps(config['data']['datum']),
     
     config['model']['language'],
-    str(config['model']['uncompiled']),
-    str(config['model']['compiled']),
+    json.dumps(config['model']['uncompiled']),
+    json.dumps(config['model']['compiled']),
     config['model']['dependList'],
-    str(config['model']['example']),
+    json.dumps(config['model']['example']),
     
-    str(config['model_category']),
-    str(config['predictive_ability']['type']),
-    str(config['predictive_ability']['metric']),
-    str(config['predictive_ability']['value']),
-    str(config['predictive_ability']['lcl']),
-    str(config['predictive_ability']['ucl'])
+    json.dumps(config['model_category']),
+    json.dumps(config['predictive_ability']['type']),
+    json.dumps(config['predictive_ability']['metric']),
+    json.dumps(config['predictive_ability']['value']),
+    json.dumps(config['predictive_ability']['lcl']),
+    json.dumps(config['predictive_ability']['ucl'])
 ]
 
 

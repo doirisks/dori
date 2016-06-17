@@ -83,9 +83,6 @@ run_scripts_in(START,0)
 os.chdir(CURDIR)
 # get the commands
 text = merge_sql_commands(START,0)
-print "#############################"
-print text
-print "#############################"
 
 
 # save the merged sql commands in the starting directory
