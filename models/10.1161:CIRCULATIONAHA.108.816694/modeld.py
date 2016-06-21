@@ -4,7 +4,7 @@
 model.py
 by Ted Morin
 
-contains a function to predict 30-year CVD risks using method from 
+contains a function to predict 30-year hard CVD risks using method from 
 10.1161/CIRCULATIONAHA.108.816694
 2009 Predicting the Thirty-year Risk of Cardiovascular Disease
 The Framingham Heart Study

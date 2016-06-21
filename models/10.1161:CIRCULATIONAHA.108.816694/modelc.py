@@ -4,7 +4,7 @@
 model.py
 by Ted Morin
 
-contains a function to predict 30-year CVD risks using beta coefficients from 
+contains a function to predict 30-year full CVD risks using beta coefficients from 
 10.1161/CIRCULATIONAHA.108.816694
 2009 Predicting the Thirty-year Risk of Cardiovascular Disease
 The Framingham Heart Study
