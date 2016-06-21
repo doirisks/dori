@@ -27,7 +27,7 @@ CREATE TABLE `models` (
   `DOI` varchar(255)  COLLATE utf8_unicode_ci NOT NULL,
   `papertitle` varchar(255) NOT NULL,
   `modeltitle` varchar(255) NOT NULL,
-  `yearofpub` varchar(5),
+  `yearofpub` int(16),
   `authors` TEXT,
 
   `must` TEXT, /*population category*/
@@ -42,6 +42,7 @@ CREATE TABLE `models` (
   `inpdatatype` TEXT,
   `upper` TEXT,
   `lower` TEXT,
+  `numofinputs` int(8),
   
   `output` varchar(255), /*output category*/
   `outcome` varchar(255),

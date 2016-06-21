@@ -23,16 +23,25 @@ DROP TABLE IF EXISTS `CUIs`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `CUIs` (
 
-  `CUI` varchar(255) NOT NULL, 
+  `CUI` varchar(255) NOT NULL,      /*identification*/
   `name1` varchar(255),
   `name2` varchar(255),
   `name3` varchar(255),
   
-  `must` TEXT, 
+  `must` TEXT,                      /*relations to models*/ 
   `mustnot` TEXT,
   `input` TEXT,
   `outcome` TEXT,
   `output` TEXT,
+  
+  `equivalent` TEXT,                /*relations to other CUIs*/
+  `derivable` TEXT,
+  `derivedfrom` TEXT,
+
+  `units` varchar(255),                     /*program features*/
+  `defaultupper` varchar(20),
+  `defaultlower` varchar(20),
+  `datatype` varchar(12),
   
 /*  `uploaded` DATE DEFAULT CURRENT_DATE,*/
   
