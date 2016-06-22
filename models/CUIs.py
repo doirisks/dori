@@ -22,6 +22,7 @@ def addCUI(CUI):
         CUIs[CUI]['equivalent'] = []
         CUIs[CUI]['derivable'] = []
         CUIs[CUI]['derivedfrom'] = []
+        # values not added: name1, name2, name3, datatype, units, defaultlower, defaultupper
 
 # adds a new name to the CUI if it is not a duplicate name
 def addname(CUI,newname):
@@ -138,7 +139,7 @@ while DOI is not None:
             if defaultlower[i] == "":
                 CUIs[groupCUI[i]]['defaultlower'] = None
             elif CUIs[groupCUI[i]].has_key('defaultlower'):
-                if CUIs[groupCUI[i]]['defaultlower'] > defaultlower[i]:
+                if CUIs[groupCUI[i]]['defaultlower'] > defaultlower[i] and CUIs[groupCUI[i]]['defaultlower']!=None:
                     CUIs[groupCUI[i]]['defaultlower'] = defaultlower[i]
             else :
                 CUIs[groupCUI[i]]['defaultlower'] = defaultlower[i]
@@ -147,7 +148,7 @@ while DOI is not None:
             if defaultupper[i] == "":
                 CUIs[groupCUI[i]]['defaultupper'] = None
             elif CUIs[groupCUI[i]].has_key('defaultupper'):
-                if CUIs[groupCUI[i]]['defaultupper'] < defaultupper[i]:
+                if CUIs[groupCUI[i]]['defaultupper'] < defaultupper[i] and CUIs[groupCUI[i]]['defaultupper']!=None:
                     CUIs[groupCUI[i]]['defaultupper'] = defaultupper[i]
             else :
                 CUIs[groupCUI[i]]['defaultupper'] = defaultupper[i]
@@ -159,9 +160,20 @@ while DOI is not None:
     DOI = cur1.fetchone()
 cur1.close()
 
-# special adjustments
-if CUIs.has_key('C0804405'):    # age cannot be less than zero
+# special adjustments 1: age cannot be less than zero
+if CUIs.has_key('C0804405'):   
     CUIs['C0804405']['defaultlower'] = 0
+
+# special adjustments 2: Sex CUI (not male-specific)
+addCUI('C28421')
+        # values not added: name1, name2, name3, datatype, units, defaultlower, defaultupper,
+CUIs['C28421']['name1'] = 'Sex'
+CUIs['C28421']['name2'] = 'Gender'
+CUIs['C28421']['name3'] = 'Sex (m/f)'
+CUIs['C28421']['datatype'] = 'bool'
+CUIs['C28421']['units'] = 'm/f'
+CUIs['C28421']['defaultlower'] = None
+CUIs['C28421']['defaultupper'] = None
 
 
 """
