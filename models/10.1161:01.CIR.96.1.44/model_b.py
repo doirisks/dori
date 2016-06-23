@@ -59,8 +59,6 @@ def model(ismale,age,sbp,dbp,cig,totchol,diab,chd):
     if chd :
         points += 5
     
-    print points
-    
     # look up risk
     if points >= 10:
         score = points - 10
