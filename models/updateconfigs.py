@@ -4,6 +4,7 @@
 #
 # updates all of the configuration files recursively, merges the sql commands into a single file
 # set criteria for "configs" at blue lines
+# 
 
 
 import sys
