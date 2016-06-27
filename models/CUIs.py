@@ -239,7 +239,7 @@ for CUI in CUIs.keys():
     columns = []    # values which are known for the given cui
     values = []     # values for the given cui
     
-    # iterate through all possible columns.
+    # iterate through all possible columns setting values
     for key in all_columns:
         if CUIs[CUI].has_key(key):
             columns.append(key)
