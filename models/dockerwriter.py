@@ -85,7 +85,7 @@ while model != None :
     # files which will not be ignored
     added = []
     
-    # rules for python imports
+    # rules for python imports (PART I)
     if model[2][:6] == 'python' or model[2] == 'py':
     
         # FROM statement
@@ -94,6 +94,7 @@ while model != None :
         else :                                          # otherwise, assume version 2
             text += 'FROM elyase/conda:2.7\n'
         
+        # install pip
         
         # MAINTAINER statement
         text += 'MAINTAINER "DOI RISKS"\n'
@@ -110,12 +111,19 @@ while model != None :
         if model[5] != None:
             text += "COPY ./" + model[5] + " requirements.txt\n"
             added.append(model[5])
+            text += "RUN conda install -f -q --file requirements.txt\n"
 
-    # rules for R imports
-    elif model[2] == 'R' or model[2] == 'R':
+    # rules for R imports (PART I)
+    elif model[2] == 'R' or model[2] == 'r':
         model = cur.fetchone()
         continue
     
+    # rules for unrecognized languages
+    else :
+        model = cur.fetchone()
+        continue
+        
+    ###################################################################### for ALL languages
     # set the current working directory
     os.chdir( os.path.join(models_path,model[1].replace('/',':')) )
 
