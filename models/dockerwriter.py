@@ -86,10 +86,17 @@ while model != None :
     added = []
     
     # rules for python imports
-    if model[2] == 'python' or model[2] == 'py':
+    if model[2][:6] == 'python' or model[2] == 'py':
     
         # FROM statement
-        text += 'FROM elyase/conda\nMAINTAINER "DOI RISKS"\n'
+        if len(model[2]) > 6 and model[2][:7] == '3':   # if python version 3 is requested explicitly
+            text += 'FROM elyase/conda:3.4\n'
+        else :                                          # otherwise, assume version 2
+            text += 'FROM elyase/conda:2.7\n'
+        
+        
+        # MAINTAINER statement
+        text += 'MAINTAINER "DOI RISKS"\n'
         
         # bring in a duplicate of the first compiled file with a uniform name
         if len(model[3]) != 0:
@@ -164,7 +171,7 @@ while model != None :
     # write make the docker container!
     count += 1
     if len(sys.argv) > 1 and '-b' in sys.argv:
-        os.system("sudo docker build -t doirisks/model_" + model[0] )
+        os.system("sudo docker build -t doirisks/model_" + str(model[0]) + " ./")
         print str(count) + " images built!"
     else :
         print str(count) + " Dockerfiles written!"
