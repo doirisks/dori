@@ -7,7 +7,8 @@ write docker files for python. To build a docker container of a particular compi
 USAGE: sudo python dockerwriter.py [OPTIONS]
 
 OPTIONS:
--b                  build all docker files
+-b, --build                 build all docker files
+-t, --test                  build just the first docker file
 
 N.B: run models.py and CUIs.py first!
 """
@@ -58,7 +59,7 @@ cur.execute(fetch_query)
 # save the base, should be the path to ......./dori-master/models
 models_path = os.getcwd()
 
-# counter so that progress can be observed
+# counter so that progress can be observed, used for -t option
 count = 0
 
 # iterate through all of the models
@@ -85,16 +86,15 @@ while model != None :
     # files which will not be ignored
     added = []
     
+    ###################################
     # rules for python imports (PART I)
     if model[2][:6] == 'python' or model[2] == 'py':
     
         # FROM statement
-        if len(model[2]) > 6 and model[2][:7] == '3':   # if python version 3 is requested explicitly
-            text += 'FROM elyase/conda:3.4\n'
-        else :                                          # otherwise, assume version 2
-            text += 'FROM elyase/conda:2.7\n'
+        text += 'FROM continuumio/miniconda\n'
         
         # install pip
+        text += 'RUN conda install pip'
         
         # MAINTAINER statement
         text += 'MAINTAINER "DOI RISKS"\n'
@@ -113,12 +113,14 @@ while model != None :
             added.append(model[5])
             # loading the listed dependencies 
             text += "RUN conda install -f -q --file requirements.txt\n"
-
+            
+    ###################################
     # rules for R imports (PART I)
     elif model[2] == 'R' or model[2] == 'r':
         model = cur.fetchone()
         continue
     
+    ###################################
     # rules for unrecognized languages
     else :
         model = cur.fetchone()
@@ -179,7 +181,10 @@ while model != None :
         
     # write make the docker container!
     count += 1
-    if len(sys.argv) > 1 and '-b' in sys.argv:
+    if ('-b' in sys.argv or '--build' in sys.argv):
+        os.system("sudo docker build -t doirisks/model_" + str(model[0]) + " ./")
+        print str(count) + " images built!"
+    elif ('-t' in sys.argv or '--build' in sys.argv) and (count == 1):
         os.system("sudo docker build -t doirisks/model_" + str(model[0]) + " ./")
         print str(count) + " images built!"
     else :
