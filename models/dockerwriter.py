@@ -111,6 +111,7 @@ while model != None :
         if model[5] != None:
             text += "COPY ./" + model[5] + " requirements.txt\n"
             added.append(model[5])
+            # loading the listed dependencies 
             text += "RUN conda install -f -q --file requirements.txt\n"
 
     # rules for R imports (PART I)
