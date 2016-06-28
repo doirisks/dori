@@ -1,0 +1,12 @@
+#######################################################################
+# Dockerfile to build model 13
+# Based on elyase/conda, produced by dockerwriter.py
+#######################################################################
+
+FROM elyase/conda
+MAINTAINER "DOI RISKS"
+COPY ./ model
+COPY ./model_f.py model.py
+COPY ./requirements.txt requirements.txt
+COPY ./model_f.py /model_f.py
+COPY ./example_f.py /example_f.py

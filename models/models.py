@@ -158,7 +158,7 @@ def run_scripts_in(mypath,recurs):
             count += 1
     
     for d in notfiles:
-         run_scripts_in(os.path.join(mypath,d),recurs+1)
+        run_scripts_in(os.path.join(mypath,d),recurs+1)
     print count
     print
 
