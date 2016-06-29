@@ -43,8 +43,6 @@ def ignore_files(not_ignored, mypath): # no limit to recursion!
             text += d + "/"     # ignore the directory
         else :
             text += nextlevel[0] # if the directory has something interesting in it
-            
-    
     return text, void
 
 
@@ -71,7 +69,7 @@ while model != None :
     # comments
     text += """#######################################################################
 # Dockerfile to build model """ + str(model[0]) + """
-# Based on elyase/conda, produced by dockerwriter.py
+# Based on continuumio/miniconda, produced by dockerwriter.py
 #######################################################################
 
 """
@@ -94,7 +92,7 @@ while model != None :
         text += 'FROM continuumio/miniconda\n'
         
         # install pip
-        text += 'RUN conda install pip'
+        text += 'RUN conda install pip\n'
         
         # MAINTAINER statement
         text += 'MAINTAINER "DOI RISKS"\n'
@@ -184,7 +182,7 @@ while model != None :
     if ('-b' in sys.argv or '--build' in sys.argv):
         os.system("sudo docker build -t doirisks/model_" + str(model[0]) + " ./")
         print str(count) + " images built!"
-    elif ('-t' in sys.argv or '--build' in sys.argv) and (count == 1):
+    elif ('-t' in sys.argv or '--test' in sys.argv) and (count == 1):
         os.system("sudo docker build -t doirisks/model_" + str(model[0]) + " ./")
         print str(count) + " images built!"
     else :
