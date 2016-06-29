@@ -23,4 +23,4 @@ scores.append( model(0,0,61,371,80,141,1,0) ) #f, notreated, 61,371tot,80hdl,141
 scores.append( model(0,0,46,211,87,131,1,0) ) #f, notreated, 46yrs,211tot, 87hdl,131sbp,smokes,no db
 scores.append( model(1,0,39,170,60,135,0,0) ) #m, notreated, 39yrs, 170tot, 60hdl, 135sbp, no smoke, no db
 for score in scores:
-    print "%.3f" % score*100.
+    print "%.3f" % (float(score)*100.0)
