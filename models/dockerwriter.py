@@ -84,7 +84,7 @@ while model != None :
     # files which will not be ignored
     added = []
     
-    ###################################
+    ###################################  could this be universal with Conda?
     # rules for python imports (PART I)
     if model[2][:6] == 'python' or model[2] == 'py':
     
@@ -93,19 +93,19 @@ while model != None :
         
         # install pip
         text += 'RUN conda install pip\n'
-        
+   
         # MAINTAINER statement
         text += 'MAINTAINER "DOI RISKS"\n'
         
         # bring in a duplicate of the first compiled file with a uniform name
         if len(model[3]) != 0:
             if model[3][0] != "":
-                text += "COPY ./" + model[3][0] + " model" + getFileExtension(model[3][0]) + '\n'
+                text += "COPY " + model[3][0] + " /model" + getFileExtension(model[3][0]) + '\n'
         
         # bring in a duplicate of the first uncompiled file with a uniform name
         if len(model[4]) != 0 :
             if model[4][0] != "":
-                text += "COPY ./" + model[4][0] + " model" + getFileExtension(model[4][0]) + '\n'
+                text += "COPY " + model[4][0] + " /model" + getFileExtension(model[4][0]) + '\n'
         
         # bring in the dependency list if it exists
         if model[5] != None and model[5] != "":
@@ -133,19 +133,19 @@ while model != None :
     # bring in the compiled files
     for index, item in enumerate(model[3]):
         if item != "":
-            text += "COPY ./" + item + " /" + item + '\n'
+            text += "COPY " + item + " /" + item + '\n'
             added.append(item)
         
     # bring in the uncompiled files
     for index, item in enumerate(model[4]):
         if item != "":
-            text += "COPY ./" + item + " /" + item + '\n'
+            text += "COPY " + item + " /" + item + '\n'
             added.append(item)
         
     # bring in examples if any
     for example in model[6]:
         if example != "":
-            text += "COPY ./" + example + " /" + example + '\n'
+            text += "COPY " + example + " /" + example + '\n'
             added.append(example)
     
     # bring in the JSON config file (if it exists)
