@@ -100,22 +100,25 @@ while model != None :
         # MAINTAINER statement
         text += 'MAINTAINER "DOI RISKS"\n'
         
+        # add a folder containing all model data added
+        text += "ADD ./ model"+str(model[0])+"\n"
+        
         # bring in a duplicate of the first compiled file with a uniform name
-        if len(model[3]) != 0:
-            if model[3][0] != "":
-                text += "COPY " + model[3][0] + " /model" + getFileExtension(model[3][0]) + '\n'
+        #if len(model[3]) != 0:
+        #    if model[3][0] != "":
+        #        text += "COPY " + model[3][0] + " /model" + getFileExtension(model[3][0]) + '\n'
         
         # bring in a duplicate of the first uncompiled file with a uniform name
-        if len(model[4]) != 0 :
-            if model[4][0] != "":
-                text += "COPY " + model[4][0] + " /model" + getFileExtension(model[4][0]) + '\n'
+        #if len(model[4]) != 0 :
+        #    if model[4][0] != "":
+        #        text += "COPY " + model[4][0] + " /model" + getFileExtension(model[4][0]) + '\n'
         
         # bring in the dependency list if it exists
         if model[5] != None and model[5] != "":
-            text += "COPY ./" + model[5] + " requirements.txt\n"
+            #text += "COPY ./" + model[5] + " requirements.txt\n"
             added.append(model[5])
             # loading the listed dependencies 
-            text += "RUN conda install -f -q --file requirements.txt\n"
+            text += "RUN conda install -f -q --file /model"+str(model[0])+"/requirements.txt\n"
             
     ###################################
     # rules for R imports (PART I)
@@ -134,24 +137,24 @@ while model != None :
     # bring in the compiled files
     for index, item in enumerate(model[3]):
         if item != "":
-            text += "COPY " + item + " /" + item + '\n'
+            #text += "COPY " + item + " /" + item + '\n'
             added.append(item)
         
     # bring in the uncompiled files
     for index, item in enumerate(model[4]):
         if item != "":
-            text += "COPY " + item + " /" + item + '\n'
+            #text += "COPY " + item + " /" + item + '\n'
             added.append(item)
         
     # bring in examples if any
     for example in model[6]:
         if example != "":
-            text += "COPY " + example + " /" + example + '\n'
+            #text += "COPY " + example + " /" + example + '\n'
             added.append(example)
     
     # bring in the JSON config file (if it exists)
     if model[7] != None:
-        text += "ADD ./" + model[7] + " config.json"
+        #text += "ADD ./" + model[7] + " config.json"
         added.append(model[7])
     
 
@@ -160,7 +163,6 @@ while model != None :
         added[index] = os.path.split(item)[1]
     # ignore all of the files not added
     ignoretext = ignore_files(added, os.getcwd())[0]
-    
         
     # name the output file
     if ('-b' in sys.argv or '--build' in sys.argv):
