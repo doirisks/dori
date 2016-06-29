@@ -103,15 +103,15 @@ while model != None :
         # add a folder containing all model data added
         text += "ADD ./ model"+str(model[0])+"\n"
         
-        # bring in a duplicate of the first compiled file with a uniform name
-        #if len(model[3]) != 0:
-        #    if model[3][0] != "":
-        #        text += "COPY " + model[3][0] + " /model" + getFileExtension(model[3][0]) + '\n'
+        # duplicate the first compiled file to give it a uniform name
+        #WARNING may overwrite a mislocated file!
+        if model[3] != None and model[3] != "":
+            text += "RUN cp " + os.path.join("/model"+str(model[0]), model[3][0]) + " /model"+str(model[0])+"/model" + getFileExtension(model[3][0]) + '\n'
         
-        # bring in a duplicate of the first uncompiled file with a uniform name
-        #if len(model[4]) != 0 :
-        #    if model[4][0] != "":
-        #        text += "COPY " + model[4][0] + " /model" + getFileExtension(model[4][0]) + '\n'
+        # duplicate the first uncompiled file with a uniform name 
+        # WARNING may overwrite a mislocated file!
+        if len(model[4]) != 0 and model[4][0] != "":
+            text += "RUN cp " + os.path.join("/model"+str(model[0]),model[4][0]) + " /model"+str(model[0])+"/model" + getFileExtension(model[4][0]) + '\n'
         
         # bring in the dependency list if it exists
         if model[5] != None and model[5] != "":
@@ -163,7 +163,7 @@ while model != None :
         added[index] = os.path.split(item)[1]
     # ignore all of the files not added
     ignoretext = ignore_files(added, os.getcwd())[0]
-        
+    
     # name the output file
     if ('-b' in sys.argv or '--build' in sys.argv):
         # write the dockerignore
