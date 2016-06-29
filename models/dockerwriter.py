@@ -99,14 +99,16 @@ while model != None :
         
         # bring in a duplicate of the first compiled file with a uniform name
         if len(model[3]) != 0:
-            text += "COPY ./" + model[3][0] + " model" + getFileExtension(model[3][0]) + '\n'
+            if model[3][0] != "":
+                text += "COPY ./" + model[3][0] + " model" + getFileExtension(model[3][0]) + '\n'
         
         # bring in a duplicate of the first uncompiled file with a uniform name
         if len(model[4]) != 0 :
-            text += "COPY ./" + model[4][0] + " model" + getFileExtension(model[4][0]) + '\n'
+            if model[4][0] != "":
+                text += "COPY ./" + model[4][0] + " model" + getFileExtension(model[4][0]) + '\n'
         
         # bring in the dependency list if it exists
-        if model[5] != None:
+        if model[5] != None and model[5] != "":
             text += "COPY ./" + model[5] + " requirements.txt\n"
             added.append(model[5])
             # loading the listed dependencies 
