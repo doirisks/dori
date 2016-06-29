@@ -161,32 +161,43 @@ while model != None :
     
         
     # name the output file
-    if '-b' in sys.argv:
+    if ('-b' in sys.argv or '--build' in sys.argv):
         # write the dockerignore
         with open('.dockerignore', 'w') as output:
             output.write(ignoretext)
-        # write the document
+        # write the document name
         output_name = 'Dockerfile'
+    elif ('-t' in sys.argv or '--test' in sys.argv) and (count == 1):
+        # write the dockerignore for use
+        with open('.dockerignore', 'w') as output:
+            output.write(ignoretext)
+        # write the dockerignore for the record
+        with open('dockerignore_' + str(model[0]), 'w') as output:
+            output.write(ignoretext)
+        # write the document name
+        output_name = 'Dockerfile_' + str(model[0])
     else :
         # write the dockerignore
         with open('dockerignore_' + str(model[0]), 'w') as output:
             output.write(ignoretext)
-        # write the document
+        # write the document name
         output_name = 'Dockerfile_' + str(model[0])
     
     with open( output_name ,'w') as output:
         output.write(text)
         
-    # write make the docker container!
+    # write or make the docker container!
     count += 1
     if ('-b' in sys.argv or '--build' in sys.argv):
         os.system("sudo docker build -t doirisks/model_" + str(model[0]) + " ./")
         print str(count) + " images built!"
     elif ('-t' in sys.argv or '--test' in sys.argv) and (count == 1):
+        with open( 'Dockerfile' ,'w') as output:
+            output.write(text)
         os.system("sudo docker build -t doirisks/model_" + str(model[0]) + " ./")
-        print str(count) + " images built!"
+        print "Test complete!\n1 Dockerfile written"
     else :
-        print str(count) + " Dockerfiles written!"
+        print str(count) + " Dockerfile(s) written!"
     
     model = cur.fetchone()
 
