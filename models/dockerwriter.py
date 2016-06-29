@@ -156,8 +156,7 @@ while model != None :
 
     # identify the items added by their individual names 
     for index, item in enumerate(added):
-        while os.path.split(item)[-1] != os.path.split(os.path.split(item)[-1])[-1]:
-            added[i] = os.path.split(item)[-1]
+        added[index] = os.path.split(item)[1]
     # ignore all of the files not added
     ignoretext = ignore_files(added, os.getcwd())[0]
     
