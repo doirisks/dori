@@ -84,6 +84,9 @@ while model != None :
     # files which will not be ignored
     added = []
     
+    # set the current working directory to the target DOI
+    os.chdir( os.path.join(models_path,model[1].replace('/',':')) )
+    
     ###################################  could this be universal with Conda?
     # rules for python imports (PART I)
     if model[2][:6] == 'python' or model[2] == 'py':
@@ -127,8 +130,6 @@ while model != None :
         continue
         
     ###################################################################### for ALL languages
-    # set the current working directory
-    os.chdir( os.path.join(models_path,model[1].replace('/',':')) )
 
     # bring in the compiled files
     for index, item in enumerate(model[3]):
