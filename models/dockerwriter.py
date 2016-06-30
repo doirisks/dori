@@ -104,14 +104,12 @@ while model != None :
         text += "ADD ./ model"+str(model[0])+"\n"
         
         # duplicate the first compiled file to give it a uniform name
-        #WARNING may overwrite a mislocated file!
         if model[3] != None and model[3] != "":
-            text += "RUN cp " + os.path.join("/model"+str(model[0]), model[3][0]) + " /model"+str(model[0])+"/model" + getFileExtension(model[3][0]) + '\n'
+            text += "RUN cp -n " + os.path.join("/model"+str(model[0]), model[3][0]) + " /model"+str(model[0])+"/model" + getFileExtension(model[3][0]) + '\n'
         
         # duplicate the first uncompiled file with a uniform name 
-        # WARNING may overwrite a mislocated file!
         if len(model[4]) != 0 and model[4][0] != "":
-            text += "RUN cp " + os.path.join("/model"+str(model[0]),model[4][0]) + " /model"+str(model[0])+"/model" + getFileExtension(model[4][0]) + '\n'
+            text += "RUN cp -n " + os.path.join("/model"+str(model[0]),model[4][0]) + " /model"+str(model[0])+"/model" + getFileExtension(model[4][0]) + '\n'
         
         # bring in the dependency list if it exists
         if model[5] != None and model[5] != "":
@@ -190,7 +188,7 @@ while model != None :
     with open( output_name ,'w') as output:
         output.write(text)
         
-    # write or make the docker container!
+    # build the docker container (if applicable) and declare status
     count += 1
     if ('-b' in sys.argv or '--build' in sys.argv):
         os.system("sudo docker build -t doirisks/model_" + str(model[0]) + " ./")
