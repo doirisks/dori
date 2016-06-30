@@ -104,7 +104,7 @@ while model != None :
         text += "ADD ./ model"+str(model[0])+"\n"
         
         # duplicate the first compiled file to give it a uniform name
-        if model[3] != None and model[3] != "":
+        if model[3] != None and model[3][0] != "":
             text += "RUN cp -n " + os.path.join("/model"+str(model[0]), model[3][0]) + " /model"+str(model[0])+"/model" + getFileExtension(model[3][0]) + '\n'
         
         # duplicate the first uncompiled file with a uniform name 
