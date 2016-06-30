@@ -35,7 +35,7 @@ def populate(added, target):
             print start
             end = os.path.join(target, item)
             print end
-            if isdir(start):
+            if os.path.isdir(start):
                 os.system("cp -r " + start + " " + end) 
             else :
                 os.system("cp " + start + " " + end) 
