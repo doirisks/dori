@@ -167,17 +167,17 @@ if __name__ == '__main__':
         with open( output_name ,'w') as output:
             output.write(text)
             
-        # build the docker container (if applicable) and print count
+        # build the docker container (if applicable) and ?print count
         count += 1
         if ('-b' in sys.argv or '--build' in sys.argv):
             dockbuild(model,"../dockmodel")
-            print str(count) + " images built!"
+            #print str(count) + " images built!"
         elif ('-t' in sys.argv or '--test' in sys.argv) and (count == 1):
             dockbuild(model,"../dockmodel")
             os.system("sudo docker build -t doirisks/model_" + str(model[0]) + " ./")
-            print "Test complete!\n1 Dockerfile written"
+            #print "Test complete!\n1 Dockerfile written"
         else :
-            print str(count) + " Dockerfile(s) written!"
+            #print str(count) + " Dockerfile(s) written!"
         
         model = cur.fetchone()
 
