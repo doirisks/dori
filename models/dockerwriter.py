@@ -179,9 +179,9 @@ if __name__ == '__main__':
             #print str(count) + " images built!"
         elif ('-t' in sys.argv or '--test' in sys.argv) and (count == 1):
             dockbuild(model,"../dockmodel")
-            os.system("sudo docker build -t doirisks/model_" + str(model[0]) + " ./")
             #print "Test complete!\n1 Dockerfile written"
         else :
+            pass
             #print str(count) + " Dockerfile(s) written!"
         
         model = cur.fetchone()
