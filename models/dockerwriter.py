@@ -32,8 +32,13 @@ def populate(added, target):
     for item in added:
         if item != "":
             start = os.path.join(current_working_directory, item)
+            print start
             end = os.path.join(target, item)
-            os.system("cp -r " + start + " " + end) 
+            print end
+            if isdir(start):
+                os.system("cp -r " + start + " " + end) 
+            else :
+                os.system("cp " + start + " " + end) 
             # consider using -l (link) for the cp command
             # this option might speed up the process and save disk space, esp for bigger models
             # how would docker build react?
@@ -180,5 +185,8 @@ if __name__ == '__main__':
             #print str(count) + " Dockerfile(s) written!"
         
         model = cur.fetchone()
+    
+    # close the connection
+    cnx.close()
 
 
