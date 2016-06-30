@@ -36,9 +36,9 @@ def populate(added, target):
             end = os.path.join(target, item)
             print end
             if os.path.isdir(start):
-                os.system("cp -r " + start + " " + end) 
+                os.system("sudo cp -r " + start + " " + end) 
             else :
-                os.system("cp " + start + " " + end) 
+                os.system("sudo cp " + start + " " + end) 
             # consider using -l (link) for the cp command
             # this option might speed up the process and save disk space, esp for bigger models
             # how would docker build react?
