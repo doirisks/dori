@@ -31,17 +31,19 @@ def ignore_files(not_ignored, mypath): # no limit to recursion!
     notfiles = [f for f in os.listdir(mypath) if ( not os.path.isfile(os.path.join(mypath, f)) and f[0] != '.' )]
     onlyfiles.sort()
     for f in onlyfiles:
-        if not f in not_ignored :   # if the file is ignored
-            text += f               # ignore it
+        if f in not_ignored :           # if the file is added
+            text += "!" + f             # make an exception
             text += '\n'
+            void = False                # make sure the directory is not ignored
         else :              # if the file is necessary
-            void = False
+            pass                        # leave it be
     
     for d in notfiles:
         nextlevel = ignore_files(not_ignored,os.path.join(mypath,d))
-        if nextlevel[1]:  # if directory is void
-            text += d + "/"     # ignore the directory
-        else :
+        if nextlevel[1]:                            # if directory is void
+            pass      # ignore the directory
+        else :                                      # otherwise
+            text += "!" + os.path.join(mypath,d) + "/\n"
             text += nextlevel[0] # if the directory has something interesting in it
     return text, void
 
@@ -160,7 +162,8 @@ while model != None :
     for index, item in enumerate(added):
         added[index] = os.path.split(item)[1]
     # ignore all of the files not added
-    ignoretext = ignore_files(added, os.getcwd())[0]
+    ignoretext = "# .dockerignore\n# \n# ignore everything\n*\n# except:\n"
+    ignoretext += ignore_files(added, os.getcwd())[0]
     
     # name the output file
     if ('-b' in sys.argv or '--build' in sys.argv):
