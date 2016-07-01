@@ -165,12 +165,12 @@ if __name__ == '__main__':
             text += "RUN conda install -y --file /model"+str(model[0])+"/" + model[5] + "\n"
         
         # RUN to setup model conda environment and activate it
-        if model[5] != None and model[5] != "": 
-            text += "RUN conda env create "                         # create env
-            text += "--name model"+str(model[0]) + " "
-            text += "--file " + os.path.join("model"+str(model[0]), model[5]) + " "
-            text += "\n"
-            #text += "RUN source activate model" + str(model[0])     # activate the model
+        #if model[5] != None and model[5] != "": 
+        #    text += "RUN conda env create "                         # create env
+        #    text += "--name model"+str(model[0]) + " "
+        #    text += "--file " + os.path.join("model"+str(model[0]), model[5]) + " "
+        #    text += "\n"
+        #    #text += "RUN source activate model" + str(model[0])     # activate the model
         
         # name and write the Dockerfile
         output_name = 'Dockerfile_' + str(model[0])
