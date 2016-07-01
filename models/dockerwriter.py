@@ -170,7 +170,7 @@ if __name__ == '__main__':
             text += "--name model"+str(model[0]) + " "
             text += "--file " + os.path.join("model"+str(model[0]), model[5]) + " "
             text += "\n"
-            text += "RUN source activate model" + str(model[0])     # activate the model
+            #text += "RUN source activate model" + str(model[0])     # activate the model
         
         # name and write the Dockerfile
         output_name = 'Dockerfile_' + str(model[0])
