@@ -89,6 +89,7 @@ CREATE TABLE `models` (
   `value` varchar(255), 
   `lcl` varchar(255), 
   `ucl` varchar(255), 
+  `config` varchar(255),
   
   `modified` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 /*  `uploaded` DATE DEFAULT CURRENT_DATE,*/
@@ -141,7 +142,7 @@ elif 1 < len(sys.argv):                         # more than one argument
             print 'ERROR: directory invalid'
 """
 
-# running scripts and return the sql query as output
+# runs scripts and returns the sql query as output
 def run_scripts_in(mypath,recurs):
     if recurs == DEPTH: return ""
     text = ""
@@ -166,29 +167,9 @@ def run_scripts_in(mypath,recurs):
     for d in notfiles:
         text += run_scripts_in(os.path.join(mypath,d),recurs+1)
     
-    print count
+    print(count)
     print
     return(text)
-
-# combining sql commands
-def merge_sql_commands(mypath,recurs):
-    text = ""
-    if recurs == DEPTH: return text
-    
-    onlyfiles = [f for f in os.listdir(mypath) if os.path.isfile(os.path.join(mypath, f))]
-    notfiles = [f for f in os.listdir(mypath) if ( not os.path.isfile(os.path.join(mypath, f)) and f[0] != '.' )]
-    onlyfiles.sort()
-##############################################################################################################
-    for f in onlyfiles:
-        if f[:5] == "confi" and f[-4:] == '.sql':
-            infile = open(os.path.join(mypath, f),'r')
-            text += infile.read()
-            infile.close()
-    
-    for d in notfiles:
-        text += str(merge_sql_commands(os.path.join(mypath,d),recurs+1))
-    
-    return text
 
 #os.chdir(CURDIR)
 # run the scripts and build query
