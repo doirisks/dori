@@ -148,7 +148,7 @@ def run_scripts_in(mypath,recurs):
     if recurs == DEPTH: return ""
     text = ""
     count = 0
-    print mypath
+    #print mypath
     os.chdir(mypath)
     
     onlyfiles = [f for f in os.listdir(mypath) if os.path.isfile(os.path.join(mypath, f))]
@@ -159,8 +159,8 @@ def run_scripts_in(mypath,recurs):
     for f in onlyfiles:
         if f[:5] == "new_c" and f[-3:] == '.py':        # change this line if lines are changed
             thefile = os.path.join(mypath, f)
-            print(thefile)
-            p = subprocess.Popen(['python', os.path.join(mypath, f)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            #print(thefile)
+            p = subprocess.Popen(['python', thefile], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             newtxt, newerr = p.communicate()
             text += newtxt + newerr
             count += 1
@@ -168,18 +168,20 @@ def run_scripts_in(mypath,recurs):
     for d in notfiles:
         text += run_scripts_in(os.path.join(mypath,d),recurs+1)
     
-    print(count)
-    print
+    #print(count)
+    #print
     return(text)
 
 # run the scripts and build query
 insert_query = run_scripts_in(START,0)
 insert_query += "COMMIT;\n"
 
-#print insert_query
-#print len(CUIs.keys())
 
 cur3.execute(insert_query)
 
 cur3.close()
 cnx.close()
+
+#print insert_query
+print "models inserted: " + str( (len(insert_query.split('\n')) - 2)/ 2)
+

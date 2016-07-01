@@ -48,7 +48,8 @@ def treatgroup(group, groupCUI, groupname, modelID):
             addname(CUIs[groupCUI[i]], group[i])
             if CUIs[groupCUI[i]].has_key('datatype'):
                 if CUIs[groupCUI[i]]['datatype'] != 'bool':
-                    print str(groupCUI[i]) + " " + str(group[i]) + " had a data type other than bool. Investigate."
+                    pass
+                    #print str(groupCUI[i]) + " " + str(group[i]) + " had a data type other than bool. Investigate."
             CUIs[groupCUI[i]]['datatype'] = 'bool'
             CUIs[groupCUI[i]][groupname].append(int(modelID))
 
@@ -259,10 +260,11 @@ for CUI in CUIs.keys():
     sub_query = "INSERT INTO `CUIs` (`" + "`, `".join(columns) + "`) VALUES ( " + ", ".join(values) + " );\n"
     insert_query += sub_query
 insert_query += "COMMIT;\n"
-print insert_query
-print len(CUIs.keys())
 
 cur3.execute(insert_query)
 
 cur3.close()
 cnx.close()
+
+#print insert_query
+print "CUIs inserted: " + str(len(CUIs.keys()))

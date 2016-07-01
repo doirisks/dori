@@ -33,9 +33,9 @@ def populate(added, target):
     for item in added:
         if item != "":
             start = os.path.join(current_working_directory, item)
-            print start
+            #print start
             end = os.path.join(target, item)
-            print end
+            #print end
             if os.path.isdir(start):
                 os.system('sudo cp -r "' + start + '" "' + end + '"') 
             else :
