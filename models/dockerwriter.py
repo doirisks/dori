@@ -53,7 +53,7 @@ def dockbuild(model, dockmodel):
     if not os.path.isdir(dockmodel):
         os.system("sudo mkdir " + dockmodel)
     # ensure that it is clean
-    os.system("sudo rm -rf "+dockmodel+"/*")
+    os.system("sudo rm -rf "+dockmodel+"/*")        # DANGEROUS LINE
     
     # files which will be included in the container
     added = []
@@ -101,9 +101,6 @@ if __name__ == '__main__':
     # save the base, should be the path to ......./dori-master/models
     models_path = os.getcwd()
 
-    # counter so that progress can be observed, used for -t option
-    count = 0
-
     # iterate through all of the models
     model = cur.fetchone()
     while model != None :
@@ -119,12 +116,11 @@ if __name__ == '__main__':
         os.chdir( os.path.join(models_path,model[1].replace('/',':')) )
         
         # text of the Dockerfile (starts with comments)
-        text = """#######################################################################
-    # Dockerfile to build model """ + str(model[0]) + """
-    # Based on continuumio/miniconda, produced by dockerwriter.py
-    #######################################################################
+        text = """######################################################################## Dockerfile to build model """ + str(model[0]) + """
+# Based on continuumio/miniconda, produced by dockerwriter.py
+#######################################################################
 
-    """
+"""
         
         # FROM statement
         text += 'FROM continuumio/miniconda\n'
@@ -165,24 +161,23 @@ if __name__ == '__main__':
         
         # RUN to install model dependencies
         if model[5] != None and model[5] != "": 
-            text += "RUN conda install -f -q --file /model"+str(model[0])+"/"+model[5]+"\n"
+            text += "RUN conda install -y -q --file /model"+str(model[0])+"/" + model[5] + "\n"
         
         # name and write the Dockerfile
         output_name = 'Dockerfile_' + str(model[0])
         with open( output_name ,'w') as output:
             output.write(text)
             
-        # build the docker container (if applicable) and ?print count
-        count += 1
+        # build the docker container (if applicable) and ?print progress
         if ('-b' in sys.argv or '--build' in sys.argv):
             dockbuild(model,"../dockmodel")
-            #print str(count) + " images built!"
-        elif ('-t' in sys.argv or '--test' in sys.argv) and (count == 1):
+            #print "image built for model " + str(model[0]) + "!"
+        elif ('-t' in sys.argv or '--test' in sys.argv) and (model[0] == 1):
             dockbuild(model,"../dockmodel")
-            #print "Test complete!\n1 Dockerfile written"
+            #print "Test Complete!\nDockerfile written for model " + str(model[0]) + "!"
         else :
             pass
-            #print str(count) + " Dockerfile(s) written!"
+            #print "Dockerfile written for model " + str(model[0]) + "!"
         
         model = cur.fetchone()
     
