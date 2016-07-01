@@ -164,7 +164,8 @@ if __name__ == '__main__':
         if model[5] != None and model[5] != "": 
             text += "RUN conda install -y --file /model"+str(model[0])+"/" + model[5] + "\n"
         
-        # RUN to setup model conda environment and activate it
+        # RUN to setup model conda environment and activate it 
+        # TODO: the conda env create cannot read a requirements.txt file
         #if model[5] != None and model[5] != "": 
         #    text += "RUN conda env create "                         # create env
         #    text += "--name model"+str(model[0]) + " "
