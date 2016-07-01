@@ -13,6 +13,7 @@ import MySQLdb as db
 import json
 import sys
 import os
+import subprocess
 
 # configuration
 cnx = db.connect(host = 'localhost',user='doirisks',passwd='bitnami',db='doiarchive')
@@ -88,6 +89,7 @@ CREATE TABLE `models` (
   `value` varchar(255), 
   `lcl` varchar(255), 
   `ucl` varchar(255), 
+  `config` varchar(255),
   
   `modified` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 /*  `uploaded` DATE DEFAULT CURRENT_DATE,*/
@@ -140,55 +142,38 @@ elif 1 < len(sys.argv):                         # more than one argument
             print 'ERROR: directory invalid'
 """
 
-# running scripts
+# runs scripts and returns the sql query as output
 def run_scripts_in(mypath,recurs):
-    if recurs == DEPTH: return   
+    if recurs == DEPTH: return ""
+    text = ""
     count = 0
     print mypath
     os.chdir(mypath)
     
     onlyfiles = [f for f in os.listdir(mypath) if os.path.isfile(os.path.join(mypath, f))]
-    notfiles = [f for f in os.listdir(mypath) if ( not os.path.isfile(os.path.join(mypath, f)) and f[0] != '.' )]
     onlyfiles.sort()
+    notfiles = [f for f in os.listdir(mypath) if ( not os.path.isfile(os.path.join(mypath, f)) and f[0] != '.' )]
+    notfiles.sort()
 ##############################################################################################################
     for f in onlyfiles:
         if f[:5] == "new_c" and f[-3:] == '.py':        # change this line if lines are changed
-            print os.path.join(mypath, f)
-            os.system('python "' + os.path.join(mypath, f) + '"')
+            thefile = os.path.join(mypath, f)
+            print(thefile)
+            p = subprocess.Popen(['python', os.path.join(mypath, f)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            newtxt, newerr = p.communicate()
+            text += newtxt + newerr
             count += 1
     
     for d in notfiles:
-        run_scripts_in(os.path.join(mypath,d),recurs+1)
-    print count
+        text += run_scripts_in(os.path.join(mypath,d),recurs+1)
+    
+    print(count)
     print
+    return(text)
 
-# combining sql commands
-def merge_sql_commands(mypath,recurs):
-    text = ""
-    if recurs == DEPTH: return text
-    
-    onlyfiles = [f for f in os.listdir(mypath) if os.path.isfile(os.path.join(mypath, f))]
-    notfiles = [f for f in os.listdir(mypath) if ( not os.path.isfile(os.path.join(mypath, f)) and f[0] != '.' )]
-    onlyfiles.sort()
-##############################################################################################################
-    for f in onlyfiles:
-        if f[:5] == "confi" and f[-4:] == '.sql':
-            infile = open(os.path.join(mypath, f),'r')
-            text += infile.read()
-            infile.close()
-            text += ';\n'
-    
-    for d in notfiles:
-        text += str(merge_sql_commands(os.path.join(mypath,d),recurs+1))
-    
-    return text
-    
-# run the scripts
-run_scripts_in(START,0)
-
-os.chdir(CURDIR)
-# get the commands
-insert_query = merge_sql_commands(START,0)
+#os.chdir(CURDIR)
+# run the scripts and build query
+insert_query = run_scripts_in(START,0)
 insert_query += "COMMIT;\n"
 
 #print insert_query
