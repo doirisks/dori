@@ -13,6 +13,7 @@ OPTIONS:
 N.B: run models.py and CUIs.py first!
 """
 
+from connection_config import *
 import MySQLdb as db
 import json
 import sys
@@ -95,7 +96,7 @@ def dockbuild(model, dockmodel):
     
 if __name__ == '__main__':
     # connect to mysql server
-    cnx = db.connect(host='localhost',db = 'doiarchive', user='doirisks', passwd='bitnami')
+    cnx = db.connect(host=DEFAULT_HOSTNAME,db = DEFAULT_DATEBASE, user=DEFAULT_USERNAME, passwd=DEFAULT_PASSWORD)
     cur = cnx.cursor()
 
     # get data on the models
@@ -103,7 +104,7 @@ if __name__ == '__main__':
     cur.execute(fetch_query)
 
     # save the base, should be the path to ......./dori-master/models
-    models_path = os.getcwd()
+    models_path = os.path.abspath(os.path.join(os.getcwd(),"../models"))
 
     # iterate through all of the models
     model = cur.fetchone()

@@ -8,7 +8,7 @@ builds the 'models' table in doiarchives from config.py files
 N.B: relies on "new_config_gener.py" files in model directories
 """
 
-
+from connection_config import *
 import MySQLdb as db
 import json
 import sys
@@ -16,7 +16,7 @@ import os
 import subprocess
 
 # configuration
-cnx = db.connect(host = 'localhost',user='doirisks',passwd='bitnami',db='doiarchive')
+cnx = db.connect(host = DEFAULT_HOSTNAME,user=DEFAULT_USERNAME,passwd=DEFAULT_PASSWORD,db=DEFAULT_DATEBASE)
 
 cur2 = cnx.cursor()
 # refresh the table
@@ -118,8 +118,9 @@ cur3 = cnx.cursor()
 USAGE = 'USAGE: run_scripts_in [DEPTH] [DIRECTORY]'
 
 DEPTH = 2
-CURDIR = os.getcwd()
-START = CURDIR
+models_path = os.path.abspath(os.path.join(os.getcwd(),"../models"))
+START = models_path
+os.chdir(models_path)
 
 """
 # input checks
@@ -171,7 +172,6 @@ def run_scripts_in(mypath,recurs):
     print
     return(text)
 
-#os.chdir(CURDIR)
 # run the scripts and build query
 insert_query = run_scripts_in(START,0)
 insert_query += "COMMIT;\n"

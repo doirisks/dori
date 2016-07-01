@@ -7,6 +7,7 @@ builds the 'CUIs' table in the doiarchives from the 'models' table
 """
 
 
+from connection_config import *
 import MySQLdb as db
 import json
 
@@ -53,7 +54,7 @@ def treatgroup(group, groupCUI, groupname, modelID):
 
     
 # configuration
-cnx = db.connect(host = 'localhost',user='doirisks',passwd='bitnami',db='doiarchive')
+cnx = db.connect(host = DEFAULT_HOSTNAME,user=DEFAULT_USERNAME,passwd=DEFAULT_PASSWORD,db=DEFAULT_DATEBASE)
 cur1 = cnx.cursor()
 
 cur1.execute("SELECT id,must,mustCUI,mustnot,mustnotCUI,outcome,outcomeCUI,output,outputCUI,inpname,inpCUI,inpunits,inpdatatype, lower,upper FROM `models`")
