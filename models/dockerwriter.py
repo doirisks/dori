@@ -53,7 +53,11 @@ def dockbuild(model, dockmodel):
     if not os.path.isdir(dockmodel):
         os.system("sudo mkdir " + dockmodel)
     # ensure that it is clean
-    os.system("sudo rm -rf "+dockmodel+"/*")        # DANGEROUS LINE
+    if os.path.samefile(dockmodel,"/"):                 # some error checking
+        print "Tried to build in root!"
+        return()
+    else :
+        os.system("sudo rm -rf "+dockmodel+"/*")        # DANGEROUS LINE
     
     # files which will be included in the container
     added = []
@@ -143,7 +147,7 @@ if __name__ == '__main__':
         # rules for python imports (PART I)
         if model[2][:6] == 'python' or model[2] == 'py':
             # install pip
-            text += 'RUN conda install pip\n'
+            text += 'RUN conda install -y pip\n'
             
         # rules for R imports (PART I)
         elif model[2] == 'R' or model[2] == 'r':
@@ -156,12 +160,17 @@ if __name__ == '__main__':
             continue # just skips them for now!
         ###################################################################### for ALL languages
         
-        # setup model conda environment
-        #TODO
-        
         # RUN to install model dependencies
         if model[5] != None and model[5] != "": 
-            text += "RUN conda install -y -q --file /model"+str(model[0])+"/" + model[5] + "\n"
+            text += "RUN conda install -y --file /model"+str(model[0])+"/" + model[5] + "\n"
+        
+        # RUN to setup model conda environment and activate it
+        if model[5] != None and model[5] != "": 
+            text += "RUN conda env create "                         # create env
+            text += "--name model"+str(model[0]) + " "
+            text += "--file " + os.path.join("model"+str(model[0]), model[5]) + " "
+            text += "\n"
+            text += "RUN source activate model" + str(model[0])     # activate the model
         
         # name and write the Dockerfile
         output_name = 'Dockerfile_' + str(model[0])
