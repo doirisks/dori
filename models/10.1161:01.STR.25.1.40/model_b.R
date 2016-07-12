@@ -84,7 +84,7 @@ save(list = c('female', 'male'), file = "model_b_table.Rdata");
 
 # accepts a dataframe argument
 model_df = function (patients) {
-  # male table
+  # load table
   load("model_b_table.Rdata");
   
   # apply a lambda function to each row
