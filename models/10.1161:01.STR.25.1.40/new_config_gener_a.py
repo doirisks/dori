@@ -12,7 +12,7 @@ config['id']['DOI'] = '10.1161/01.STR.25.1.40'
 config['id']['papertitle'] = 'Stroke Risk Profile: Adjustment for Antihypertensive Medication'      
 config['id']['modeltitle'] = 'Risk Score by Beta Coefficients (Table 1)'     #TODO
 config['id']['yearofpub'] = '1994'          
-config['id']['authors'] = ["D'Agostino, R.B.","Wolf, P.A.", "Belanger, A.J.","Kannel, W.B."]
+config['id']['authors'] = ["DAgostino, R.B.","Wolf, P.A.", "Belanger, A.J.","Kannel, W.B."]
 
 # population constraints
 config['population'] = {}
@@ -44,14 +44,14 @@ config['data'] = {}
 config['data']['filename'] = ['']   # name tabular data file     ['All of the Data']
 config['data']['fileurl'] = ['']    # some kind of pointer?      ['/var/www/models/99.9999:aaa.a9/all.Rdata']
 config['data']['datumname'] = ['Sample Size']  # important data for easy access    ['Sample Size']
-config['data']['datum'] = ['']      # values for important data         ['8,000,000,000']
+config['data']['datum'] = ['5734']      # values for important data         ['8,000,000,000']
 
 # model function and dependencies
 config['model'] = {}
 config['model']['language'] = 'R'
 config['model']['uncompiled'] = ['model_a.R']
 config['model']['compiled'] = ['']              #no Rdata file?
-config['model']['dependList'] = None        # requirements.txt?
+config['model']['dependList'] = 'requirements.txt'        # requirements.txt?
 config['model']['example'] = ['']     
 
 # I do not know what this would be used for
