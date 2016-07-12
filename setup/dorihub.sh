@@ -34,3 +34,9 @@ rm sqlsetup.sql
 # run setup scripts individually
 cd setup
 ./setup.sh
+
+# this should not be necessary TODO
+sleep 1
+./CUIs.py
+sleep 1
+./CUIs.py
