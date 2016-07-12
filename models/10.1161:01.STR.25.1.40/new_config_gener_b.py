@@ -74,7 +74,6 @@ with open(config_name + '.json','w') as output:
 
 # dump sql config file 
 import sql
-sqlfile = open(config_name + '.sql','w')
 models_table = sql.Table('models')
 
 modvalues = [

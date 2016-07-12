@@ -1,0 +1,10 @@
+######################################################################## Dockerfile to build model 28
+# Based on continuumio/miniconda, produced by dockerwriter.py
+#######################################################################
+
+FROM continuumio/miniconda
+MAINTAINER "DOI RISKS"
+ADD ./ model28
+RUN cp -n /model28/modela.py /model28/model.py
+RUN conda install -y pip
+RUN conda install -y --file /model28/requirements.txt
