@@ -46,5 +46,5 @@ sleep 1
 ./CUIs.py
 
 # set interface as the DocumentRoot of the server
-sed "s/DocumentRoot .*/ServerRoot \/src\/interface\/public/g" /etc/apache2/sites-available/example.com.conf
+sed "s/DocumentRoot .*/DocumentRoot \/src\/interface\/public/g" /etc/apache2/sites-available/example.com.conf
 
