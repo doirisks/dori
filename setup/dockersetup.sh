@@ -47,6 +47,7 @@ sleep 1
 
 # set interface as the default webpage of the server
 cp -r /src/interface /var/www/interface
+mkdir /var/www/interface/log
 chmod -R 755 /var/www/interface
 sed -i "s/example.com\/public_html/interface\/public/g" /etc/apache2/sites-available/example.com.conf
 sed -i "s/example.com/interface/g" /etc/apache2/sites-available/example.com.conf
