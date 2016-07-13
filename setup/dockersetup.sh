@@ -46,14 +46,14 @@ sleep 1
 ./CUIs.py
 
 # set interface as the default webpage of the server
-cp /src/interface /var/www/interface
+cp -r /src/interface /var/www/interface
 chmod -R 755 /var/www/interface
 sed -i "s/example.com\/public_html/interface\/public/g" /etc/apache2/sites-available/example.com.conf
 sed -i "s/example.com/interface/g" /etc/apache2/sites-available/example.com.conf
 cp /etc/apache2/sites-available/example.com.conf /etc/apache2/sites-available/interface.conf
-a2dissite /etc/apache2/sites-available/example.com.conf 
+a2dissite example.com.conf 
 rm /etc/apache2/sites-available/example.com.conf 
-a2ensite /etc/apache2/sites-available/interface.conf
+a2ensite interface.conf
 chmod -R 755 /src/interface/
 
 # stop the mysql server
