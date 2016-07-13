@@ -31,7 +31,7 @@ service mysql start
 
 # make a small sql command file, run it, and delete it
 # maybe do this step with python instead?
-echo "CREATE DATABASE doiarchive ; CREATE USER doirisks@localhost IDENTIFIED BY 'bitnami'; GRANT ALL PRIVILEGES ON doiarchive.* TO 'doirisks'@'localhost';" > sqlsetup.sql
+echo "CREATE DATABASE doiarchive ; CREATE USER doirisks@localhost IDENTIFIED BY 'bitnami'; GRANT ALL PRIVILEGES ON doiarchive.* TO 'doirisks'@'localhost'; COMMIT;" > sqlsetup.sql
 mysql -u root -p"Admin2015" < sqlsetup.sql
 rm sqlsetup.sql
 
