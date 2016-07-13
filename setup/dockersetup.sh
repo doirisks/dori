@@ -4,7 +4,7 @@
 # by Ted M
 #
 # setup script for a linode/lamp docker container
-#
+# apache2 and mysql must started in docker container (for now)
 
 # update the container to make installation possible
 apt-get update
@@ -48,4 +48,6 @@ sleep 1
 # set interface as the DocumentRoot of the server
 sed -i "s/DocumentRoot .*/DocumentRoot \/src\/interface\/public/g" /etc/apache2/sites-available/example.com.conf
 chmod -R 755 /src/interface/
-service apache2 start
+
+# stop the mysql server
+service mysql stop
