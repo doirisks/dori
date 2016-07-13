@@ -29,4 +29,5 @@ if ($_GET['short'] == NULL) {
 else {
     echo 'booop'; //TODO
 }
+mysql_close();
 ?>
