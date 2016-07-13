@@ -47,4 +47,4 @@ sleep 1
 
 # set interface as the DocumentRoot of the server
 sed "s/DocumentRoot .*/DocumentRoot \/src\/interface\/public/g" /etc/apache2/sites-available/example.com.conf
-
+service apache2 start
