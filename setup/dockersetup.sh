@@ -46,5 +46,6 @@ sleep 1
 ./CUIs.py
 
 # set interface as the DocumentRoot of the server
-sed "s/DocumentRoot .*/DocumentRoot \/src\/interface\/public/g" /etc/apache2/sites-available/example.com.conf
+sed -i "s/DocumentRoot .*/DocumentRoot \/src\/interface\/public/g" /etc/apache2/sites-available/example.com.conf
+chmod -R 755 /src/interface/
 service apache2 start
