@@ -20,12 +20,20 @@ foreach( $posted_array as $id ) {
         $ans[$id]['error'] = 'invalid id';
     }
 
-    // build, run, and store query
+    // build and run query
     $to_query = "SELECT * FROM `models` WHERE id = " . $id ;
-    $ans[$id] = query($to_query);
+    $from_query = query($to_query);
     
-    if ( empty($ans[$id]) ) {
+    # handle query output
+    if (count($from_query) == 0) {
         $ans[$id]['error'] = 'no models found';
+    }
+    else if (count($from_query) == 1) {
+        $ans[$id] = $from_query[0];
+    }
+    else {
+        $ans[$id]['error'] = 'duplicate models found!';
+        $ans[$id]['models'] = $from_query;
     }
 }
 
