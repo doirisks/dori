@@ -67,11 +67,11 @@ foreach ($models as $id) {
         $arg = $CUI_vals[$CUI];
         
         // check that CUI's value is in valid range (unnecessary for bools!)
-        if (!empty($lower[$index]) and ($arg < $lower[$index])) {
+        if (!empty($lowers[$index]) and ($arg < $lowers[$index])) {
             $ans[$id]['error'] = 'CUI below acceptable range: ' . $CUI;  // CUI below acceptable range
             break;
         }
-        if (!empty($upper[$index]) and ($arg > $upper[$index])) {
+        if (!empty($uppers[$index]) and ($arg > $uppers[$index])) {
             $ans[$id]['error'] = 'CUI above acceptable range: ' . $CUI;  // CUI above acceptable range
             break;
         }
