@@ -1,7 +1,7 @@
 <?php
 /**
- * find all models that can
- *
+ * find all models for which a set of CUIs can fill all inputs
+ * (accepts either array or associative array json input)
  *
  **/
 
@@ -11,6 +11,14 @@
 require('../../../../includes/query_conf.php'); 
 $str_json = file_get_contents('php://input');
 $posted_array = json_decode($str_json, true);
+
+// supplies JUNK VALUES if CUIs are given without values
+if (is_array($posted_array) ) {
+    foreach($posted_array as $CUI) {
+        $replacement[$CUI] = 1;
+    }
+    $posted_array = $replacement;
+}
 
 // clean input, then expand CUIs via derived CUIs
 $CUIs = array();
@@ -62,9 +70,9 @@ $modelIDs = array_keys($inputIDcounts);     // this line used in debug AND in ac
 // build query to get models
 $to_query = "SELECT * FROM `models` WHERE ( id = ";
 foreach ($modelIDs as $id) {
-    $to_query .= htmlspecialchars ($modelID);
+    $to_query .= htmlspecialchars ($id);
     $to_query .= " AND numofinputs = ";
-    $to_query .= htmlspecialchars ($inputIDcounts[$modelID]);
+    $to_query .= htmlspecialchars ($inputIDcounts[$id]);
     $to_query .= " ) OR ( id = ";
 }
 
