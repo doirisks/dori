@@ -3,6 +3,7 @@
  * find all models for which a set of CUIs can fill all inputs
  * (accepts either array or associative array json input)
  *
+ * DOES NOT SCREEN FOR INAPPROPRIATE POPULATIONS
  **/
 
 
@@ -70,7 +71,7 @@ $modelIDs = array_keys($inputIDcounts);     // this line used in debug AND in ac
 // build query to get models
 $to_query = "SELECT * FROM `models` WHERE ( id = ";
 foreach ($modelIDs as $id) {
-    $to_query .= htmlspecialchars ($id);
+    $to_query .= htmlspecialchars($id);
     $to_query .= " AND numofinputs = ";
     $to_query .= htmlspecialchars ($inputIDcounts[$id]);
     $to_query .= " ) OR ( id = ";
