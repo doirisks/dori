@@ -86,7 +86,7 @@
         $CUI_vals = [];
         foreach ($CUIs as $CUI) {
             $CUI = htmlspecialchars ($CUI);
-            $CUI_vals[$CUI] = $_GET[$CUI];
+            $CUI_vals[$CUI] = $QUERYDATA[$CUI];
             // debugging CUIs passed
             //echo "<p>" . $CUI . ", ". $_GET[$CUI] . "</p>\n";
         }
