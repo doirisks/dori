@@ -116,7 +116,7 @@
         // build a query
         $to_query = "SELECT `CUI` FROM `CUIs` WHERE (CUI != '";
         foreach ($CUIs as $CUI) {
-            if ( strcasecmp($CUI_vals[$CUI],'true') == 0) {
+            if ( (is_string($CUI_vals[$CUI])) and (strcasecmp($CUI_vals[$CUI],'true') == 0) ) {
                 $to_query .= $CUI;
                 $to_query .= "' AND CUI LIKE '%";
                 $to_query .= $CUI;
