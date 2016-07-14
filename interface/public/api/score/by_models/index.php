@@ -15,21 +15,22 @@
 // get query configurations and posted json
 require('../../../../includes/query_conf.php'); 
 $str_json = file_get_contents('php://input');
+$posted_array = json_decode($str_json, true);
 
 // guarantee that model ids were sent
-if (!isset($str_json['models'] or empty($str_json['models'])) {
-    $ans = ['error':'no models sent']
+if ( (!isset($posted_array['models'])) or (empty($posted_array['models'])) ) {
+    $ans['error'] = 'no models sent';
     die(json_encode($ans));
 }
 
 // store 'models' element in its own variables
-$models = $str_json['models'];
-unset( $this->$CUIs['models'] );  // TODO test: works without "$this->"   ...?
+$models = $posted_array['models'];
+$CUIs['models'] = null;  
 
 // clean input, then expand CUIs via derived CUIs
 $CUIs = array();
 $CUI_vals = [];
-prep_CUIs($CUIs,$CUI_vals,$str_json);
+prep_CUIs($CUIs,$CUI_vals,$posted_array);
 
 // a variable for the response
 $ans = [];
@@ -38,8 +39,8 @@ $ans = [];
 foreach ($models as $id) {
     
     // check that id is numerical
-    if ( !ctype_digit($id) ){
-        $ans[$id] = ['error':'bad id'];
+    if ( !ctype_digit((string)$id) ){
+        $ans[$id]['error'] = 'bad id';
         continue;
     }
 
@@ -57,7 +58,7 @@ foreach ($models as $id) {
     foreach ($inputs as $index => $CUI) {               // TODO check CUIs and arguments
     
         // make sure a CUI value exists
-        if (!isset($CUI_vals[$CUI]) {
+        if (!isset($CUI_vals[$CUI])) {
             $ans[$id]['error'] = 'missing CUI: ' . $CUI;  // identify a missing CUI
             break;
         }
@@ -94,11 +95,11 @@ foreach ($models as $id) {
                     $arg = (string)round((float)$arg);
                 } else {
                     // otherwise, error
-                    $ans[$id]['error'] = 'bad integer CUI: ' . $CUI]);  // identify a bad CUI
+                    $ans[$id]['error'] = 'bad integer CUI: ' . $CUI;  // identify a bad CUI
                     break;
                 }
             } else {
-                $ans[$id]['error'] = 'bad integer CUI: ' . $CUI]);  // identify a bad CUI
+                $ans[$id]['error'] = 'bad integer CUI: ' . $CUI;  // identify a bad CUI
                 break;
             }
         } 
@@ -111,11 +112,11 @@ foreach ($models as $id) {
                     // arg is already fine
                 }
                 else {
-                    $ans[$id]['error'] = 'bad float CUI: ' . $CUI]);  // identify a bad float
+                    $ans[$id]['error'] = 'bad float CUI: ' . $CUI;  // identify a bad float
                     break;
                 }
             } else {
-                $ans[$id]['error'] = 'bad float CUI: ' . $CUI]);  // identify a bad float
+                $ans[$id]['error'] = 'bad float CUI: ' . $CUI;  // identify a bad float
                 break;
             }
         }
