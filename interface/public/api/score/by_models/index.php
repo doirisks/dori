@@ -77,9 +77,13 @@ foreach ($models as $id) {
         }
         
         if ($datatypes[$index] == 'bool') {     // bool, convert to integer
-            if ($arg == 'true') {
+            if ($arg === true) {
                 $arg = '1';
-            } else if ($arg == 'false') {
+            } else if ($arg === false) {
+                $arg = '0';
+            } else if ($arg == "true") {
+                $arg = '1';
+            } else if ($arg == "false") {
                 $arg = '0';
             } else {
                 $ans[$id]['error'] = 'bad boolean CUI: ' . $CUI;  // identify a bad bool
