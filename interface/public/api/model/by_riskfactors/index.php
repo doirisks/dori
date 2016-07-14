@@ -90,7 +90,7 @@ else {
 
 $models = query($to_query);
 if ( count($models) == 0 ) {
-    $ans['error'] = 'insufficient data';
+    $ans['error'] = 'no models received';
     echo json_encode($ans);
     exit();
 }
