@@ -6,22 +6,6 @@
 # setup script for a ubuntu:14.04 docker container
 # apache2 and mysql must started in docker container (for now)
 
-# update the container to make installation possible
-apt-get update -y
-apt-get install -y apache2
-apt-get install -y mysql-server
-apt-get install -y php5
-apt-get install -y php5-mysql
-
-# install necessary python (condense to a requirements.txt or .yml or something?)
-apt-get install -y python2.7
-apt-get install -y python-sql
-apt-get install -y python-MySQLdb
-apt-get install -y python-numpy
-
-# install R?
-#TODO
-
 # start mysql server
 service mysql start
 
