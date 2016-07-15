@@ -4,7 +4,7 @@
 #
 #####################################
 
-FROM ubuntu:14.04
+FROM doirisks/doribase
 MAINTAINER "DOI RISKS"
 
 ADD . /src
