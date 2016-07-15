@@ -29,8 +29,8 @@ config['input']['description'] = ['Sex (Male = True)','Antihypertensive Medicati
 config['input']['CUI'] = ['C0086582','C0684167','C0804405','C0364708','C0364221','C0488055','C3496611','C1315719']
 config['input']['units'] = ['','','years','mg/dL','mg/dL','mmHg','','']   
 config['input']['datatype'] = ['bool','bool','float','float','float','float','bool','bool']
-config['input']['upper'] = ['','74','','','','','','']
-config['input']['lower'] = ['','30','','','','','','']
+config['input']['upper'] = ['','','74','','','','','']
+config['input']['lower'] = ['','','30','','','','','']
 
 # human and machine readable output descriptions
 config['output'] = {}
