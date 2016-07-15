@@ -14,26 +14,24 @@ if ( (!is_array($posted_array)) or (count($posted_array) == 0) ) {
 // iterate through ids
 $ans = [];
 foreach( $posted_array as $id ) {
-    // ensure that id is valid
+    // ensure that id is numerical
     $id = (string)$id;
     if ( !ctype_digit($id) ) {
         $ans[$id]['error'] = 'invalid id';
     }
 
-    // build and run query
-    $to_query = "SELECT id, DOI, language, compiled, uncompiled, dependList, example, config FROM `models` WHERE id = " . $id ;
-    $from_query = query($to_query);
+    // build command
+    $command = "python ../../../../scripts/makedockerfolder.py " . (string)$id;
     
-    # handle query output
-    if (count($from_query) == 0) {
-        $ans[$id]['error'] = 'no models found';
-    }
-    else if (count($from_query) == 1) {
-        $ans[$id] = $from_query[0];
-    }
-    else {
-        $ans[$id]['error'] = 'duplicate models found!';
-        $ans[$id]['models'] = $from_query;
+    // execute and handle command
+    $modeloutput = array();
+    exec($command,$modeloutput);
+    if (count($modeloutput) < 1) {                          // ensure an answer came back
+        $ans[$id]['error'] = "no response script";
+    } else if (!ctype_digit($modeloutput[0])) {             // ensure that the answer was a numerical hash
+        $ans[$id]['error'] = "invalid hash returned";
+    } else {                                                // record the hash
+        $ans[$id]['hash'] = $modeloutput[0];
     }
 }
 

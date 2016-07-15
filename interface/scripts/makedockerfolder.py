@@ -119,6 +119,9 @@ def dockprepzip(model, dynamic_content):
     os.system("sudo tar cfz " + dockpath" + ".tar.gz " + dockpath")
     # remove the folder
     os.system("sudo rm -r " + dockpath)
+    
+    # return the dockhash
+    return(dockhash)
 
 # import from dockerwriter (hard coded)
 conn_conf = imp.load_source("/src/setup/connection_config", "connection_config", open("/src/setup/connection_config.py", 'r') )
@@ -155,5 +158,6 @@ model[6] = json.loads(model[6]) # example(s)
 os.chdir( os.path.join(MODELS_PATH,model[1].replace('/',':')) )
 
 # build the model
-dockprepzip(model,DYNAMIC_CONTENT_DIRECTORY)
+dockhash = dockprepzip(model,DYNAMIC_CONTENT_DIRECTORY)
 
+print(dockhash)
