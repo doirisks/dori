@@ -21,15 +21,15 @@ foreach( $posted_array as $id ) {
     }
 
     // build command
-    $command = "python ../../../../scripts/makedockerfolder.py " . (string)$id;
+    $command = '../../../../scripts/makedockerfolder.py ' . (string)$id;
     
     // execute and handle command
     $modeloutput = array();
     exec($command,$modeloutput);
     if (count($modeloutput) < 1) {                          // ensure an answer came back
-        $ans[$id]['error'] = "no response script";
-    } else if (!ctype_digit($modeloutput[0])) {             // ensure that the answer was a numerical hash
-        $ans[$id]['error'] = "invalid hash returned";
+        $ans[$id]['error'] = "no response from script";
+    } else if ( (!ctype_digit($modeloutput[0])) or ($modeloutput[0] == "") ) {             // ensure that the answer was a numerical hash
+        $ans[$id]['error'] = $modeloutput[0];
     } else {                                                // record the hash
         $ans[$id]['hash'] = $modeloutput[0];
     }

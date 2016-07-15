@@ -15,7 +15,6 @@ DOCKHASH_MIN = 1000                         # starting and maximum hashes for dy
 DOCKHASH_MAX = 9999
 MODELS_PATH = "/src/models"                 # path to models directory in source
 
-
 # basic imports
 import os
 import sys
@@ -52,9 +51,9 @@ def populate(added, target):
             end = os.path.join(target, item)
             #print end
             if os.path.isdir(start):
-                os.system('sudo cp -r "' + start + '" "' + end + '"') 
+                os.system('cp -r "' + start + '" "' + end + '"') 
             else :
-                os.system('sudo cp "' + start + '" "' + end + '"') 
+                os.system('cp "' + start + '" "' + end + '"') 
             # consider using -l (link) for the cp command
             # this option might speed up the process and save disk space, esp for bigger models
             # how would docker build react?
@@ -62,13 +61,9 @@ def populate(added, target):
 # dockbuild([id, DOI, language, compiled, uncompiled, dependList, example, config])
 # prepares a tar.gz with all necessary parts and the Dockerfile
 # must be run from the model's DOI directory after Dockerfile has been built
-# requires root privileges to run
+# requires root privileges to run (?)
 def dockprepzip(model, dynamic_content):
     dynamic_content = os.path.abspath(dynamic_content)
-    
-    # make the dynamic content directory exists
-    if not os.path.isdir(dynamic_content):
-        os.system("sudo mkdir " + dynamic_content)
     
     # create a unique directory for this call
     dockhash = 1000
@@ -77,10 +72,10 @@ def dockprepzip(model, dynamic_content):
         dockhash += 1
         # limit the number of model requests that can exist in the queue
         if dockhash > DOCKHASH_MAX:
-            print "error"
+            print("error")
             exit()
         dockpath = os.path.join( dynamic_content, str(dockhash) )
-    os.system("sudo mkdir " + dockhash)
+    os.system("mkdir " + dockpath)
     
     # files which will be included in the container
     added = []
@@ -110,16 +105,23 @@ def dockprepzip(model, dynamic_content):
     
     # populate the folder from which the docker container will be built
     populate(added, dockpath)
-    
-    # move in the Dockerfile
-    if os.path.isfile(   os.path.join(os.getcwd(), "Dockerfile_"+ str(model[0]))   )
-    os.system("sudo cp Dockerfile_"+ str(model[0]) + " " + dockpath + "/Dockerfile")
-    
+   
+    # move in the Dockerfile if it exists
+    if os.path.isfile(   os.path.join(os.getcwd(), "Dockerfile_"+ str(model[0]))   ):
+        os.system("cp Dockerfile_"+ str(model[0]) + " " + dockpath + "/Dockerfile")
+    else :
+        print("error")
+        exit()
+
+    # make sure that there is no / at the end of the dockpath
+    if (dockpath[-1] == '/'):
+        dockpath = dockpath[:-1]
+
     # zip the folder
-    os.system("sudo tar cfz " + dockpath" + ".tar.gz " + dockpath")
+    os.system("tar cfz " + dockpath + ".tar.gz " + dockpath)
     # remove the folder
-    os.system("sudo rm -r " + dockpath)
-    
+    #os.system("rm -rf " + dockpath)
+
     # return the dockhash
     return(dockhash)
 
