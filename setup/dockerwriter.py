@@ -153,8 +153,7 @@ if __name__ == '__main__':
             
         # rules for R imports (PART I)
         elif model[2] == 'R' or model[2] == 'r':
-            model = cur.fetchone()
-            continue # just skips them for now!
+            pass
         
         # rules for unrecognized languages
         else :
