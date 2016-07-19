@@ -26,5 +26,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-MySQLdb
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-numpy
 
 # install R
+RUN DEBIAN_FRONTEND=noninteractive apt-get build-dep -y r-base
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y r-base
 
