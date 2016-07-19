@@ -140,7 +140,11 @@ foreach ($models as $id) {
             $command .= " " . $arg;
         }
     } else if ( strtolower($model['language']) == 'r' ) {
-        //TODO
+        $command = 'Rscript ../../../../scripts/Rrisk.R "' . MODELROOT . '" "' . $model['DOI'] . '"';
+        $command .= " " . json_decode($model['compiled'])[0];
+        foreach( $modelargs as $arg) {
+            $command .= " " . $arg;
+        }
     } else if ( strtolower($model['language']) == 'sas' ) {
         //TODO
     }
