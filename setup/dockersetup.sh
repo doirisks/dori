@@ -28,3 +28,8 @@ chown -R www-data:www-data /var/www/interface/
 
 # stop the mysql server
 service mysql stop
+
+# make a startup script to run apache2 and mysql
+echo "#!/bin/bash
+service apache2 start; service mysql start" > onstart.sh
+chmod +x onstart.sh
