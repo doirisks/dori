@@ -32,6 +32,8 @@ $CUIs = array();
 $CUI_vals = [];
 prep_CUIs($CUIs,$CUI_vals,$posted_array);
 
+echo json_encode($CUI_vals);
+
 // a variable for the response
 $ans = [];
 

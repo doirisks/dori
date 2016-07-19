@@ -109,7 +109,7 @@
         // BMI
         if (in_array('heightCUI',$CUIs) && in_array('weightCUI',$CUIs)) {
             array_push($CUIs,'BMI_CUI');
-            $CUI_vals['BMI_CUI'] = $CUI_vals['BMI_CUI'];
+            $CUI_vals['BMI_CUI'] = $CUI_vals['BMI_CUI']; #TODO
         }
         
         // add disjunctive CUIs ("CUIs" with OR in them)
@@ -130,7 +130,7 @@
         else {
             $to_query = substr($to_query,0,-14);
             // debug here
-            //echo htmlspecialchars($to_query);
+            echo htmlspecialchars($to_query);
             $data = query($to_query);
             foreach( $data as $datum ) {
                 array_push($CUIs,$datum['CUI']);
