@@ -153,7 +153,8 @@ if __name__ == '__main__':
             
         # rules for R imports (PART I)
         elif model[2] == 'R' or model[2] == 'r':
-            pass
+            # install conda R
+            text += 'RUN conda install -y -c r r\n'
         
         # rules for unrecognized languages
         else :
