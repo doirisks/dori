@@ -23,7 +23,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-MySQLdb
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-numpy
 
 # install R
-RUN DEBIAN_FRONTEND=noninteractive wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
+ADD https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh ./Miniconda2-latest-Linux-x86_64.sh
 RUN DEBIAN_FRONTEND=noninteractive bash Miniconda2-latest-Linux-x86_64.sh
 RUN DEBIAN_FRONTEND=noninteractive conda update conda
 RUN DEBIAN_FRONTEND=noninteractive conda install -c r r
