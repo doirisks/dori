@@ -118,7 +118,7 @@ def dockprepzip(model, dynamic_content):
         dockpath = dockpath[:-1]
 
     # zip the folder
-    os.system("tar cfz " + dockpath + ".tar.gz " + dockpath)
+    os.system("tar cfz " + dockpath + ".tar.gz -C " + dockpath + " .")
     # remove the folder
     #os.system("rm -rf " + dockpath)
 
