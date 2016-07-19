@@ -116,7 +116,7 @@
         // build a query
         $to_query = "SELECT `CUI` FROM `CUIs` WHERE (CUI != '";
         foreach ($CUIs as $CUI) {
-            if ( (is_string($CUI_vals[$CUI])) and (strcasecmp($CUI_vals[$CUI],'true') == 0) ) {
+            if ( $CUI_vals[$CUI] === true ) {
                 $to_query .= $CUI;
                 $to_query .= "' AND CUI LIKE '%";
                 $to_query .= $CUI;
@@ -130,7 +130,7 @@
         else {
             $to_query = substr($to_query,0,-14);
             // debug here
-            echo htmlspecialchars($to_query);
+            #echo htmlspecialchars($to_query) . "\n";
             $data = query($to_query);
             foreach( $data as $datum ) {
                 array_push($CUIs,$datum['CUI']);
