@@ -23,7 +23,8 @@ cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/in
 a2dissite 000-default.conf 
 rm /etc/apache2/sites-available/000-default.conf 
 a2ensite interface.conf
-chmod -R 755 /src/interface/
+#chmod -R 755 /src/interface/ # unnecessary
+chown -R www-data:www-data /var/www/interface/
 
 # stop the mysql server
 service mysql stop

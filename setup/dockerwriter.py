@@ -121,7 +121,8 @@ if __name__ == '__main__':
         os.chdir( os.path.join(models_path,model[1].replace('/',':')) )
         
         # text of the Dockerfile (starts with comments)
-        text = """######################################################################## Dockerfile to build model """ + str(model[0]) + """
+        text = """#######################################################################
+# Dockerfile to build model """ + str(model[0]) + """
 # Based on continuumio/miniconda, produced by dockerwriter.py
 #######################################################################
 
