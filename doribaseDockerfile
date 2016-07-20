@@ -24,7 +24,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-numpy
 
 # install R
 ADD https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh ./Miniconda2-latest-Linux-x86_64.sh
-RUN DEBIAN_FRONTEND=noninteractive bash Miniconda2-latest-Linux-x86_64.sh -b -p $bin/miniconda; echo 'PATH="bin/miniconda/bin:$PATH"' >> ~/.bashrc
+RUN DEBIAN_FRONTEND=noninteractive bash Miniconda2-latest-Linux-x86_64.sh -b -p /bin/miniconda; echo 'export PATH="/bin/miniconda/bin:$PATH"' >> ~/.bashrc; echo 'export PATH="/bin/miniconda/bin:$PATH"' >> /var/www/.bashrc
 RUN DEBIAN_FRONTEND=noninteractive /bin/miniconda/bin/conda update -y conda
 RUN DEBIAN_FRONTEND=noninteractive /bin/miniconda/bin/conda install -y -c r r
 
