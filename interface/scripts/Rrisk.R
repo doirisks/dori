@@ -40,8 +40,8 @@ if (dir.exists(modelDOI)){
 if (file.exists(targetfile)) {
   load(targetfile)
 } else {
-  stop(cat("model not found");
+  stop(cat("model not found"));
 }
 
 # print the score of the arguments given
-cat(as.character(model(as.numeric(arguments)))
+cat(as.character(model(as.numeric(arguments))))
