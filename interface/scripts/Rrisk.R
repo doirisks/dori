@@ -41,4 +41,4 @@ if (file.exists(targetfile)) {
 }
 
 # print the score of the arguments given
-springf(model(as.numeric(arguments)))
+sprintf(model(as.numeric(arguments)))
