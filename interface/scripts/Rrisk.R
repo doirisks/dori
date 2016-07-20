@@ -21,6 +21,9 @@ modelDOI = sub('/', ':', modelDOI)
 targetfile = args[3]
 arguments = args[4:length(args)]
 
+# debugging
+#as.numeric(arguments)
+
 # move to the repository directory
 if (dir.exists(repopath)) {
   setwd(repopath);
@@ -41,4 +44,4 @@ if (file.exists(targetfile)) {
 }
 
 # print the score of the arguments given
-sprintf(model(as.numeric(arguments)))
+model(as.numeric(arguments))
