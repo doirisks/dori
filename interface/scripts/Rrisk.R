@@ -28,20 +28,20 @@ arguments = args[4:length(args)]
 if (dir.exists(repopath)) {
   setwd(repopath);
 } else {
-  stop("bad repository path");
+  stop(cat("bad repository path"));
 }
 # move to the DOI directory
 if (dir.exists(modelDOI)){
   setwd(modelDOI);
 } else {
-  stop("DOI not found");
+  stop(cat("DOI not found"));
 }
 # load the requested model
 if (file.exists(targetfile)) {
   load(targetfile)
 } else {
-  stop("model not found");
+  stop(cat("model not found");
 }
 
 # print the score of the arguments given
-model(as.numeric(arguments))
+cat(as.character(model(as.numeric(arguments)))
