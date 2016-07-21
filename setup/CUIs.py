@@ -165,15 +165,17 @@ while DOI is not None:
 # clear result sets (https://github.com/farcepest/MySQLdb1/issues/28)
 while cur1.nextset():
     # debugging print:
-    print('threw out a result set')
+    #print('threw out a result set')
     pass
     
 # close cursor 1
 cur1.close()
 
-# special adjustments 1: age cannot be less than zero
-if CUIs.has_key('C0804405'):   
+# hard-coded adjustments 1: default lower and upper bounds
+if CUIs.has_key('C0804405'):                # 0 < age < 130
     CUIs['C0804405']['defaultlower'] = 0
+    CUIs['C0804405']['defaultupper'] = 130
+# TODO
 
 # special adjustments 2: Sex CUI (not male-specific)
 addCUI('C28421')
@@ -276,7 +278,55 @@ insert_query += "COMMIT\n"
 cur3.execute(insert_query)
 
 cur3.close()
-cnx.close()
 
 #print insert_query
 print "CUIs inserted: " + str(len(CUIs.keys()))
+
+cur4 = cnx.cursor()
+# fetch singles
+singles_query = "SELECT `CUI` FROM `CUIs` WHERE ( CUI NOT LIKE '%OR%' ) AND ( CUI NOT LIKE '%or%' ) AND ( CUI NOT LIKE '%AND%' ) AND ( CUI NOT LIKE '%and%' )"
+cur4.execute(singles_query)
+cur4.close()
+#CUIs = [i[0] for i in cur4.fetchall()]
+updates = {}
+CUI = cur4.fetchone()
+while CUI is not None:
+    cur5 = cnx.cursor()
+    check_query = "SELECT `CUI` FROM `CUIs` WHERE CUI LIKE '%" + CUI + "%' AND CUI != '" + CUI + "'"
+    cur5.execute(check_query)
+    compound = cur5.fetchone()
+    while compound is not None:
+        # make sure that each CUI is referenced in this update
+        if not updates.haskey(compound[0]):
+            updates[compound[0]] = {}
+            updates[compound[0]]['derivable'] = []
+            updates[compound[0]]['derivedfrom'] = []
+        if not updates.haskey(CUI[0]):
+            updates[CUI[0]] = {}
+            updates[CUI[0]]['derivable'] = []
+            updates[CUI[0]]['derivedfrom'] = []
+        # add references between the single and compound CUIs
+        updates[CUI[0]]['derivable'].append(compound[0])
+        updates[CUI[0]]['derivedfrom'].append(compound[0])
+        updates[compound[0]]['derivable'].append(CUI[0])
+        updates[compound[0]]['derivedfrom'].append(CUI[0])
+    cur5.close()
+    cur4.fetchone()
+cur4.close()
+
+
+cur6 = cnx.cursor()
+# update_query
+update_columns = ['derivable', 'derivedfrom']
+update_query = ""
+for CUI in updates:
+    update"UPDATE `%s`='%s', `%s`='%s' WHERE CUI = '%s'\n" % ()
+
+
+# close the connection
+cnx.close()
+
+
+
+
+
