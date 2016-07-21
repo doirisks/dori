@@ -40,7 +40,7 @@ $ans = [];
 
 // iterate through models sent
 foreach ($models as $id) {
-    $ans[$id] = scord_id($id);
+    $ans[$id] = score_id($id, $CUI_vals);
 }
 
 echo json_encode($ans);

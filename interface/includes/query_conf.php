@@ -235,10 +235,6 @@
             }
             array_push($modelargs,$arg);
         }
-        // make sure that no errors occurred
-        if (isset($resp['error'])) {
-            return($resp);
-        }
 
         // calculate risk score
         $command = null;
