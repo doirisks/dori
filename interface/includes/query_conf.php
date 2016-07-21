@@ -178,7 +178,7 @@
                 // check upper and lower bounds
                 $arg = check_bounds($arg,$datum['defaultlower'],$datum['defaultupper'])
                 if (is_string($arg)){
-                    $CUI_vals[$datum['CUI']] .= $datum['CUI'];
+                    $CUI_vals[$datum['CUI']] = $arg . $datum['CUI'];
                     continue;
                 }
             } 
@@ -210,7 +210,7 @@
                 // check upper and lower bounds
                 $arg = check_bounds($arg,$datum['defaultlower'],$datum['defaultupper'])
                 if (is_string($arg)){
-                    $CUI_vals[$datum['CUI']] .= $datum['CUI'];
+                    $CUI_vals[$datum['CUI']] = $arg . $datum['CUI'];
                     continue;
                 }
             }
@@ -294,6 +294,9 @@
         $datatypes = json_decode($model['inpdatatype']);
         $uppers = json_decode($model['upper']);
         $lowers = json_decode($model['lower']);
+        
+        // check population criteria
+        // TODO
 
         // assemble and CHECK model arguments
         $modelargs = array();
@@ -314,10 +317,6 @@
                     $arg = '1';
                 } else if ($arg === false) {
                     $arg = '0';
-                } else if ($arg == "true") {
-                    $arg = '1';
-                } else if ($arg == "false") {
-                    $arg = '0';
                 } else {
                     $resp['error'] = 'bad boolean CUI: ' . $CUI;  // identify a bad bool
                     return($resp);
@@ -325,48 +324,35 @@
             } 
             // integer
             else if ($datatypes[$index] == 'integer' or $datatypes[$index] == 'int') { 
-                if ( ctype_digit($arg) ){
-                    // argument is already okay
-                } else if ( ctype_digit(str_replace('.','',$arg)) ) { // only non-numbers are decimal points
-                    if ( substr_count($arg,'.') == 1 && strlen($arg) > 1 ) { 
-                        // if there is only one decimal point, round to nearest integer
-                        $arg = (string)round((float)$arg);
-                    } else {
-                        // otherwise, error
-                        $resp['error'] = 'bad integer CUI: ' . $CUI;  // identify a bad CUI
-                        return($resp);
-                    }
-                } else {
+                // ensure that argument is an integer
+                if ( !is_int($arg) ) {
                     $resp['error'] = 'bad integer CUI: ' . $CUI;  // identify a bad CUI
                     return($resp);
                 }
-                
                 // check upper and lower bounds
-                $boundcheck = check_bounds($CUI, $arg, $lowers[$index], $lowers[$index]) ;
-                if ($boundcheck == -1) {
-                    $resp['error'] = 'CUI below acceptable range: ' . $CUI;  // CUI below acceptable range
+                $arg = check_bounds($arg,$datum['defaultlower'],$datum['defaultupper'])
+                if (is_string($arg)){
+                    $resp['error'] = $arg . $CUI;
                     return($resp);
-                } else if ($boundcheck == 1) {
-                    $resp['error'] = 'CUI above acceptable range: ' . $CUI;  // CUI above acceptable range
-                    return($resp);
-                } 
+                }
+                $arg = (string)$arg;
             } 
             // float ($datatypes[$index] == 'float')
             else  {    
-                if (ctype_digit($arg) ) {
-                    // if already integer, tell code it is a float
-                    $arg .= '.0';
-                } else if (ctype_digit(str_replace('.','',$arg)) ) {
-                    if (substr_count($arg,'.') == 1 && strlen($arg) > 1 ) {
-                        // arg is already fine
-                    }
-                    else {
-                        $resp['error'] = 'bad float CUI: ' . $CUI;  // identify a bad float
-                        return($resp);
-                    }
-                } else {
-                    $resp['error'] = 'bad float CUI: ' . $CUI;  // identify a bad float
+                if ( !is_float($arg) ) {
+                    $resp['error'] = 'bad float CUI: ' . $CUI;  // identify a bad CUI
                     return($resp);
+                }
+                // check upper and lower bounds
+                $arg = check_bounds($arg,$datum['defaultlower'],$datum['defaultupper'])
+                if (is_string($arg)){
+                    $resp['error'] = $arg . $CUI;
+                    return($resp);
+                }
+                $arg = (string)$arg;
+                // if it looks like an integer, tell code it is a float
+                if ( ctype_digit($arg) ) {
+                    $arg .= '.0';
                 }
             }
             array_push($modelargs,$arg);
