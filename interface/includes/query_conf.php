@@ -267,5 +267,6 @@
             // record the score!
             $resp['score'] = $modeloutput[0];
         }
+        return($resp);
     }
 ?>
