@@ -143,7 +143,7 @@
     /**
      * Scores an id based on [already expanded] CUI value table
      */
-    function score_id($id, $CUIs, $CUI_vals) {
+    function score_id($id, $CUI_vals) {
         // response variable
         $resp = [];
     
