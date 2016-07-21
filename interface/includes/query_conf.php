@@ -86,11 +86,11 @@
      * append CUI after error message!
      */
     function check_bounds ($value, $low, $upp) {
-        if ($value < $low) {
-            return('bad CUI - below acceptable range: ');  // CUI below acceptable range
+        if ( ($low != null) and ($value < $low)) {
+            return('bad CUI - value ' . $value . ' below bound of ' . $low . ': ');  // CUI below acceptable range
         }
-        if ($value > $upp) {
-            return('bad CUI - above acceptable range: ');  // CUI above acceptable range
+        if ( ($upp != null) and ($value > $upp)) {
+            return('bad CUI - value ' . $value . ' above bound of ' . $upp . ': ');  // CUI above acceptable range
         }
         else {
             return($value);
@@ -104,16 +104,16 @@
     function prep_CUIs(&$CUIs, &$CUI_vals, $QUERYDATA) {// cleaning (and debugging)
         $allegedCUIs = array_keys($QUERYDATA);
         // accept only real CUIs
-        $to_query = "SELECT `CUI`, `datatype`, `defaultlower`, `defaultupper`, `derivable` FROM `CUIs` WHERE (CUI != '"
+        $to_query = "SELECT `CUI`, `datatype`, `defaultlower`, `defaultupper`, `derivable` FROM `CUIs` WHERE CUI = '";
         foreach ($allegedCUIs as $CUI) {
-            if ( ctype_alphanum($CUI) ) {
+            if ( ctype_alnum($CUI) ) {
                 $to_query .= $CUI;
                 $to_query .= "' OR CUI = '";
             }
         }
         $to_query .= "'";
         // break off without any effect if no CUIs were accepted
-        if (strcasecmp($to_query,"SELECT `CUI`, `datatype`, `defaultlower`, `defaultupper`, `derivable` FROM `CUIs` WHERE (CUI != '") == 0) {
+        if (strcasecmp($to_query,"SELECT `CUI`, `datatype`, `defaultlower`, `defaultupper`, `derivable` FROM `CUIs` WHERE CUI = '") == 0) {
             return(1);
         }
         // debug here
@@ -126,22 +126,27 @@
         $derivable = array();   // CUIs which may be derivable afterwards
         foreach( $data as $datum ) {
             // make sure a CUI value exists
-            if (!isset($CUI_vals[$datum['CUI']])) {
+            if (!isset($QUERYDATA[$datum['CUI']])) {
                 $CUI_vals[$datum['CUI']] = 'bad CUI - no value given: ' . $datum['CUI'];  // identify a missing CUI
                 continue;
             }
 
             // get the CUI's alleged value
-            $arg = (string)$QUERYDATA[$datum['CUI']];
+            $arg = $QUERYDATA[$datum['CUI']];
             
             // bools
-            if ($datatypes[$datum] == 'bool') { 
-                if ( ($arg == "true") or ($arg === 1) ) {           // recognize improper forms of "true"
+            if ($datum['datatype'] == 'bool') { 
+                if ( $datum['CUI'] == 'C28421' ) {
+                    // no action
+                    // TODO: make sure 'male' or 'female' is indicated?
+                } else if (is_bool($arg)) {
+                    // no action
+                } else if ( ($arg == "true") or ($arg === 1) ) {    // recognize improper forms of "true"
                     $arg = true;
                 } else if (($arg == "false") or ($arg === 0) ) {    // recognize improper forms of "false
                     $arg = false;
                 } else {
-                    $CUI_vals[$datum['CUI']] = 'bad boolean CUI: ' . $datum['CUI'];  // identify a bad bool
+                    $CUI_vals[$datum['CUI']] = 'bad boolean CUI: ' . $datum['CUI'] . " = " . (string)$arg ;  // identify a bad bool
                     continue;
                 }
                 // check for possibly derivable CUIs
@@ -152,7 +157,7 @@
                 }
             } 
             // integers
-            else if ($datatypes[$datum] == 'integer' or $datatypes[$datum] == 'int') { 
+            else if ($datum['datatype'] == 'integer' or $datum['datatype'] == 'int') { 
                 if (is_string($arg)){
                     if ( ctype_digit($arg) ) {
                         $arg = (int)$arg;
@@ -176,7 +181,7 @@
                 }
                 
                 // check upper and lower bounds
-                $arg = check_bounds($arg,$datum['defaultlower'],$datum['defaultupper'])
+                $arg = check_bounds($arg,(int)$datum['defaultlower'],(int)$datum['defaultupper']);
                 if (is_string($arg)){
                     $CUI_vals[$datum['CUI']] = $arg . $datum['CUI'];
                     continue;
@@ -187,17 +192,17 @@
                 if (is_string($arg)) {   
                     if ( ctype_digit($arg) ) {
                         // if already integer, tell code it is a float
-                        $arg = floatval($arg);
+                        $arg = (float)$arg;
                     } else if (ctype_digit(str_replace('.','',$arg)) ) {
                         if (substr_count($arg,'.') == 1 && strlen($arg) > 1 ) {
-                            $arg = floatval($arg);
+                            $arg = (float)$arg;
                         }
                         else {
-                            $CUI_vals[$datum['CUI']] = 'bad float CUI: ' . $datum['CUI'];  // identify a bad float
+                            $CUI_vals[$datum['CUI']] = 'bad float CUI: ' . $datum['CUI'] . " = " . (string)$arg;  // identify a bad float
                             continue;
                         }
                     } else {
-                        $CUI_vals[$datum['CUI']] = 'bad float CUI: ' . $datum['CUI'];  // identify a bad float
+                        $CUI_vals[$datum['CUI']] = 'bad float CUI: ' . $datum['CUI'] . " = " . (string)$arg;  // identify a bad float
                         continue;
                     } 
                 }
@@ -205,10 +210,10 @@
                     $arg = (float)$arg;
                 }
                 else if (!is_float($arg)){
-                    $CUI_vals[$datum['CUI']] = 'bad float CUI: ' . $datum['CUI'];  // identify a bad float
+                    $CUI_vals[$datum['CUI']] = 'bad float CUI: ' . $datum['CUI'] . " = " . (string)$arg;  // identify a bad float
                 }
                 // check upper and lower bounds
-                $arg = check_bounds($arg,$datum['defaultlower'],$datum['defaultupper'])
+                $arg = check_bounds($arg,(float)$datum['defaultlower'],(float)$datum['defaultupper']);
                 if (is_string($arg)){
                     $CUI_vals[$datum['CUI']] = $arg . $datum['CUI'];
                     continue;
@@ -226,12 +231,12 @@
             array_push($CUIs,'C0086582');               //male sex CUI
             //array_push($CUIs,'');                       //female sex CUI
             if (strcasecmp($CUI_vals['C28421'],'male') == 0) {
-                $CUI_vals['C0086582'] = 'true';
-                //$CUI_vals['???'] = 'false';               //female sex
+                $CUI_vals['C0086582'] = true;
+                //$CUI_vals['???'] = false;               //female sex
             }
             else {
-                $CUI_vals['C0086582'] = 'false';
-                //$CUI_vals['???'] = 'true';                //female sex
+                $CUI_vals['C0086582'] = false;
+                //$CUI_vals['???'] = true;                //female sex
             }
         }
 
@@ -243,19 +248,17 @@
         
         // add derivable boolean CUIs
         // build a query
-        $to_query = "SELECT `CUI`, `derivedfrom` FROM `CUIs` WHERE (CUI != '";
+        $to_query = "SELECT `CUI`, `derivedfrom` FROM `CUIs` WHERE CUI = '";
         foreach ($derivable as $maybe) {
             $to_query .= $maybe;
-            $to_query .= "' AND CUI LIKE '%";
-            $to_query .= $maybe;
-            $to_query .= "%') OR ( CUI != '";
+            $to_query .= "' OR CUI = '";
         }
         // only use the query if something was added to it
-        if (strcasecmp($to_query,"SELECT `CUI`, `derivedfrom` FROM `CUIs` WHERE (CUI != '") == 0) {
+        if (strcasecmp($to_query,"SELECT `CUI`, `derivedfrom` FROM `CUIs` WHERE CUI = '") == 0) {
             // do nothing
         }
         else {
-            $to_query = substr($to_query,0,-14);
+            $to_query .= "'";
             // debug here
             #echo htmlspecialchars($to_query) . "\n";
             $data = query($to_query);
@@ -330,7 +333,7 @@
                     return($resp);
                 }
                 // check upper and lower bounds
-                $arg = check_bounds($arg,$datum['defaultlower'],$datum['defaultupper'])
+                $arg = check_bounds($arg,(int)$lowers[$index],(int)$uppers[$index]);
                 if (is_string($arg)){
                     $resp['error'] = $arg . $CUI;
                     return($resp);
@@ -344,7 +347,7 @@
                     return($resp);
                 }
                 // check upper and lower bounds
-                $arg = check_bounds($arg,$datum['defaultlower'],$datum['defaultupper'])
+                $arg = check_bounds($arg,(float)$lowers[$index],(float)$uppers[$index]);
                 if (is_string($arg)){
                     $resp['error'] = $arg . $CUI;
                     return($resp);
