@@ -78,17 +78,146 @@
         }
     }
     
+    
+    /**
+     * Check upper and lower bounds of an integer- or float-valued CUI, 
+     * 
+     * compares the 'value' with 'low' and 'upp', returns error message
+     * append CUI after error message!
+     */
+    function check_bounds ($value, $low, $upp) {
+        if ($value < $low) {
+            return('bad CUI - below acceptable range: ');  // CUI below acceptable range
+        }
+        if ($value > $upp) {
+            return('bad CUI - above acceptable range: ');  // CUI above acceptable range
+        }
+        else {
+            return($value);
+        }
+    }
+    
+    
     /**
      * Cleans input, expands known CUIs to find directly derived CUIs
      */
     function prep_CUIs(&$CUIs, &$CUI_vals, $QUERYDATA) {// cleaning (and debugging)
-        $CUIs = array_keys($QUERYDATA);
-        $CUI_vals = [];
-        foreach ($CUIs as $CUI) {
-            $CUI = htmlspecialchars ($CUI);
-            $CUI_vals[$CUI] = $QUERYDATA[$CUI];
-            // debugging CUIs passed
-            //echo "<p>" . $CUI . ", ". $_GET[$CUI] . "</p>\n";
+        $allegedCUIs = array_keys($QUERYDATA);
+        // accept only real CUIs
+        $to_query = "SELECT `CUI`, `datatype`, `defaultlower`, `defaultupper`, `derivable` FROM `CUIs` WHERE (CUI != '"
+        foreach ($allegedCUIs as $CUI) {
+            if ( ctype_alphanum($CUI) ) {
+                $to_query .= $CUI;
+                $to_query .= "' OR CUI = '";
+            }
+        }
+        $to_query .= "'";
+        // break off without any effect if no CUIs were accepted
+        if (strcasecmp($to_query,"SELECT `CUI`, `datatype`, `defaultlower`, `defaultupper`, `derivable` FROM `CUIs` WHERE (CUI != '") == 0) {
+            return(1);
+        }
+        // debug here
+        #echo htmlspecialchars($to_query) . "\n";
+        
+        // query
+        $data = query($to_query);
+        
+        // handle data
+        $derivable = array();   // CUIs which may be derivable afterwards
+        foreach( $data as $datum ) {
+            // make sure a CUI value exists
+            if (!isset($CUI_vals[$datum['CUI']])) {
+                $CUI_vals[$datum['CUI']] = 'bad CUI - no value given: ' . $datum['CUI'];  // identify a missing CUI
+                continue;
+            }
+
+            // get the CUI's alleged value
+            $arg = (string)$QUERYDATA[$datum['CUI']];
+            
+            // bools
+            if ($datatypes[$datum] == 'bool') { 
+                if ( ($arg == "true") or ($arg === 1) ) {           // recognize improper forms of "true"
+                    $arg = true;
+                } else if (($arg == "false") or ($arg === 0) ) {    // recognize improper forms of "false
+                    $arg = false;
+                } else {
+                    $CUI_vals[$datum['CUI']] = 'bad boolean CUI: ' . $datum['CUI'];  // identify a bad bool
+                    continue;
+                }
+                // check for possibly derivable CUIs
+                if ($datum['derivable'] != '[]') {
+                    foreach (json_decode($datum['derivable']) as $maybe) {
+                        array_push($derivable, $maybe);
+                    }
+                }
+            } 
+            // integers
+            else if ($datatypes[$datum] == 'integer' or $datatypes[$datum] == 'int') { 
+                if (is_string($arg)){
+                    if ( ctype_digit($arg) ) {
+                        $arg = (int)$arg;
+                    } else if ( ctype_digit(str_replace('.','',$arg)) ) { // only non-numbers are decimal points
+                        if ( substr_count($arg,'.') == 1 && strlen($arg) > 1 ) { 
+                            // if there is only one decimal point, round to nearest integer
+                            $arg = (string)round((float)$arg);
+                        } else {
+                            // otherwise, error
+                            $CUI_vals[$datum['CUI']] = 'bad integer CUI: ' . $datum['CUI'];  // identify a bad CUI
+                            continue;
+                        }
+                    } else {
+                        $CUI_vals[$datum['CUI']] = 'bad integer CUI: ' . $datum['CUI'];  // identify a bad CUI
+                        continue;
+                    }
+                } else if (is_float) { 
+                    $arg = (int)round((float)$arg);
+                } else if (!is_int($arg)) {
+                    $CUI_vals[$datum['CUI']] = 'bad integer CUI: ' . $datum['CUI'];  // identify a bad CUI
+                }
+                
+                // check upper and lower bounds
+                $arg = check_bounds($arg,$datum['defaultlower'],$datum['defaultupper'])
+                if (is_string($arg)){
+                    $CUI_vals[$datum['CUI']] .= $datum['CUI'];
+                    continue;
+                }
+            } 
+            // floats ($datatypes[$datum] == 'float')
+            else  { 
+                if (is_string($arg)) {   
+                    if ( ctype_digit($arg) ) {
+                        // if already integer, tell code it is a float
+                        $arg = floatval($arg);
+                    } else if (ctype_digit(str_replace('.','',$arg)) ) {
+                        if (substr_count($arg,'.') == 1 && strlen($arg) > 1 ) {
+                            $arg = floatval($arg);
+                        }
+                        else {
+                            $CUI_vals[$datum['CUI']] = 'bad float CUI: ' . $datum['CUI'];  // identify a bad float
+                            continue;
+                        }
+                    } else {
+                        $CUI_vals[$datum['CUI']] = 'bad float CUI: ' . $datum['CUI'];  // identify a bad float
+                        continue;
+                    } 
+                }
+                else if (is_int($arg)){
+                    $arg = (float)$arg;
+                }
+                else if (!is_float($arg)){
+                    $CUI_vals[$datum['CUI']] = 'bad float CUI: ' . $datum['CUI'];  // identify a bad float
+                }
+                // check upper and lower bounds
+                $arg = check_bounds($arg,$datum['defaultlower'],$datum['defaultupper'])
+                if (is_string($arg)){
+                    $CUI_vals[$datum['CUI']] .= $datum['CUI'];
+                    continue;
+                }
+            }
+            
+            // add verified CUIs
+            array_push($CUIs,$datum['CUI']);
+            $CUI_vals[$datum['CUI']] = $arg;
         }
         
         // expanding known CUIs
@@ -112,19 +241,17 @@
             $CUI_vals['BMI_CUI'] = $CUI_vals['BMI_CUI']; #TODO
         }
         
-        // add disjunctive CUIs ("CUIs" with OR in them)
+        // add derivable boolean CUIs
         // build a query
-        $to_query = "SELECT `CUI` FROM `CUIs` WHERE (CUI != '";
-        foreach ($CUIs as $CUI) {
-            if ( $CUI_vals[$CUI] === true ) {
-                $to_query .= $CUI;
-                $to_query .= "' AND CUI LIKE '%";
-                $to_query .= $CUI;
-                $to_query .= "%') OR ( CUI != '";
-            }
+        $to_query = "SELECT `CUI`, `derivedfrom` FROM `CUIs` WHERE (CUI != '";
+        foreach ($derivable as $maybe) {
+            $to_query .= $maybe;
+            $to_query .= "' AND CUI LIKE '%";
+            $to_query .= $maybe;
+            $to_query .= "%') OR ( CUI != '";
         }
         // only use the query if something was added to it
-        if (strcasecmp($to_query,"SELECT `CUI` FROM `CUIs` WHERE (CUI != '") == 0) {
+        if (strcasecmp($to_query,"SELECT `CUI`, `derivedfrom` FROM `CUIs` WHERE (CUI != '") == 0) {
             // do nothing
         }
         else {
@@ -133,11 +260,17 @@
             #echo htmlspecialchars($to_query) . "\n";
             $data = query($to_query);
             foreach( $data as $datum ) {
+                // TODO
+                # determine whether CUIs are really derivable and determine their value
+                # currently assuming that all possible CUIs are derivable and true
+                
+                // add verified CUIs
                 array_push($CUIs,$datum['CUI']);
-                $CUI_vals[$datum['CUI']] = "true";
+                $CUI_vals[$datum['CUI']] = true;
             }
         }
     }
+    
     
     
     /**
@@ -175,17 +308,8 @@
             // get the CUI's value
             $arg = $CUI_vals[$CUI];
             
-            // check that CUI's value is in valid range (unnecessary for bools!)
-            if (!empty($lowers[$index]) and ($arg < $lowers[$index])) {
-                $resp['error'] = 'CUI below acceptable range: ' . $CUI;  // CUI below acceptable range
-                return($resp);
-            }
-            if (!empty($uppers[$index]) and ($arg > $uppers[$index])) {
-                $resp['error'] = 'CUI above acceptable range: ' . $CUI;  // CUI above acceptable range
-                return($resp);
-            }
-            
-            if ($datatypes[$index] == 'bool') {     // bool, convert to integer
+            // bool, convert to integer
+            if ($datatypes[$index] == 'bool') { 
                 if ($arg === true) {
                     $arg = '1';
                 } else if ($arg === false) {
@@ -199,7 +323,8 @@
                     return($resp);
                 }
             } 
-            else if ($datatypes[$index] == 'integer' or $datatypes[$index] == 'int') { // integer
+            // integer
+            else if ($datatypes[$index] == 'integer' or $datatypes[$index] == 'int') { 
                 if ( ctype_digit($arg) ){
                     // argument is already okay
                 } else if ( ctype_digit(str_replace('.','',$arg)) ) { // only non-numbers are decimal points
@@ -215,8 +340,19 @@
                     $resp['error'] = 'bad integer CUI: ' . $CUI;  // identify a bad CUI
                     return($resp);
                 }
+                
+                // check upper and lower bounds
+                $boundcheck = check_bounds($CUI, $arg, $lowers[$index], $lowers[$index]) ;
+                if ($boundcheck == -1) {
+                    $resp['error'] = 'CUI below acceptable range: ' . $CUI;  // CUI below acceptable range
+                    return($resp);
+                } else if ($boundcheck == 1) {
+                    $resp['error'] = 'CUI above acceptable range: ' . $CUI;  // CUI above acceptable range
+                    return($resp);
+                } 
             } 
-            else  {    // float ($datatypes[$index] == 'float')
+            // float ($datatypes[$index] == 'float')
+            else  {    
                 if (ctype_digit($arg) ) {
                     // if already integer, tell code it is a float
                     $arg .= '.0';
