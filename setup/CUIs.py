@@ -331,7 +331,7 @@ for CUI in updates.keys():
 update_query += " COMMIT"
 
 # debuggign update query:
-print update_query
+#print update_query
 
 #execute update query
 cur6.execute(update_query)
