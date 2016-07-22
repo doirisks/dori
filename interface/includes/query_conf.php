@@ -263,15 +263,77 @@
             #echo htmlspecialchars($to_query) . "\n";
             $data = query($to_query);
             foreach( $data as $datum ) {
-                // TODO
-                # determine whether CUIs are really derivable and determine their value
-                # currently assuming that all possible CUIs are derivable and true
+                // determine whether CUIs are really derivable and determine their value
+                // supports only pure disjunction and conjunction
                 
-                // add verified CUIs
-                array_push($CUIs,$datum['CUI']);
-                $CUI_vals[$datum['CUI']] = true;
+                // conjunction
+                if ( stristr($datum['CUI'],"and") ) {
+                    $depends = json_decode($datum['derivedfrom']);
+                    // arg stores the potential for the conjunction to be true
+                    $arg = true;
+                    // iterate through possible derivers
+                    foreach ($depends as $dep) {
+                        // if any dependencies are false, the conjunction is false
+                        if ( ($CUI_vals[$dep] === false) ) {
+                            array_push($CUIs,$datum['CUI']);
+                            $CUI_vals[$datum['CUI']] = false;
+                            $arg = false;
+                            break;
+                        }
+                        // if the conjunction still might be true, check for missing data
+                        if ( $arg === true ) {
+                            $arg = $CUI_vals[$datum['CUI']];
+                        }
+                    }
+                    // if the argument stayed true for all dependencies, the conjunction is true
+                    if ( $arg === true ) {
+                        array_push($CUIs,$datum['CUI']);
+                        $CUI_vals[$datum['CUI']] = true;
+                    }
+                    
+                // disjunction
+                } else if ( stristr($datum['CUI'],"or") ) {
+                    $depends = json_decode($datum['derivedfrom']);
+                    // arg stores the potential for the disjunction to be false
+                    $arg = false;
+                    // iterate through possible derivers
+                    foreach ($depends as $dep) {
+                        // if any dependencies are true, the disjunction is true
+                        if ( ($CUI_vals[$dep] === true) ) {
+                            array_push($CUIs,$datum['CUI']);
+                            $CUI_vals[$datum['CUI']] = true;
+                            $arg = true;
+                            break;
+                        }
+                        // if the conjunction still might be false, check for missing data
+                        if ( $arg === false ) {
+                            $arg = $CUI_vals[$datum['CUI']];
+                        }
+                    }
+                    // if the argument stayed false for all dependencies, the disjunction is false
+                    if ( $arg === false ) {
+                        array_push($CUIs,$datum['CUI']);
+                        $CUI_vals[$datum['CUI']] = false;
+                    }
+                // singles
+                } else {
+                    $depends = json_decode($datum['derivedfrom']);
+                    // iterate through possible derivers
+                    foreach ($depends as $dep) {
+                        // disjunctions - if false, then all components are false
+                        if ( (stristr($dep,"or")) and ($CUI_vals[$dep] === false) ) {
+                            $datum['CUI'] = false;
+                            break;
+                        // conjunctions - if true, then all components are true
+                        } else if ( (stristr($dep,"and")) and ($CUI_vals[$dep] === true) ) {
+                            array_push($CUIs,$datum['CUI']);
+                            $CUI_vals[$datum['CUI']] = true;
+                            break;
+                        }
+                    }
+                }
             }
-        }
+        } // end of derivable handling
     }
     
     
