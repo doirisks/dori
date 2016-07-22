@@ -319,9 +319,20 @@ cur6 = cnx.cursor()
 # update_query
 update_columns = ['derivable', 'derivedfrom']
 update_query = ""
-for CUI in updates:
-    update"UPDATE `%s`='%s', `%s`='%s' WHERE CUI = '%s'\n" % ()
+for CUI in updates.keys():
+    update += "UPDATE `%s`='%s', `%s`='%s' WHERE CUI = '%s';\n" % (
+        'derivedfrom',
+        updates[CUI]['derivedfrom'], 
+        'derivable',
+        updates[CUI]['derivable'], 
+        CUI
+    )
+update += " COMMIT"
 
+#execute update query
+cur6.execute(update_query)
+# close cursor 6
+cur6.close()
 
 # close the connection
 cnx.close()
