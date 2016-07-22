@@ -182,7 +182,7 @@ CUIs['C28421']['units'] = 'm/f'
 CUIs['C28421']['defaultlower'] = None
 CUIs['C28421']['defaultupper'] = None
 
-# hard-coded adjustments 2: default lower and upper bounds - no citations
+# hard-coded adjustments 2: default lower and upper bounds - NO CITATIONS
 if CUIs.has_key('C0804405'):                # 0 <= age <= 130
     CUIs['C0804405']['defaultlower'] = "0"
     CUIs['C0804405']['defaultupper'] = "130"
@@ -191,38 +191,38 @@ if CUIs.has_key('C1542867'):                # 7.5 <= BMI <= 200
     CUIs['C1542867']['defaultlower'] = "7.5"
     CUIs['C1542867']['defaultupper'] = "200"
 if CUIs.has_key('unknown'):                # 0 < height (inches) < 130
-    CUIs['unknown']['defaultlower'] = ""
-    CUIs['unknown']['defaultupper'] = ""
+    CUIs['unknown']['defaultlower'] = "0"
+    CUIs['unknown']['defaultupper'] = "130"
 if CUIs.has_key(''):                # 0 < weight (lb?) < 800
-    CUIs['unknown']['defaultlower'] = ""
-    CUIs['unknown']['defaultupper'] = ""
+    CUIs['unknown']['defaultlower'] = "0"
+    CUIs['unknown']['defaultupper'] = "800"
 if CUIs.has_key('C2734066'):                # 38.1 < waist circumference (cm) < 312.32
-    CUIs['C2734066']['defaultlower'] = ""
-    CUIs['C2734066']['defaultupper'] = ""
+    CUIs['C2734066']['defaultlower'] = "38.1"
+    CUIs['C2734066']['defaultupper'] = "312.32"
 if CUIs.has_key('C0488055'):                # 70 < SBP (mmHg) < 400
-    CUIs['C0488055']['defaultlower'] = ""
-    CUIs['C0488055']['defaultupper'] = ""
+    CUIs['C0488055']['defaultlower'] = "70"
+    CUIs['C0488055']['defaultupper'] = "400"
 if CUIs.has_key('C0488052'):                # 30 < DBP (mmHg) < 180
-    CUIs['C0488052']['defaultlower'] = ""
-    CUIs['C0488052']['defaultupper'] = ""
+    CUIs['C0488052']['defaultlower'] = "30"
+    CUIs['C0488052']['defaultupper'] = "180"
 if CUIs.has_key('C0364708'):                # 10 < totchol (mg/dL) < 3165
-    CUIs['C0364708']['defaultlower'] = ""
-    CUIs['C0364708']['defaultupper'] = ""
+    CUIs['C0364708']['defaultlower'] = "10"
+    CUIs['C0364708']['defaultupper'] = "3165"
 if CUIs.has_key('C0364221'):                # 5 < hdlchol (mg/dL) < 3000
-    CUIs['C0364221']['defaultlower'] = ""
-    CUIs['C0364221']['defaultupper'] = ""
+    CUIs['C0364221']['defaultlower'] = "5"
+    CUIs['C0364221']['defaultupper'] = "3000"
 if CUIs.has_key('C0364225'):                # 10 < ldlchol (mg/dL) < 3000
-    CUIs['C0364225']['defaultlower'] = ""
-    CUIs['C0364225']['defaultupper'] = ""
+    CUIs['C0364225']['defaultlower'] = "10"
+    CUIs['C0364225']['defaultupper'] = "3000"
 if CUIs.has_key('C0488794'):                # 26 < heart rate < 240
-    CUIs['C0488794']['defaultlower'] = ""
-    CUIs['C0488794']['defaultupper'] = ""
+    CUIs['C0488794']['defaultlower'] = "26"
+    CUIs['C0488794']['defaultupper'] = "240"
 if CUIs.has_key('C0802682'):                # 1 < vital capacity (L) < 5
-    CUIs['C0802682']['defaultlower'] = ""
-    CUIs['C0802682']['defaultupper'] = ""
+    CUIs['C0802682']['defaultlower'] = "1"
+    CUIs['C0802682']['defaultupper'] = "5"
 if CUIs.has_key('C0364714'):                # 10 < triglycerides (mg/dL) < 3000
-    CUIs['C0364714']['defaultlower'] = ""
-    CUIs['C0364714']['defaultupper'] = ""
+    CUIs['C0364714']['defaultlower'] = "10"
+    CUIs['C0364714']['defaultupper'] = "3000"
 
 
 """
