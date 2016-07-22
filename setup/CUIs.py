@@ -173,8 +173,8 @@ cur1.close()
 
 # hard-coded adjustments 1: default lower and upper bounds
 if CUIs.has_key('C0804405'):                # 0 < age < 130
-    CUIs['C0804405']['defaultlower'] = 0
-    CUIs['C0804405']['defaultupper'] = 130
+    CUIs['C0804405']['defaultlower'] = "0"
+    CUIs['C0804405']['defaultupper'] = "130"
 # TODO
 
 # special adjustments 2: Sex CUI (not male-specific)
@@ -250,6 +250,7 @@ json_columns = [
   'derivedfrom'
 ]
 
+
 insert_query = ""
 for CUI in CUIs.keys():
     columns = []    # values which are known for the given cui
@@ -286,22 +287,22 @@ cur4 = cnx.cursor()
 # fetch singles
 singles_query = "SELECT `CUI` FROM `CUIs` WHERE ( CUI NOT LIKE '%OR%' ) AND ( CUI NOT LIKE '%or%' ) AND ( CUI NOT LIKE '%AND%' ) AND ( CUI NOT LIKE '%and%' )"
 cur4.execute(singles_query)
-cur4.close()
 #CUIs = [i[0] for i in cur4.fetchall()]
 updates = {}
-CUI = cur4.fetchone()
-while CUI is not None:
+CUIs = cur4.fetchall()
+cur4.close()
+for CUI in list(CUIs):
     cur5 = cnx.cursor()
-    check_query = "SELECT `CUI` FROM `CUIs` WHERE CUI LIKE '%" + CUI + "%' AND CUI != '" + CUI + "'"
+    check_query = "SELECT `CUI` FROM `CUIs` WHERE CUI LIKE '%" + CUI[0] + "%' AND CUI != '" + CUI[0] + "'"
     cur5.execute(check_query)
     compound = cur5.fetchone()
     while compound is not None:
         # make sure that each CUI is referenced in this update
-        if not updates.haskey(compound[0]):
+        if not updates.has_key(compound[0]):
             updates[compound[0]] = {}
             updates[compound[0]]['derivable'] = []
             updates[compound[0]]['derivedfrom'] = []
-        if not updates.haskey(CUI[0]):
+        if not updates.has_key(CUI[0]):
             updates[CUI[0]] = {}
             updates[CUI[0]]['derivable'] = []
             updates[CUI[0]]['derivedfrom'] = []
@@ -310,24 +311,27 @@ while CUI is not None:
         updates[CUI[0]]['derivedfrom'].append(compound[0])
         updates[compound[0]]['derivable'].append(CUI[0])
         updates[compound[0]]['derivedfrom'].append(CUI[0])
+        compound = cur5.fetchone()
     cur5.close()
     cur4.fetchone()
-cur4.close()
 
 
 cur6 = cnx.cursor()
 # update_query
 update_query = ""
 for CUI in updates.keys():
-    update += "UPDATE `%s`='%s', `%s`='%s' WHERE CUI = '%s';\n" % (
+    update_query += "UPDATE `CUIs` SET `%s`='%s', `%s`='%s' WHERE CUI = '%s';\n" % (
         'derivedfrom',
-        updates[CUI]['derivedfrom'], 
+        json.dumps(updates[CUI]['derivedfrom']), 
         'derivable',
-        updates[CUI]['derivable'], 
+        json.dumps(updates[CUI]['derivable']), 
         CUI
     )
 # add commit to query
 update_query += " COMMIT"
+
+# debuggign update query:
+print update_query
 
 #execute update query
 cur6.execute(update_query)
