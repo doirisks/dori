@@ -2,32 +2,36 @@ version: "2"
 
 services:
   dori:
-    build: ./
+    build: .
+    container_name: dori
     ports: 
       - "8081:80"
     networks:
-      - dori-network
+      - dori_network
     links:
-      - db:dori_mysql
+      - dori_mysql
+      - dori_mysql:dorimysqldb
     command: apache2
+    
 
   dori_mysql:
     image: mysql/mysql-server
     container_name: dori_mysql
     volumes:
-      - "dori-data:/var/lib/mysql"
+      - "dori_data:/var/lib/mysql"
     networks:
-      - dori-network
+      - dori_network
+    expose:
+      - "3306"
     environment:
       - MYSQL_USER=doirisks
       - MYSQL_PASSWORD=bitnami
       - MYSQL_DATABASE=doiarchive
       - MYSQL_ROOT_PASSWORD=Admin2015
-    command: mysql
-  
-  
+    command: nginx mysql
+
 volumes:
-  dori-data:
+  dori_data:
   
 networks:
-  dori-network:
+  dori_network:
