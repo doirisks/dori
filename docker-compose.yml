@@ -11,7 +11,7 @@ services:
     links:
       - dori_mysql
       - dori_mysql:dorimysqldb
-    command: apache2
+    command: bash /src/setup/setup.sh; apache2
     
 
   dori_mysql:
