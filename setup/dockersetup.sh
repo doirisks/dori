@@ -6,12 +6,8 @@
 # setup script for a ubuntu:14.04 docker container
 # apache2 and mysql must started in docker container (for now)
 
-# start mysql server
-service mysql start
-
 # run setup scripts
 cd /src/setup
-./dockersetup.py
 ./setup.sh
 
 # set interface as the default webpage of the server
@@ -26,10 +22,3 @@ a2ensite interface.conf
 #chmod -R 755 /src/interface/ # unnecessary
 chown -R www-data:www-data /var/www/interface/
 
-# stop the mysql server
-service mysql stop
-
-# make a startup script to run apache2 and mysql
-echo "#!/bin/bash
-service apache2 start; service mysql start; bash" > /onstart.sh
-chmod +x /onstart.sh

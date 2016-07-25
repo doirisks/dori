@@ -22,7 +22,7 @@ cur2 = cnx.cursor()
 # refresh the table
 refresh_query = """-- MySQL dump 10.13  Distrib 5.5.46, for debian-linux-gnu (i686)
 --
--- Host: localhost    Database: doiarchive
+-- Host: dorimysqldb    Database: doiarchive
 -- ------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;

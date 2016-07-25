@@ -1,0 +1,33 @@
+version: "2"
+
+services:
+  dori:
+    build: ./
+    ports: 
+      - "8081:80"
+    networks:
+      - dori-network
+    links:
+      - db:dori_mysql
+    command: apache2
+
+  dori_mysql:
+    image: mysql/mysql-server
+    container_name: dori_mysql
+    volumes:
+      - "dori-data:/var/lib/mysql"
+    networks:
+      - dori-network
+    environment:
+      - MYSQL_USER=doirisks
+      - MYSQL_PASSWORD=bitnami
+      - MYSQL_DATABASE=doiarchive
+      - MYSQL_ROOT_PASSWORD=Admin2015
+    command: mysql
+  
+  
+volumes:
+  dori-data:
+  
+networks:
+  dori-network:
