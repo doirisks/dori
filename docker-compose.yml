@@ -3,6 +3,7 @@ version: "2"
 services:
   dori:
     build: .
+    image: doirisks/dori
     container_name: dori
     ports: 
       - "8081:80"
@@ -11,7 +12,7 @@ services:
     links:
       - dori_mysql
       - dori_mysql:dorimysqldb
-    command: bash /src/setup/setup.sh; apache2
+    command: bash /src/setup/setup.sh ; httpd
     
 
   dori_mysql:
@@ -28,7 +29,7 @@ services:
       - MYSQL_PASSWORD=bitnami
       - MYSQL_DATABASE=doiarchive
       - MYSQL_ROOT_PASSWORD=Admin2015
-    command: nginx mysql
+    command: mysql
 
 volumes:
   dori_data:

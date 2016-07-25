@@ -7,8 +7,8 @@
 # apache2 and mysql must started in docker container (for now)
 
 # run setup scripts
-cd /src/setup
-./setup.sh
+#cd /src/setup
+#./setup.sh
 
 # set interface as the default webpage of the server
 cp -r /src/interface /var/www/interface
