@@ -10,7 +10,7 @@ config = {}
 config['id'] = {}
 config['id']['DOI'] = '10.1161/CIRCULATIONAHA.107.699579'
 config['id']['papertitle'] = 'General Cardiovascular Risk Profile for Use in Primary Care'
-config['id']['modeltitle'] = 'Cox Regression Model'         
+config['id']['modeltitle'] = 'Calibrated CVD Model for Coronary Heart Disease'         
 config['id']['yearofpub'] = '2008'          # year of publication           '2100'
 config['id']['authors'] = ['DAgostino, R.B.','Vasan, R.S.','Pencina, M.J.']
 
@@ -34,26 +34,26 @@ config['input']['lower'] = ['','','30','','','','','']
 
 # human and machine readable output descriptions
 config['output'] = {}
-config['output']['name'] = '10Y General Cardiovascular Disease Risk'   
-config['output']['outcomeName'] = 'General Cardiovascular Disease' 
+config['output']['name'] = '10Y Coronary Heart Disease Risk'   
+config['output']['outcomeName'] = 'Coronary Heart Disease' 
 config['output']['outcomeTime'] = '10'  
-config['output']['CUI'] = 'C3176186'    
-config['output']['outcomeCUI'] = 'C0007222'  
+config['output']['CUI'] = ''    
+config['output']['outcomeCUI'] = 'C2926063'
 
 # tabular or machine readable data available for download
 config['data'] = {}
 config['data']['filename'] = ['']   # name tabular data file     ['All of the Data']
 config['data']['fileurl'] = ['']    # some kind of pointer?      ['/var/www/models/99.9999:aaa.a9/all.Rdata']
-config['data']['datumname'] = ['Sample Size']  # important data for easy access    ['Sample Size']
-config['data']['datum'] = ['8491']      # values for important data         ['8,000,000,000']
+config['data']['datumname'] = ['Male Sample Size', 'Female Sample Size']  # important data for easy access    ['Male Sample Size', 'Female Sample Size']
+config['data']['datum'] = ['3969', '4522']      # values for important data         ['8,000,000,000']
 
 # model function and dependencies
 config['model'] = {}
 config['model']['language'] = 'python'      # function's language    'python'
-config['model']['uncompiled'] = ['model.py']  # some kind of pointer?  ['model.py']
+config['model']['uncompiled'] = ['model_b.py', 'model_a.py']  # some kind of pointer?  ['model.py']
 config['model']['compiled'] = ['']    # some kind of pointer?  ['']
 config['model']['dependList'] = 'requirements.txt'    # some kind of pointer?  'requirements.txt'
-config['model']['example'] = ['example.py']     # some kind of pointer?  ['example.py']
+config['model']['example'] = ['example_b.py']     # some kind of pointer?  ['example.py']
 
 # I do not know what this would be used for
 config['model_category'] = ['prognostic'] #choices: 'diagnostic','prognostic'
@@ -66,7 +66,7 @@ config['predictive_ability']['value'] = []
 config['predictive_ability']['lcl'] = []
 config['predictive_ability']['ucl'] = []
 
-config_name = 'config'
+config_name = 'config_b'
 
 # dump json config file
 import json

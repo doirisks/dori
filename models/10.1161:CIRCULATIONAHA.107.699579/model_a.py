@@ -1,5 +1,5 @@
 """
-model.py
+model_a.py
 by Ted Morin
 
 contains a function to predict 10-year CVD risks using beta coefficients from 
