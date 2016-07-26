@@ -12,7 +12,7 @@ services:
     links:
       - dori_mysql
 #      - dori_mysql:dorimysqldb
-    command: "/bin/bash /src/setup/setup.sh; echo 'asdf' ; apache2ctl -D FOREGROUND"
+    command: "/bin/bash /src/setup/onstart.sh"
     
 
   dori_mysql:
