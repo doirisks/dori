@@ -11,7 +11,7 @@ services:
       - dori_network
     links:
       - dori_mysql
-      - dori_mysql:dorimysqldb
+#      - dori_mysql:dorimysqldb
     command: "/src/setup/setup.sh ; apache2ctl -D FOREGROUND"
     
 

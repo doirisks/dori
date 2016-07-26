@@ -15,7 +15,7 @@
     define("PASSWORD", "bitnami");
 
     // your database's server
-    define("SERVER", "dorimysqldb");
+    define("SERVER", "dori_mysql");
 
     // your database's username
     define("USERNAME", "doirisks");
