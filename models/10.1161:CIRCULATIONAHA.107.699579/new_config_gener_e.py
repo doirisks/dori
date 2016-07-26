@@ -12,7 +12,7 @@ config['id']['DOI'] = '10.1161/CIRCULATIONAHA.107.699579'
 config['id']['papertitle'] = 'General Cardiovascular Risk Profile for Use in Primary Care'
 config['id']['modeltitle'] = 'Calibrated CVD Model for Intermittent Claudication'
 config['id']['yearofpub'] = '2008'          # year of publication           '2100'
-config['id']['authors'] = ['DAgostino, R.B.','Vasan, R.S.','Pencina, M.J.']
+config['id']['authors'] = ['DAgostino, R.B.','Vasan, R.S.','Pencina, M.J.', 'Wolf, Philip A.', 'Cobain, Mark', 'Massaro, Joseph M.', 'Kannel, William B.']
 
 
 # population constraints
