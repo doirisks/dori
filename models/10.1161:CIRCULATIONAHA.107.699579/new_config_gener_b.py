@@ -50,7 +50,7 @@ config['data']['datum'] = ['3969', '4522']      # values for important data     
 # model function and dependencies
 config['model'] = {}
 config['model']['language'] = 'python'      # function's language    'python'
-config['model']['uncompiled'] = ['model_b.py', 'model_a.py']  # some kind of pointer?  ['model.py']
+config['model']['uncompiled'] = ['model_b.py']  # some kind of pointer?  ['model.py']
 config['model']['compiled'] = ['']    # some kind of pointer?  ['']
 config['model']['dependList'] = 'requirements.txt'    # some kind of pointer?  'requirements.txt'
 config['model']['example'] = ['example_b.py']     # some kind of pointer?  ['example.py']
