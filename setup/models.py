@@ -18,9 +18,8 @@ import subprocess
 # configuration
 cnx = db.connect(host = DEFAULT_HOSTNAME,user=DEFAULT_USERNAME,passwd=DEFAULT_PASSWORD,db=DEFAULT_DATEBASE)
 
-cur2 = cnx.cursor()
 # refresh the table
-refresh_query = """-- MySQL dump 10.13  Distrib 5.5.46, for debian-linux-gnu (i686)
+"""-- MySQL dump 10.13  Distrib 5.5.46, for debian-linux-gnu (i686)
 --
 -- Host: dori_mysql    Database: doiarchive
 -- ------------------------------------------------------
@@ -39,10 +38,9 @@ refresh_query = """-- MySQL dump 10.13  Distrib 5.5.46, for debian-linux-gnu (i6
 --
 -- Table structure for table `models`
 --
-
-DROP TABLE IF EXISTS `models`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8 */;"""
+refresh_query = """DROP TABLE IF EXISTS `models`;
 CREATE TABLE `models` (
 
   `id` int(16) NOT NULL AUTO_INCREMENT, /*id category*/
@@ -91,15 +89,17 @@ CREATE TABLE `models` (
   `ucl` varchar(255), 
   `config` varchar(255),
   
-  `modified` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified` TIMESTAMP DEFAULT NOW() ON UPDATE NOW(),
 /*  `uploaded` DATE DEFAULT CURRENT_DATE,*/
   
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 
 """
-cur2.execute(refresh_query)
-cur2.close()
+for sql in refresh_query.split(";"): #given file, may need ";\n"
+    cur2 = cnx.cursor()
+    cur2.execute(sql)
+    cur2.close()
 
 cur3 = cnx.cursor()
 # build the insert query
