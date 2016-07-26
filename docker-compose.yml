@@ -12,7 +12,7 @@ services:
     links:
       - dori_mysql
 #      - dori_mysql:dorimysqldb
-    command: "/bin/bash /src/setup/setup.sh ; /bin/bash apache2ctl -D FOREGROUND"
+    command: "/bin/bash /src/setup/setup.sh ; apache2ctl -D FOREGROUND"
     
 
   dori_mysql:
@@ -29,7 +29,6 @@ services:
       - MYSQL_PASSWORD=bitnami
       - MYSQL_DATABASE=doiarchive
       - MYSQL_ROOT_PASSWORD=Admin2015
-#    command: mysql
 
 volumes:
   dori_data:
