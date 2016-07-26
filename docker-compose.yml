@@ -7,8 +7,8 @@ services:
     container_name: dori
     ports: 
       - "8081:80"
-#    networks:
-#      - dori_network
+    networks:
+      - dori_network
     links:
       - dori_mysql
 #      - dori_mysql:dorimysqldb
@@ -20,10 +20,8 @@ services:
     container_name: dori_mysql
     volumes:
       - "dori_data:/var/lib/mysql"
-#    networks:
-#      - dori_network
-    expose:
-      - "3306"
+    networks:
+      - dori_network
     environment:
       - MYSQL_USER=doirisks
       - MYSQL_PASSWORD=bitnami
@@ -33,5 +31,5 @@ services:
 volumes:
   dori_data:
   
-#networks:
-#  dori_network:
+networks:
+  dori_network:
