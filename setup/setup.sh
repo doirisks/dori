@@ -1,3 +1,5 @@
+cd /src/setup
+
 ./models.py
 
 ./CUIs.py
