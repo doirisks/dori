@@ -61,15 +61,16 @@ function whole_interface(own_div_id, init_riskfactors = []) {
         // try to fetch the CUI
         if (this.all_CUIs[CUI] == null){
             // fetch and handle data from server
-            CUIarray = [CUI];
             this.all_CUIs[CUI] = $.ajax({
                 url : "api/cui/by_cui/", 
-                data : { CUIarray : CUIarray },
+                data : JSON.stringify([CUI]),
                 pertinent : {"array" : this.all_CUIs, "function" : this.update },
+                headers : {"Access-Control-Allow-Origin":"*"},
                 success: function(reply) {
                     var thisdata = JSON.parse(reply);
                     var thisCUI = Object.keys(thisdata)[0];
                     this.pertinent["array"][thisCUI] = thisdata[thisCUI];
+                    
                     console.log(JSON.stringify(this.data));
                     console.log(JSON.stringify(thisdata));
                     console.log(JSON.stringify(thisdata[thisCUI]));
