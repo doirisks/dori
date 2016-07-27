@@ -1,4 +1,4 @@
 <?php
     require('../includes/config.php');
-    render('getrisk.php',["riskfactors" => $riskfactors]);
+    render('main.php',["riskfactors" => $riskfactors]);
 ?>
