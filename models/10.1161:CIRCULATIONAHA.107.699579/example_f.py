@@ -1,5 +1,5 @@
 """
-example_a.py
+example_f.py
 by Ted Morin
 
 example code for a model of 10.1161/CIRCULATIONAHA.107.699579
@@ -9,7 +9,7 @@ Framingham Heart Study
 prints test output
 """
 
-from model_a import model
+from model_f import model
 scores = []
 scores.append( model(1,1,53,161,55,125,0,1) ) #m,treated,53yrs,161tot,55hdl,125sbp,nosmokes, diabetic
 scores.append( model(0,0,61,180,47,124,1,0) ) #f,not treated,61yrs,180tot,47hdl,124sbp,smokes,not db
