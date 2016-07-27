@@ -67,7 +67,6 @@ function whole_interface(own_div_id, init_riskfactors = []) {
         // add a local object for the CUI and 
         this.all_CUIs[CUI]["local_obj"] = new riskfactors_single(this, CUI);
         if (vis) {
-            console.log(CUI);
             this.vis_CUIs.push(CUI);
         }
     }
@@ -75,10 +74,7 @@ function whole_interface(own_div_id, init_riskfactors = []) {
     // update procedure
     this.update = function() {
         // temporary procedure
-        console.log("stop 2");
         for (i in this.vis_CUIs) {
-            console.log(i);
-            console.log(this.vis_CUIs[i]);
             this.righttable.push(this.all_CUIs[this.vis_CUIs[i]]["local_obj"]);
         }
         // TODO
@@ -86,7 +82,6 @@ function whole_interface(own_div_id, init_riskfactors = []) {
     
     $('#'+own_div_id).html(this.base);
     // iterate through given risk factors and add them
-    console.log("stop 1");
     for (CUI in init_riskfactors) {
         this.fetchCUI(CUI);
     }
