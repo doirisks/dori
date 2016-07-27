@@ -21,75 +21,76 @@ function whole_interface(own_div_id, init_riskfactors = []) {
     this.all_CUIs = {};
     
     // list of visible models and CUIs
-    vis_models = [];
-    vis_CUIs = [];
+    this.vis_models = [];
+    this.vis_CUIs = [];
     
     // the left side of the interface - models
-    this.left = new models_interface(this);
+    this.lefttable  =  new models_table(this);
+    this.leftfinder = new models_finder(this);
     // the right side of the interface - risk factors
-    this.right = new riskfactors_interface(this, init_riskfactors);
+    this.righttable  =  new riskfactors_table(this);
+    this.rightfinder = new riskfactors_finder(this);
     
     // the base text of the interface
     var text = '<table class="table-condensed" ><tr>\n'
     text    += '    <td style="vertical-align:Top;border:1px solid">\n';
-    text    += this.left.base;
+    
+    // left interface
+    text    += '        <h4 >Models</h4>\n';
+    text    += this.lefttable.base;
+    text    += '        <br>\n';
+    text    += this.leftfinder.base;
+    
     text    += '    </td>\n';
     text    += '    <td style="vertical-align:Top;border:1px solid">\n';
-    text    += this.right.base;
+    
+    // right interface
+    text    += '        <h4>Risk Factors</h4>\n';
+    text    += '        <div>\n';
+    text    += this.righttable.base;
+    text    += '            <br>\n';
+    text    += this.rightfinder.base;
+    text    += '        </div>\n';
+    
     text    += '    </td>\n';
     text    += '</tr></table>\n';
     this.base = text;
     
     // add a CUI
-    this.addCUI = function (CUI, vis = true) {
+    this.fetchCUI = function (CUI, vis = true) {
+        // make an object for the CUI
+        this.all_CUIs[CUI] = {};
+        
+        // fetch and handle data from server
         // TODO
+        
+        // add a local object for the CUI and 
+        this.all_CUIs[CUI]["local_obj"] = new riskfactors_single(this, CUI);
+        if (vis) {
+            console.log(CUI);
+            this.vis_CUIs.push(CUI);
+        }
     }
     
     // update procedure
     this.update = function() {
+        // temporary procedure
+        console.log("stop 2");
+        for (i in this.vis_CUIs) {
+            console.log(i);
+            console.log(this.vis_CUIs[i]);
+            this.righttable.push(this.all_CUIs[this.vis_CUIs[i]]["local_obj"]);
+        }
         // TODO
     }
     
     $('#'+own_div_id).html(this.base);
     // iterate through given risk factors and add them
-    for (i in init_riskfactors) {
-        this.addCUI(init_riskfactors[i]);
+    console.log("stop 1");
+    for (CUI in init_riskfactors) {
+        this.fetchCUI(CUI);
     }
     this.update();
-}
-
-/**
- * models_interface
- * 
- * class to write and maintain the models half of the main div of the doirisks interface
- **/
-
-function models_interface(master) {
-    this.table = new models_table(this);
-    this.finder = new models_finder(this);
-    var text = '        <h4 >Models</h4>\n';
-    text    += this.table.base;
-    text    += '        <br>\n';
-    text    += this.finder.base;
-    this.base = text;
-}
-
-/**
- * riskfactors_interface
- * 
- * class to write and maintain the risk factors half of the main div of the doirisks interface
- **/
-
-function riskfactors_interface(master, init_riskfactors) {
-    this.table = new riskfactors_table(this);
-    this.finder = new riskfactors_finder(this);
-    var text = '        <h4>Risk Factors</h4>\n';
-    text    += '        <div>\n';
-    text    += this.table.base;
-    text    += '            <br>\n';
-    text    += this.finder.base;
-    text    += '        </div>\n';
-    this.base = text;
 }
 
 /**
@@ -99,6 +100,7 @@ function riskfactors_interface(master, init_riskfactors) {
  **/
 
 function models_table(master) {
+    this.master = master;
     var text = "        <div id = 'models'>\n";
     text    += '            <!-- available models are added here -->\n';
     text    += '        </div>\n';
@@ -112,19 +114,24 @@ function models_table(master) {
  **/
 
 function riskfactors_table(master) {
+    this.master = master;
     var text = "            <form id = 'riskfactors' >\n";
     text    += '                <!-- risk factor inputs added by getrisk.js -->\n';
     text    += '            </form>\n';
     this.base = text;
     
+    // the most 
+    this.head = null;
+    
     // makes a CUI visible in the table
-    this.push = function (CUI) {
-        //TODO
+    this.push = function (CUI_obj) {
+        CUI_obj.show(this.head);
+        this.head = CUI_obj;
     }
     
     // remove a CUI from the table
-    this.pop = function (CUI) {
-    
+    this.pop = function (CUI_obj) {
+        CUI_obj.remove();
     }
 }
 
@@ -134,6 +141,7 @@ function riskfactors_table(master) {
  * class to hold the search for new models
  **/
 function models_finder(master) {
+    this.master = master;
     var text = "        <form id = 'newmodel'> <!-- add a new risk factor -->\n";
     text    += '            <span class="searchform">\n';
     text    += '                <span><b>Search for Models</b></span>\n';
@@ -152,6 +160,7 @@ function models_finder(master) {
  * class to hold the search for new models
  **/
 function riskfactors_finder(master) {
+    this.master = master;
     var text = "            <form id = 'newriskfactor'> <!-- add a new risk factor -->\n";
     text    += '                <span class="searchform">\n';
     text    += '                    <span><b>Search for Risk Factors</b></span>\n';
@@ -164,7 +173,98 @@ function riskfactors_finder(master) {
     this.base = text;
 }
 
+/**
+ * riskfactors_finder
+ * 
+ * class to hold the search for new models
+ **/
+ 
+function models_single(master, model) {
+    var text = ""; //TODO
+    this.text = text;
+   
+    // previous and next in the table
+    this.prev = null;
+    this.next = null;
+    
+    this.show = function (prev) {
+        // adjust place in list
+        this.prev = prev;
+        if (prev != null && prev.next != null) {
+            this.next = prev.next;
+        }
+        prev.next = this;
+        
+        // show in html
+        $("#" + prev.id).after(this.content);
+    }
+}
+
+/**
+ * riskfactors_finder
+ * 
+ * class to hold the search for new models
+ **/
+ 
+function riskfactors_single(master,CUI) {
+    this.master = master;
+    this.CUI = CUI;
+    this.id = CUI;
+    //TODO this.datatype = master.;
+    
+    //TODO this.val = ;
+    
+    var text = '                <div id="' + this.id + '">\n';
+    text    += "                    <p>TESTING 1, 2... " + CUI + "</p>\n"; //temporary filler text
+    text    += "                </div>\n";
+    this.content = text;
+    
+    // previous and next in the table
+    this.prev = null;
+    this.next = null;
+   
+    this.show = function (prev) {
+        // adjust list pointers
+        this.prev = prev;
+        if (prev != null && prev.next != null) {
+            this.next = prev.next;
+        }
+        if (prev != null) {
+            prev.next = this;
+        }
+        
+        // show in html
+        if (prev == null){
+            $("#riskfactors").html(this.content);
+        }
+        else {
+            $("#" + prev.id).after(this.content);
+        }
+    }
+    
+    this.hide = function () {
+        // adjust list pointers
+        if (this.prev !== null) {
+            this.prev.next = this.next;
+        }
+        if (this.next !== null) {
+            this.next.prev = this.prev;
+        }
+        else {
+            // change head of table if appropriate
+            master.righttable.head = this.prev;
+        }
+        
+        // remove html
+        $("#" + this.id).remove()
+    }
+    
+    this.getVal = function () {
+        //TODO
+    }
+}
+
 // document.ready
 $(document).ready( function () {
-    the_interface = new whole_interface("main");
+    the_interface = new whole_interface("main", riskfactors);
 });
