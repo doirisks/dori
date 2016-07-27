@@ -58,16 +58,38 @@ function whole_interface(own_div_id, init_riskfactors = []) {
     
     // add a CUI
     this.fetchCUI = function (CUI, vis = true) {
-        // make an object for the CUI
-        this.all_CUIs[CUI] = {};
-        
-        // fetch and handle data from server
-        // TODO
-        
-        // add a local object for the CUI and 
-        this.all_CUIs[CUI]["local_obj"] = new riskfactors_single(this, CUI);
-        if (vis) {
+        // try to fetch the CUI
+        if (this.all_CUIs[CUI] === null){
+            // make an object for the CUI
+            this.all_CUIs[CUI] = $.ajax({
+                url : "api/cui/by_cuis/", 
+                data : [CUI],
+                destination : this.all_CUIs,
+                success: function(reply) {
+                    var thisdata = JSON.parse(reply);
+                    var thisCUI = Object.keys(thisdata)[0];
+                    this.destination[thisCUI] = thisdata[thisCUI];
+                }
+            });
+            
+            
+            
+            
+            {};
+            
+            // fetch and handle data from server
+            CUIrequest( this.all_CUIs, CUI );
+            
+            // add a local object for the CUI and 
+            this.all_CUIs[CUI]["local_obj"] = new riskfactors_single(this, CUI);
+            if (vis) {
+                this.vis_CUIs.push(CUI);
+            }
+        } else if ( this.all_CUIs[CUI]['CUI'] == CUI ) {
+            // browser already has CUI data, but it is hidden => unhide it!
             this.vis_CUIs.push(CUI);
+        } else {
+            // do nothing - CUI is either being gotten already or it is bad
         }
     }
     
@@ -257,6 +279,31 @@ function riskfactors_single(master,CUI) {
     this.getVal = function () {
         //TODO
     }
+}
+
+/**
+ * modelrequest
+ * 
+ * class to hold the search for new models
+ **/
+ 
+/**
+ * CUIrequest
+ * 
+ * defered class to hold the search for new models
+**/
+function CUIrequest(CUIassocarr, CUI) {
+    CUIassocarr[CUI] = {"state":"pending"};
+    
+    var CUIdata = $.ajax({
+        url : "api/cui/by_cuis/", 
+        data : [CUI],
+        success: function(reply) {
+            var thisdata = JSON.parse(reply);
+            var thisCUI = Object.keys(thisdata)[0];
+            CUIassocarr[thisCUI] = thisdata[thisCUI];
+        }
+    });
 }
 
 // document.ready
