@@ -5,14 +5,16 @@ $str_json = file_get_contents('php://input');
 $posted_array = json_decode($str_json, true);
 
 // check that CUIs were sent (CUIs must be sent as an array!)
-if ( (!is_array($posted_array)) or (empty($posted_array)) ) {
+if ( (!is_array($posted_array)) or (empty($posted_array)) or (!isset($posted_array['CUIs']))) {
     $ans['error'] = 'no CUIs sent';
     echo(json_encode($ans));
     exit();
 }
 
+$CUIs = $posted_array['CUIs'];
+
 // iterate through CUIs
-foreach($posted_array as $CUI) {
+foreach($CUIs as $CUI) {
 
     // check for empty or dangerous CUIs
     if ( ($CUI == NULL) or ($CUI == "") or ( !ctype_alnum($CUI) ) ){
