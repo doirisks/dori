@@ -10,9 +10,11 @@ if ( (!isset($posted_array['ids'])) or (!is_array($posted_array['ids'])) or (cou
     die(json_encode($ans));
 }
 
+$model_ids = $posted_array['ids'];
+
 // iterate through ids
 $ans = [];
-foreach( $posted_array as $id ) {
+foreach( $model_ids as $id ) {
     // ensure that id is valid
     $id = (string)$id;
     if ( !ctype_digit($id) ) {
