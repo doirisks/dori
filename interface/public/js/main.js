@@ -63,7 +63,7 @@ function whole_interface(own_div_id, init_riskfactors = []) {
             // fetch and handle data from server
             this.all_CUIs[CUI] = $.ajax({
                 url : "api/cui/by_cui/", 
-                data : JSON.stringify([CUI]),
+                data : {"CUIs": [CUI]},
                 pertinent : {"array" : this.all_CUIs, "function" : this.update },
                 headers : {"Access-Control-Allow-Origin":"*"},
                 success: function(reply) {
