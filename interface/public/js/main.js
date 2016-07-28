@@ -61,7 +61,7 @@ function whole_interface(own_div_id, init_riskfactors = []) {
         // try to fetch the CUI
         if (this.all_CUIs[CUI] == null){
             // fetch and handle data from server
-            this.all_CUIs[CUI] = $.ajax({
+            this.all_CUIs[CUI] = $.post({
                 url : "api/cui/by_cui/", 
                 data : {"CUIs": [CUI]},
                 pertinent : {"array" : this.all_CUIs, "function" : this.update },
