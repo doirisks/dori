@@ -5,10 +5,9 @@ $str_json = file_get_contents('php://input');
 $posted_array = json_decode($str_json, true);
 
 // make sure that request is valid
-if ( (!is_array($posted_array)) or (count($posted_array) == 0) ) {
-    var_dump($posted_array);
+if ( (!isset($posted_array['ids'])) or (!is_array($posted_array['ids'])) or (count($posted_array['ids']) == 0) ) {
     $ans['error'] = 'improper request';
-    exit();
+    die(json_encode($ans));
 }
 
 // iterate through ids
