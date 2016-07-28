@@ -5,7 +5,7 @@ $str_json = file_get_contents('php://input');
 $posted_array = json_decode($str_json, true);
 
 // check that CUIs were sent (CUIs must be sent as an array!)
-if ( (!is_array($posted_array)) or (empty($posted_array)) or (!isset($posted_array['CUIs']))) {
+if ( (!isset($posted_array['CUIs'])) or (!is_array($posted_array['CUIs'])) or (count($posted_array['CUIs']) == 0)) {
     $ans['error'] = 'no CUIs sent';
     echo(json_encode($ans));
     exit();
