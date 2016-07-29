@@ -61,20 +61,27 @@ function whole_interface(own_div_id, init_riskfactors = []) {
         // try to fetch the CUI
         if (this.all_CUIs[CUI] == null){
             // fetch and handle data from server
+            console.log(CUI);
             this.all_CUIs[CUI] = $.ajax({
                 url : "api/cui/by_cui/", 
                 data : {"CUIs": [CUI]},
-                //pertinent : {"array" : this.all_CUIs, "function" : this.update },
+                pertinent : {"master": this, "all_CUIs" : this.all_CUIs, "vis_CUIs": this.vis_CUIs, "update" : this.update },
                 headers: {"Content-Type": "application/json"},
                 success: function(reply) {
-                    var thisdata = JSON.parse(reply);
-                    var thisCUI = Object.keys(thisdata)[0];
-                //    this.pertinent["array"][thisCUI] = thisdata[thisCUI];
+                    // store the pertinent pointers
+                    var pertinent = this.pertinent;
                     
-                //    console.log(JSON.stringify(this.data));
-                    console.log(JSON.stringify(thisdata));
-                    console.log(JSON.stringify(thisdata[thisCUI]));
-                //    console.log(JSON.stringify(this.pertinent["function"]()));
+                    // parse the reply
+                    var data = JSON.parse(reply);
+                    var CUI = Object.keys(data)[0];
+                    
+                    // store the data in the all_CUIs array
+                    pertinent["all_CUIs"][CUI] = data[CUI];
+                    pertinent["all_CUIs"][CUI]["local_obj"] = new riskfactors_single(pertinent["master"], CUI);
+                    
+                    // show the CUI
+                    pertinent["vis_CUIs"].push(CUI)
+                    pertinent["master"].update();
                 }
             });
             
@@ -83,9 +90,10 @@ function whole_interface(own_div_id, init_riskfactors = []) {
             if (vis) {
                 this.vis_CUIs.push(CUI);
             }
-        } else if ( this.all_CUIs[CUI] != null && this.all_CUIs[CUI]['CUI'] == CUI ) {
+        } else if ( this.all_CUIs[CUI]['CUI'] == CUI ) {
             // browser already has CUI data, but it is hidden => unhide it!
             this.vis_CUIs.push(CUI);
+            this.update();
         } else {
             // do nothing - CUI is either being gotten already or it is bad
         }
@@ -229,7 +237,6 @@ function riskfactors_single(master,CUI) {
     //TODO this.val = ;
     
     var text = '                <div id="' + this.id + '">\n';
-    console.log(JSON.stringify(master.all_CUIs[CUI]));
     text    += "                    <p>TESTING 1, 2... " + master.all_CUIs[CUI]["name1"] + "</p>\n"; //temporary filler text
     text    += "                </div>\n";
     this.content = text;
