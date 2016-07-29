@@ -80,7 +80,7 @@ function whole_interface(own_div_id, init_riskfactors = []) {
                     
                     // show the CUI
                     master.vis_CUIs.push(CUI); 
-                    master.update(); 
+                    master.righttable.push(master.all_CUIs[CUI]["local_obj"]);
                 }
             });
         } else if ( this.all_CUIs[CUI]['CUI'] == CUI ) {
@@ -90,15 +90,6 @@ function whole_interface(own_div_id, init_riskfactors = []) {
         } else {
             // do nothing - CUI is either being gotten already or it is bad
         }
-    }
-    
-    // update procedure
-    this.update = function() {
-        // temporary procedure: just show all of the data
-        for (i in this.vis_CUIs) {
-            this.righttable.push(this.all_CUIs[this.vis_CUIs[i]]["local_obj"]);
-        }
-        // TODO
     }
     
     $('#'+own_div_id).html(this.base);
@@ -135,7 +126,7 @@ function riskfactors_table(master) {
     text    += '            </form>\n';
     this.base = text;
     
-    // the most 
+    // the most recent addition
     this.head = null;
     
     // makes a CUI visible in the table
@@ -194,7 +185,7 @@ function riskfactors_finder(master) {
  * class to hold the search for new models
  **/
  
-function models_single(master, model, vis = true) {
+function models_single(master, model) {
     var text = ""; //TODO
     this.text = text;
    
@@ -225,7 +216,6 @@ function riskfactors_single(master,CUI) {
     this.master = master;
     this.CUI = CUI;
     this.id = CUI;
-    this.vis = false;
     //TODO this.datatype = master.;
     
     //TODO this.val = ;
@@ -240,45 +230,39 @@ function riskfactors_single(master,CUI) {
     this.next = null;
    
     this.show = function (prev) {
-        if (!this.vis) {
-            // adjust list pointers
-            this.prev = prev;
-            if (prev != null && prev.next != null) {
-                this.next = prev.next;
-            }
-            if (prev != null) {
-                prev.next = this;
-            }
-            
-            // show in html
-            if (prev == null){
-                $("#riskfactors").html(this.content);
-            }
-            else {
-                $("#" + prev.id).after(this.content);
-            }
-            this.vis = true;
+        // adjust list pointers
+        this.prev = prev;
+        if (prev != null && prev.next != null) {
+            this.next = prev.next;
+        }
+        if (prev != null) {
+            prev.next = this;
+        }
+        
+        // show in html
+        if (prev == null){
+            $("#riskfactors").html(this.content);
+        }
+        else {
+            $("#" + prev.id).after(this.content);
         }
     }
     
     this.hide = function () {
-        if (this.vis) {
-            // adjust list pointers
-            if (this.prev !== null) {
-                this.prev.next = this.next;
-            }
-            if (this.next !== null) {
-                this.next.prev = this.prev;
-            }
-            else {
-                // change head of table if appropriate
-                master.righttable.head = this.prev;
-            }
-            
-            // remove html
-            $("#" + this.id).remove()
-            this.vis = false;
+        // adjust list pointers
+        if (this.prev !== null) {
+            this.prev.next = this.next;
         }
+        if (this.next !== null) {
+            this.next.prev = this.prev;
+        }
+        else {
+            // change head of table if appropriate
+            master.righttable.head = this.prev;
+        }
+        
+        // remove html
+        $("#" + this.id).remove();
     }
     
     this.getVal = function () {
