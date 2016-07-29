@@ -101,11 +101,38 @@ function riskfactors_single(master,CUI) {
             master.righttable.head = this.prev;
         }
         
+        // removes its CUI from vis_CUIs
+        //TODO
+        
         // remove html
         $("#" + this.id).remove();
     }
     
-    this.getVal = function () {
-        //TODO
+    // provide the value of the CUI
+    this.getVal = function (numbfill = false) {
+        var elem = this.input[0].getElementsByTagName("input")[0];
+        if (elem == null) {
+            console.log("requested value from hidden CUI");
+            return null;
+        } else if (elem.type == "checkbox") {
+            return(elem.checked);
+        } else if (elem.type == "number") {
+            // handle blank numbers
+            if (elem.value == "") {
+                if ((numbfill) && (this.master.allCUIs[this.CUI]["defaultupper"] !== null) && (this.master.allCUIs[this.CUI]["defaultlower"] !== null)) {
+                    // fill in the number with the average of the default values
+                    var value = this.master.allCUIs[this.CUI]["defaultupper"] + this.master.allCUIs[this.CUI]["defaultlower"];
+                    value = value / 2;
+                    return(value);
+                }
+                return(null);
+            }
+            return(Number(elem.value));
+        } else if (elem.type == "radio") {
+            return(elem.checked); // note that this will return true if MALE is checked for sex
+        } else {
+            console.log("unknown type error");
+            return null;
+        }
     }
 }

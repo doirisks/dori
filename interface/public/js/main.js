@@ -82,6 +82,7 @@ function whole_interface(own_div_id, init_riskfactors = []) {
                     // show the CUI
                     master.vis_CUIs.push(CUI); 
                     master.righttable.push(master.all_CUIs[CUI]["local_obj"]);
+                    console.log(master.getInputData());
                 }
             });
             // TODO add a memory variable to make sure that the CUIs are added in the right order
@@ -92,6 +93,16 @@ function whole_interface(own_div_id, init_riskfactors = []) {
         } else {
             // do nothing - CUI is either being gotten already or it is bad
         }
+    }
+    
+    this.getInputData = function() {
+        var data = {};
+        for (i in this.vis_CUIs) {
+            console.log(i);
+            var obj = this.all_CUIs[this.vis_CUIs[i]]["local_obj"];
+            data[this.vis_CUIs[i]] = obj.getVal();
+        }
+        return(data);
     }
     
     $('#'+own_div_id).html(this.base);
