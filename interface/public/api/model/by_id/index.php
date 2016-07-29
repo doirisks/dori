@@ -7,7 +7,7 @@ $posted_array = json_decode($str_json, true);
 // make sure that request is valid
 if ( (!isset($posted_array['ids'])) or (!is_array($posted_array['ids'])) or (count($posted_array['ids']) == 0) ) {
     if ((!isset($_GET['ids'])) or (!is_array($_GET['ids'])) or (count($_GET['ids']) == 0)) {
-        $ans['error'] = 'improper request';
+        $ans['error'] = 'no ids sent';
         die(json_encode($ans));
     }
     $model_ids = $_GET['ids'];
