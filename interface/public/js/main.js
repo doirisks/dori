@@ -83,6 +83,7 @@ function whole_interface(own_div_id, init_riskfactors = []) {
                     master.righttable.push(master.all_CUIs[CUI]["local_obj"]);
                 }
             });
+            // TODO add a memory variable to make sure that the CUIs are added in the right order
         } else if ( this.all_CUIs[CUI]['CUI'] == CUI ) {
             // browser already has CUI data, but it is hidden => unhide it!
             this.vis_CUIs.push(CUI);
@@ -93,6 +94,10 @@ function whole_interface(own_div_id, init_riskfactors = []) {
     }
     
     $('#'+own_div_id).html(this.base);
+    $('#allriskfactors').after(this.righttable.buttons);
+    $(this.righttable.buttons).after(this.righttable.names);
+    $(this.righttable.names).after(this.righttable.values);
+    $(this.righttable.values).after(this.righttable.unit_names);
     // iterate through given risk factors and add them
     for (CUI in init_riskfactors) {
         this.fetchCUI(CUI);
@@ -121,13 +126,18 @@ function models_table(master) {
 
 function riskfactors_table(master) {
     this.master = master;
-    var text = "            <form id = 'riskfactors' >\n";
+    var text = "            <form id = 'riskfactors' style='width:400px'>\n";
     // TODO make cell formats into a css class
-    text    += '                <span style="width:300px"> <span style="width:20px"></span> <span style="width:180px">Risk Factor</span> <span style="width:50px"><p>Value</p></span> <span style="width:50px">Units</span> </span>';
-    text    += '                <!-- risk factor inputs added by getrisk.js -->\n';
+    text    += '                <span id="riskfactortitles" style="width:300px"> <span style="width:20px"></span> <span style="width:180px">Risk Factor</span> <span style="width:50px"><p>Value</p></span> <span style="width:50px">Units</span> </span>';
+    text    += '                <div id="allriskfactors" class="wrapper"></div>\n';
     text    += '                <!-- risk factor inputs added by getrisk.js -->\n';
     text    += '            </form>\n';
     this.base = text;
+    
+    this.buttons = $("<div style='float:left; width:30px; display:block; overflow:hidden'></div>"); //document.createElement('span');
+    this.names = $("<div style='float:left; width:150px; display:block; overflow:hidden'></div>"); //document.createElement('span');
+    this.values = $("<div style='float:left; width:120px; display:block; overflow:hidden'></div>"); //document.createElement('span');
+    this.unit_names = $("<div style='style='width:50px; display:block; overflow:hidden'></div>"); //document.createElement('span');
     
     // the most recent addition
     this.head = null;
@@ -226,18 +236,22 @@ function riskfactors_single(master,CUI) {
     //TODO this.val = ;
     
     var text = '<div id="' + this.id + '">\n';
-    // removal button
-    text +=    '    <span style="text-align:center;">';
-    text +=    '        <button id = "remove' + CUI + '" onclick=hideCUI("'+CUI+'") >-</button>'; //TODO
-    text +=    '    </span>';
-    // name of risk factor CUI displayed w/link
-    text +=    '    <span style= "text-align:center;">';
+    // button - removal button
+    var text = '<div style="text-align:center; height:30px;">';
+    text +=    '    <button id = "remove' + CUI + '" onclick=the_interface.righttable.pop(master.all_CUIs["'+CUI+'"]["local_obj"]) >-</button>'; //TODO
+    text +=    '</div>';
+    this.button = $(text);
+    
+    // rf - name of risk factor CUI displayed w/link
+    var text = '<div style= "text-align:center; height:30px; overflow:visible;">';
     var riskname = toTitleCase(master.all_CUIs[CUI]['name1']);
-    text +=    '        <a href="CUIquery.php?CUI=' + CUI + '" >'+riskname+'</a>'; // TODO link destination
-    text +=    '    </span>';
+    text +=    '    <a href="CUIquery.php?CUI=' + CUI + '" >'+riskname+'</a>'; // TODO link destination
+    text +=    '</div>';
+    this.rf = $(text);
+    
+    // interpret the datatype and units
     var inputdata = "";
     var units = "";
-    // interpret the datatype and units
     if (CUI == 'C28421') { // Sex
         inputdata = 'type="radio" value="male" checked> Male</input>  <input type="radio" name="'+CUI+'" value="female"> Female<p></p';
     } else if (master.all_CUIs[CUI]['datatype'].toLowerCase() == 'float') {
@@ -249,12 +263,16 @@ function riskfactors_single(master,CUI) {
     } else /*if (master.all_CUIs[CUI]['datatype'].toUpperCase() == 'BOOL')*/ {
         inputdata = 'type = "checkbox" ';
     } 
-    text +=    '    <span style= "text-align:center;">';
-    text +=    '        <input name = "' + CUI + '" ' + inputdata + ' ></input> ';
-    text +=    '    </span>';
-    text +=    '    <span style= "text-align:center;">' + units + '</span>';
-    text +=    '</span>';
-    this.content = text;
+    
+    // input
+    var text = '<div style= "text-align:center; height:30px;">';
+    text +=    '    <input name = "' + CUI + '" ' + inputdata + ' ></input> ';
+    text +=    '</div>';
+    this.input = $(text);
+    
+    // units
+    var text = '<div style= "text-align:center; height:30px;">' + units + '</div>';
+    this.units = $(text);
     
     // previous and next in the table
     this.prev = null;
@@ -270,12 +288,26 @@ function riskfactors_single(master,CUI) {
             prev.next = this;
         }
         
-        // show in html
+        // show content
         if (prev == null){
-            $("#riskfactors").html(this.content);
+            // show button
+            $(master.righttable.buttons).html(this.button);
+            // show rf
+            $(master.righttable.names).html(this.rf);
+            // show input
+            $(master.righttable.values).html(this.input);
+            // show units
+            $(master.righttable.unit_names).html(this.units);
         }
         else {
-            $("#" + prev.id).after(this.content);
+            // show button
+            $(prev.button).after(this.button);
+            // show rf
+            $(prev.rf).after(this.rf);
+            // show input
+            $(prev.input).after(this.input);
+            // show units
+            $(prev.units).after(this.units);
         }
     }
     
