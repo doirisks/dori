@@ -122,6 +122,9 @@ function models_table(master) {
 function riskfactors_table(master) {
     this.master = master;
     var text = "            <form id = 'riskfactors' >\n";
+    // TODO make cell formats into a css class
+    text    += '                <span style="width:300px"> <span style="width:20px"></span> <span style="width:180px">Risk Factor</span> <span style="width:50px"><p>Value</p></span> <span style="width:50px">Units</span> </span>';
+    text    += '                <!-- risk factor inputs added by getrisk.js -->\n';
     text    += '                <!-- risk factor inputs added by getrisk.js -->\n';
     text    += '            </form>\n';
     this.base = text;
@@ -147,6 +150,7 @@ function riskfactors_table(master) {
  * class to hold the search for new models
  **/
 function models_finder(master) {
+    this.id = "newmodel";
     this.master = master;
     var text = "        <form id = 'newmodel'> <!-- add a new risk factor -->\n";
     text    += '            <span class="searchform">\n';
@@ -166,6 +170,7 @@ function models_finder(master) {
  * class to hold the search for new models
  **/
 function riskfactors_finder(master) {
+    this.id = "newriskfactor";
     this.master = master;
     var text = "            <form id = 'newriskfactor'> <!-- add a new risk factor -->\n";
     text    += '                <span class="searchform">\n';
@@ -220,9 +225,35 @@ function riskfactors_single(master,CUI) {
     
     //TODO this.val = ;
     
-    var text = '                <div id="' + this.id + '">\n';
-    text    += "                    <p>TESTING 1, 2... " + master.all_CUIs[CUI]["name1"] + "</p>\n"; //temporary filler text
-    text    += "                </div>\n";
+    var text = '<div id="' + this.id + '">\n';
+    // removal button
+    text +=    '    <span style="text-align:center;">';
+    text +=    '        <button id = "remove' + CUI + '" onclick=hideCUI("'+CUI+'") >-</button>'; //TODO
+    text +=    '    </span>';
+    // name of risk factor CUI displayed w/link
+    text +=    '    <span style= "text-align:center;">';
+    var riskname = toTitleCase(master.all_CUIs[CUI]['name1']);
+    text +=    '        <a href="CUIquery.php?CUI=' + CUI + '" >'+riskname+'</a>'; // TODO link destination
+    text +=    '    </span>';
+    var inputdata = "";
+    var units = "";
+    // interpret the datatype and units
+    if (CUI == 'C28421') { // Sex
+        inputdata = 'type="radio" value="male" checked> Male</input>  <input type="radio" name="'+CUI+'" value="female"> Female<p></p';
+    } else if (master.all_CUIs[CUI]['datatype'].toLowerCase() == 'float') {
+        inputdata = 'type="number" placeholder="Float" style="width:50px"';
+        units += master.all_CUIs[CUI]['units'];
+    } else if (master.all_CUIs[CUI]['datatype'].toLowerCase() == 'int' || master.all_CUIs[CUI]['datatype'].toLowerCase() == 'integer') {
+        inputdata = 'type="number" placeholder="Integer" style="width:50px';
+        units += master.all_CUIs[CUI]['units'];
+    } else /*if (master.all_CUIs[CUI]['datatype'].toUpperCase() == 'BOOL')*/ {
+        inputdata = 'type = "checkbox" ';
+    } 
+    text +=    '    <span style= "text-align:center;">';
+    text +=    '        <input name = "' + CUI + '" ' + inputdata + ' ></input> ';
+    text +=    '    </span>';
+    text +=    '    <span style= "text-align:center;">' + units + '</span>';
+    text +=    '</span>';
     this.content = text;
     
     // previous and next in the table
