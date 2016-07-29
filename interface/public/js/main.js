@@ -61,35 +61,28 @@ function whole_interface(own_div_id, init_riskfactors = []) {
         // try to fetch the CUI
         if (this.all_CUIs[CUI] == null){
             // fetch and handle data from server
-            console.log(CUI);
             this.all_CUIs[CUI] = $.ajax({
                 url : "api/cui/by_cui/", 
                 data : {"CUIs": [CUI]},
-                pertinent : {"master": this, "all_CUIs" : this.all_CUIs, "vis_CUIs": this.vis_CUIs, "update" : this.update },
+                master : this, 
                 headers: {"Content-Type": "application/json"},
                 success: function(reply) {
                     // store the pertinent pointers
-                    var pertinent = this.pertinent;
+                    var master = this.master; 
                     
                     // parse the reply
                     var data = JSON.parse(reply);
                     var CUI = Object.keys(data)[0];
                     
                     // store the data in the all_CUIs array
-                    pertinent["all_CUIs"][CUI] = data[CUI];
-                    pertinent["all_CUIs"][CUI]["local_obj"] = new riskfactors_single(pertinent["master"], CUI);
+                    master.all_CUIs[CUI] = data[CUI]; 
+                    master.all_CUIs[CUI]["local_obj"] = new riskfactors_single(master, CUI); 
                     
                     // show the CUI
-                    pertinent["vis_CUIs"].push(CUI)
-                    pertinent["master"].update();
+                    master.vis_CUIs.push(CUI); 
+                    master.update(); 
                 }
             });
-            
-            // add a local object for the CUI and 
-            this.all_CUIs[CUI]["local_obj"] = new riskfactors_single(this, CUI);
-            if (vis) {
-                this.vis_CUIs.push(CUI);
-            }
         } else if ( this.all_CUIs[CUI]['CUI'] == CUI ) {
             // browser already has CUI data, but it is hidden => unhide it!
             this.vis_CUIs.push(CUI);
@@ -201,7 +194,7 @@ function riskfactors_finder(master) {
  * class to hold the search for new models
  **/
  
-function models_single(master, model) {
+function models_single(master, model, vis = true) {
     var text = ""; //TODO
     this.text = text;
    
@@ -232,6 +225,7 @@ function riskfactors_single(master,CUI) {
     this.master = master;
     this.CUI = CUI;
     this.id = CUI;
+    this.vis = false;
     //TODO this.datatype = master.;
     
     //TODO this.val = ;
@@ -246,39 +240,45 @@ function riskfactors_single(master,CUI) {
     this.next = null;
    
     this.show = function (prev) {
-        // adjust list pointers
-        this.prev = prev;
-        if (prev != null && prev.next != null) {
-            this.next = prev.next;
-        }
-        if (prev != null) {
-            prev.next = this;
-        }
-        
-        // show in html
-        if (prev == null){
-            $("#riskfactors").html(this.content);
-        }
-        else {
-            $("#" + prev.id).after(this.content);
+        if (!this.vis) {
+            // adjust list pointers
+            this.prev = prev;
+            if (prev != null && prev.next != null) {
+                this.next = prev.next;
+            }
+            if (prev != null) {
+                prev.next = this;
+            }
+            
+            // show in html
+            if (prev == null){
+                $("#riskfactors").html(this.content);
+            }
+            else {
+                $("#" + prev.id).after(this.content);
+            }
+            this.vis = true;
         }
     }
     
     this.hide = function () {
-        // adjust list pointers
-        if (this.prev !== null) {
-            this.prev.next = this.next;
+        if (this.vis) {
+            // adjust list pointers
+            if (this.prev !== null) {
+                this.prev.next = this.next;
+            }
+            if (this.next !== null) {
+                this.next.prev = this.prev;
+            }
+            else {
+                // change head of table if appropriate
+                master.righttable.head = this.prev;
+            }
+            
+            // remove html
+            $("#" + this.id).remove()
+            this.vis = false;
         }
-        if (this.next !== null) {
-            this.next.prev = this.prev;
-        }
-        else {
-            // change head of table if appropriate
-            master.righttable.head = this.prev;
-        }
-        
-        // remove html
-        $("#" + this.id).remove()
     }
     
     this.getVal = function () {
