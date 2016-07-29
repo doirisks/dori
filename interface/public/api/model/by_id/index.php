@@ -6,11 +6,15 @@ $posted_array = json_decode($str_json, true);
 
 // make sure that request is valid
 if ( (!isset($posted_array['ids'])) or (!is_array($posted_array['ids'])) or (count($posted_array['ids']) == 0) ) {
-    $ans['error'] = 'improper request';
-    die(json_encode($ans));
+    if ((!isset($_GET['ids'])) or (!is_array($_GET['ids'])) or (count($_GET['ids']) == 0)) {
+        $ans['error'] = 'improper request';
+        die(json_encode($ans));
+    }
+    $model_ids = $_GET['ids'];
 }
-
-$model_ids = $posted_array['ids'];
+else {
+    $model_ids = $posted_array['ids'];
+}
 
 // iterate through ids
 $ans = [];

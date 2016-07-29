@@ -6,12 +6,16 @@ $posted_array = json_decode($str_json, true);
 
 // make sure that request is valid
 if ( (!isset($posted_array['ids'])) or (!is_array($posted_array['ids'])) or (count($posted_array['ids']) == 0) ) {
-    var_dump($posted_array);
-    $ans['error'] = 'improper request';
-    exit();
+    if ( (!isset($_GET['ids'])) or (!is_array($_GET['ids'])) or (count($_GET['ids']) == 0) ) {
+        $ans['error'] = 'improper request';
+        echo json_encode($ans);
+        exit();
+    }
+    $DOIs = $_GET['ids'];
 }
-
-$DOIs = $posted_array['ids'];
+else {
+    $DOIs = $posted_array['ids'];
+}
 
 // iterate through DOIs
 $ans = [];
@@ -22,7 +26,7 @@ foreach( $DOIs as $DOI ) {
     }
 
     // build, run, and store query
-    $to_query = "SELECT * FROM `models` WHERE DOI = '" . $DOI . "'";
+    $to_query = "SELECT `id` FROM `models` WHERE DOI = '" . $DOI . "'";
     $ans[$DOI] = query($to_query);
     
     if ( empty($ans[$DOI]) ) {
