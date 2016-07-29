@@ -32,7 +32,7 @@ function riskfactors_single(master,CUI) {
     if (CUI == 'C28421') { // Sex
         inputdata = 'type="radio" value="male" checked> Male</input>  <input type="radio" name="'+CUI+'" value="female"> Female<p></p';
     } else if (master.all_CUIs[CUI]['datatype'].toLowerCase() == 'float') {
-        inputdata = 'type="number" placeholder="Float" style="width:50px"';
+        inputdata = 'type="number" onchange="the_interface.fetchmodels()" placeholder="Float" style="width:50px"';
         units += master.all_CUIs[CUI]['units'];
     } else if (master.all_CUIs[CUI]['datatype'].toLowerCase() == 'int' || master.all_CUIs[CUI]['datatype'].toLowerCase() == 'integer') {
         inputdata = 'type="number" placeholder="Integer" style="width:50px';

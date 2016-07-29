@@ -13,18 +13,28 @@ require('../../../../includes/query_conf.php');
 $str_json = file_get_contents('php://input');
 $posted_array = json_decode($str_json, true);
 
-// supplies JUNK VALUES if CUIs are given without values
-if (is_array($posted_array) ) {
-    foreach($posted_array as $CUI) {
-        $replacement[$CUI] = 1;
+if ( (empty($posted_array['CUIs'])) ) {
+    if (empty($_GET)) {
+        $ans = ["error" => "no CUIs sent"];
+        die(json_encode($ans));
     }
-    $posted_array = $replacement;
+    $posted_CUIs = $_GET;
+}
+else {
+    // supplies JUNK VALUES if CUIs are given in an array (without values) - TODO update to function properly...
+    if ( is_array($posted_array) ) {
+        foreach($posted_array as $CUI) {
+            $replacement[$CUI] = 1;
+        }
+        $posted_array = $replacement;
+    }
+    $posted_CUIs = $posted_array;
 }
 
 // clean input, then expand CUIs via derived CUIs
 $CUIs = array();
 $CUI_vals = [];
-prep_CUIs($CUIs,$CUI_vals,$posted_array);
+prep_CUIs($CUIs,$CUI_vals,$posted_CUIs);
 
 // build a query to get must, mustnot, and input columns for each CUI
 $to_query = "SELECT `CUI`,`must`,`mustnot`,`input` FROM `CUIs` WHERE CUI = '";
@@ -82,7 +92,7 @@ if (strlen($to_query) > 134) {
     $to_query = substr($to_query,0, -11);
 }
 else {
-    $ans['error'] = 'no models suggested';
+    $ans['error'] = 'query could not be constructed';
     echo json_encode($ans);
     exit();
 }
@@ -90,7 +100,7 @@ else {
 
 $models = query($to_query);
 if ( count($models) == 0 ) {
-    $ans['error'] = 'no models received';
+    $ans['error'] = 'no applicable models';
     echo json_encode($ans);
     exit();
 }
