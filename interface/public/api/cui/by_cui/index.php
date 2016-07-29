@@ -6,12 +6,19 @@ $posted_array = json_decode($str_json, true);
 
 // check that CUIs were sent (CUIs must be sent as an array!)
 if ( (!isset($posted_array['CUIs'])) or (!is_array($posted_array['CUIs'])) or (count($posted_array['CUIs']) == 0)) {
-    $ans['error'] = 'no CUIs sent';
-    echo(json_encode($ans));
-    exit();
+    if ((!isset($_GET['CUIs'])) or (!is_array($_GET['CUIs'])) or (count($_GET['CUIs']) == 0) ) {
+        $ans['error'] = 'no CUIs sent';
+        echo(json_encode($ans));
+        exit();
+    }
+    else {
+        $CUIs = $_GET['CUIs'];
+    }
+}
+else {
+    $CUIs = $posted_array['CUIs'];
 }
 
-$CUIs = $posted_array['CUIs'];
 
 // iterate through CUIs
 foreach($CUIs as $CUI) {
