@@ -96,6 +96,7 @@ function whole_interface(own_div_id, init_riskfactors = []) {
     
     this.fetchmodels = function(vis = true) {
         var CUIs = this.getInputData();
+        // request to check for new models
         $.ajax({
             url : "api/model/by_riskfactors/", 
             data : CUIs,
@@ -107,17 +108,41 @@ function whole_interface(own_div_id, init_riskfactors = []) {
                 
                 // parse the reply
                 var data = JSON.parse(reply);
+                
+                // identify new ids
                 var new_ids = [];
-                for (i in data) {
-                    var id = data[i]["id"];
+                for (id in data) {
                     if (!(id in master.all_models)) {
                         new_ids.push(id);
                     }
-                    console.log(data[i]);
                 }
-                console.log(data);
                 
-                // TODO request data on new CUIs
+                // request to find data and add it to all_models
+                $.ajax({
+                    url : "api/model/by_id",
+                    data : {"ids" : new_ids},
+                    master: master,
+                    headers: {"Content-Type": "application/json"},
+                    success: function(reply) {
+                        // store the pertinent pointer
+                        var master = this.master; 
+                        
+                        // parse the reply
+                        var data = JSON.parse(reply);
+                        
+                        // store data on all newly acquired models
+                        // TODO find a way to prevent extraneous multi-requesting of the same models
+                        // TODO maybe just make a variable whole_interface.requesting models that 
+                        // TODO will stall requests...
+                        for (id in data) {
+                            if (!(id in master.all_models)) {
+                                master.all_models[id] = data[id];
+                                console.log(master.all_models[id]);
+                            }
+                        }
+                    }
+                    
+                });
                 
                 // TODO make models visible as appropriate
                 

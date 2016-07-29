@@ -79,7 +79,7 @@ $modelIDs = array_keys($inputIDcounts);     // this line used in debug AND in ac
 }*/
 
 // build query to get models
-$to_query = "SELECT * FROM `models` WHERE ( id = ";
+$to_query = "SELECT `id` FROM `models` WHERE ( id = ";
 foreach ($modelIDs as $id) {
     $to_query .= htmlspecialchars($id);
     $to_query .= " AND numofinputs = ";
