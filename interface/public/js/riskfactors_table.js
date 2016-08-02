@@ -10,27 +10,22 @@ function riskfactor_list(master) {
     this.base = document.createElement("div");
     this.base.setAttribute("style","width:400px");
     
-    //titlebar
-    var removetitle = document.createElement("p");
-    titletitle.setAttribute("style","width:30px;text-align:center;float:left;");
-    scoretitle.appendChild(docuemnt.createTextNode("Models");
-    var nametitle = document.createElement("p");
-    scoretitle.setAttribute("style","width:150px;text-align:center;");
-    scoretitle.appendChild(docuemnt.createTextNode("Scores");
-    var inputtitle = document.createElement("p");
-    scoretitle.setAttribute("style","width:120px;text-align:center;");
-    scoretitle.appendChild(docuemnt.createTextNode("Scores");
-    var unitstitle = document.createElement("p");
-    scoretitle.setAttribute("style","width:50px;text-align:center;");
-    scoretitle.appendChild(docuemnt.createTextNode("Units");
-    var titlebar = document.createElement("span");
-    titlebar.setAttribute("style","width:400px");
-    titlebar.appendChild(removetitle);
-    titlebar.appendChild(namestitle);
-    titlebar.appendChild(inputtitle);
-    titlebar.appendChild(unitstitle);
+    var removetitle = $("<div style='float:left; width:30px; display:block; overflow:hidden'></div>");
+    removetitle.append($('<p></p>'));
+    var nametitle = $("<div style='float:left; width:150px; display:block; overflow:hidden'></div>"); 
+    nametitle.append($('<p>Risk Factor</p>'));
+    var inputtitle = $("<div style='float:left; width:120px; display:block; overflow:hidden'></div>"); 
+    inputtitle.append($('<p>Input</p>'));
+    var unitstitle = $("<div style='width:50px; display:block; overflow:hidden'></div>"); 
+    unitstitle.append($('<p>Units</p>'));
     
-    this.base.append(titlebar);
+    var titlebar = $("<div style='float:clear'></div>");
+    titlebar.append(removetitle);
+    titlebar.append(nametitle);
+    titlebar.append(inputtitle);
+    titlebar.append(unitstitle);
+    
+    $(this.base).append(titlebar);
     
     // buttons, names, inputs, and units lists
     this.buttons = $("<div style='float:left; width:30px; display:block; overflow:hidden'></div>"); //document.createElement('span');
@@ -38,10 +33,13 @@ function riskfactor_list(master) {
     this.values = $("<div style='float:left; width:120px; display:block; overflow:hidden'></div>"); //document.createElement('span');
     this.unit_names = $("<div style='width:50px; display:block; overflow:hidden'></div>"); //document.createElement('span');
     
-    this.base.append(this.buttons);
-    this.base.append(this.names);
-    this.base.append(this.values);
-    this.base.append(this.unit_names);
+    var holder = $("<div style='float:clear'></div>");
+    
+    $(holder).append(this.buttons);
+    $(holder).append(this.names);
+    $(holder).append(this.values);
+    $(holder).append(this.unit_names);
+    $(this.base).append(holder);
     
     // the most recent addition
     this.head = null;

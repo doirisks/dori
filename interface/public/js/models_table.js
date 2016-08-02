@@ -12,25 +12,24 @@ function model_list(master) {
     this.base.setAttribute("style","width:400px");
     
     //titlebar
-    var titletitle = document.createElement("p");
-    titletitle.setAttribute("style","width:325px;text-align:center;float:left;");
-    scoretitle.appendChild(docuemnt.createTextNode("Models");
-    var scoretitle = document.createElement("p");
-    scoretitle.setAttribute("style","width:325px;text-align:center;");
-    scoretitle.appendChild(docuemnt.createTextNode("Scores");
-    var titlebar = document.createElement("span");
-    titlebar.setAttribute("style","width:400px");
-    titlebar.appendChild(titletitle);
-    titlebar.appendChild(scoretitle);
     
-    this.base.append(titlebar);
+    var titletitle = $("<div style='float:left; width:300px; display:block; overflow:hidden;'></div>");
+    titletitle.append($('<p>Models</p>'));
+    var scoretitle = $("<div style='float:left; width:75px; display:block;'></div>"); 
+    scoretitle.append($('<p>Score</p>'));
+    
+    var titlebar = $("<div style='float:clear'></div>");
+    titlebar.append(titletitle);
+    titlebar.append(scoretitle);
+    
+    $(this.base).append(titlebar);
     
     // titles and scores lists
     this.titles = $("<div style='float:left; width:300px; display:block; overflow:hidden'></div>"); 
     this.scores = $("<div style='width:75px; display:block; overflow:hidden'></div>"); 
     
-    this.base.append(this.titles);
-    this.base.append(this.scores);
+    $(this.base).append(this.titles);
+    $(this.base).append(this.scores);
     
     // the most recent addition
     this.head = null;

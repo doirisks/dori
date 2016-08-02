@@ -55,7 +55,7 @@ function riskfactor_single(master,CUI) {
     this.prev = null;
     this.next = null;
    
-    this.show = function (prev) {
+    this.show = function (dest, prev) {
         // adjust list pointers
         this.prev = prev;
         if (prev != null && prev.next != null) {
@@ -68,13 +68,13 @@ function riskfactor_single(master,CUI) {
         // show content
         if (prev == null){
             // show button
-            $(master.righttable.buttons).html(this.button);
+            $(dest.buttons).html(this.button);
             // show rf
-            $(master.righttable.names).html(this.rf);
+            $(dest.names).html(this.rf);
             // show input
-            $(master.righttable.values).html(this.input);
+            $(dest.values).html(this.input);
             // show units
-            $(master.righttable.unit_names).html(this.units);
+            $(dest.unit_names).html(this.units);
         }
         else {
             // show button

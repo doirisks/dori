@@ -33,19 +33,19 @@ function whole_interface(own_div_id, init_riskfactors = []) {
     this.CUIfinder = new riskfactor_finder(this);
     
     // the base text of the interface
-    this.base = document.createElementById("div");
-    var left  = document.createElementById("div");
-    var right = document.createElementById("div");
+    this.base = document.createElement("div");
+    var left  = document.createElement("div");
+    var right = document.createElement("div");
     this.base.setAttribute("style","width:800px;overflow:hidden;");
-    left.setAttribute("style", "width:400px;overflow:hidden;border:1px solid;");
+    left.setAttribute("style", "width:400px;overflow:hidden;border:1px solid;float:left;");
     right.setAttribute("style","width:400px;overflow:hidden;border:1px solid;");
     
-    var modeltitle = document.createElementById('h4')
+    var modeltitle = document.createElement('h4')
     modeltitle.appendChild(document.createTextNode("Models"));
     left.appendChild(modeltitle);
     left.appendChild(this.modellist.base);
     left.appendChild(this.modelfinder.base);
-    var rftitle = document.createElementById('h4')
+    var rftitle = document.createElement('h4')
     rftitle.appendChild(document.createTextNode("Risk Factors"));
     right.appendChild(rftitle);
     right.appendChild(this.CUIlist.base);
@@ -144,8 +144,7 @@ function whole_interface(own_div_id, init_riskfactors = []) {
                                     data[id]['lower'] = JSON.parse(data[id]['lower']);
                                     
                                     master.all_models[id] = data[id];
-                                    master.all_models[id]["local_obj"] = new models_single(master, id);
-                                    console.log("I happened");
+                                    master.all_models[id]["local_obj"] = new model_single(master, id);
                                 }
                                 // show the model
                                 master.vis_models.push(id); 
@@ -173,7 +172,7 @@ function whole_interface(own_div_id, init_riskfactors = []) {
     
     this.base.appendChild(left);
     this.base.appendChild(right);
-    $('#'+own_div_id).appendChild(this.base);
+    $('#'+own_div_id).append(this.base);
     
     // iterate through given risk factors and add them
     for (CUI in init_riskfactors) {
