@@ -34,16 +34,16 @@ function whole_interface(own_div_id, init_riskfactors = []) {
     
     // the base text of the interface
     var text = '<table class="table-condensed" ><tr>\n'
-    text    += '    <td style="vertical-align:Top;border:1px solid">\n';
+    text    += '    <td style="vertical-align:Top;border:1px solid; width:400px">\n';
     
     // left interface
-    text    += '        <h4 >Models</h4>\n';
+    text    += '        <h4 style="width:400px">Models</h4>\n';
     text    += this.lefttable.base;
     text    += '        <br>\n';
     text    += this.leftfinder.base;
     
     text    += '    </td>\n';
-    text    += '    <td style="vertical-align:Top;border:1px solid">\n';
+    text    += '    <td style="vertical-align:Top;border:1px solid; width:400px">\n';
     
     // right interface
     text    += '        <h4>Risk Factors</h4>\n';
@@ -103,6 +103,7 @@ function whole_interface(own_div_id, init_riskfactors = []) {
             master : this, 
             headers: {"Content-Type": "application/json"},
             success: function(reply) {
+                console.log("model request succeeded");
                 // store the pertinent pointer
                 var master = this.master; 
                 
@@ -140,8 +141,21 @@ function whole_interface(own_div_id, init_riskfactors = []) {
                             // TODO will stall requests...
                             for (id in data) {
                                 if (!(id in master.all_models)) {
+                                    // parse the json encoded fields from the db
+                                    data[id]['authors'] = JSON.parse(data[id]['authors']);
+                                    data[id]['inpCUI'] = JSON.parse(data[id]['inpCUI']);
+                                    data[id]['inpname'] = JSON.parse(data[id]['inpname']);
+                                    data[id]['inpdatatype'] = JSON.parse(data[id]['inpdatatype']);
+                                    data[id]['upper'] = JSON.parse(data[id]['upper']);
+                                    data[id]['lower'] = JSON.parse(data[id]['lower']);
+                                    
                                     master.all_models[id] = data[id];
+                                    master.all_models[id]["local_obj"] = new models_single(master, id);
+                                    console.log("I happened");
                                 }
+                                // show the model
+                                master.vis_models.push(id); 
+                                master.lefttable.push(master.all_models[id]["local_obj"]);
                             }
                         }
                         
@@ -164,6 +178,10 @@ function whole_interface(own_div_id, init_riskfactors = []) {
     }
     
     $('#'+own_div_id).html(this.base);
+    // add model list placeholders
+    $('#allmodels').after(this.lefttable.titles);
+    $(this.lefttable.titles).after(this.lefttable.scores);
+    // add CUI list placeholders
     $('#allriskfactors').after(this.righttable.buttons);
     $(this.righttable.buttons).after(this.righttable.names);
     $(this.righttable.names).after(this.righttable.values);
