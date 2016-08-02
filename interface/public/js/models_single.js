@@ -4,7 +4,7 @@
  * class to hold the search for new models
  **/
  
-function models_single(master, model) {
+function model_single(master, model) {
     this.master = master;
     this.id = "model" + model;
     this.model = model;
@@ -22,7 +22,7 @@ function models_single(master, model) {
     this.prev = null;
     this.next = null;
    
-    this.show = function (prev) {
+    this.show = function (dest, prev) {
         // adjust list pointers
         this.prev = prev;
         if (prev != null && prev.next != null) {
@@ -35,9 +35,9 @@ function models_single(master, model) {
         // show content
         if (prev == null){
             // show title div
-            $(master.lefttable.titles).html(this.title);
+            $(dest.titles).html(this.title);
             // show score div
-            $(master.lefttable.scores).html(this.score);
+            $(dest.scores).html(this.score);
         }
         else {
             // show title div
@@ -54,10 +54,6 @@ function models_single(master, model) {
         }
         if (this.next !== null) {
             this.next.prev = this.prev;
-        }
-        else {
-            // change head of table if appropriate
-            master.lefttable.head = this.prev;
         }
         
         // removes its CUI from vis_CUIs

@@ -4,7 +4,7 @@
  * class to hold the search for new models
  **/
  
-function riskfactors_single(master,CUI) {
+function riskfactor_single(master,CUI) {
     this.master = master;
     this.CUI = CUI;
     this.id = CUI;
