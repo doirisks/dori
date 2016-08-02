@@ -26,36 +26,30 @@ function whole_interface(own_div_id, init_riskfactors = []) {
     this.vis_CUIs = [];
     
     // the left side of the interface - models
-    this.lefttable  =  new models_table(this);
-    this.leftfinder = new models_finder(this);
+    this.modellist  =  new model_list(this);
+    this.modelfinder = new model_finder(this);
     // the right side of the interface - risk factors
-    this.righttable  =  new riskfactors_table(this);
-    this.rightfinder = new riskfactors_finder(this);
+    this.CUIlist  =  new riskfactor_list(this);
+    this.CUIfinder = new riskfactor_finder(this);
     
     // the base text of the interface
-    var text = '<table class="table-condensed" ><tr>\n'
-    text    += '    <td style="vertical-align:Top;border:1px solid; width:400px">\n';
+    this.base = document.createElementById("div");
+    var left  = document.createElementById("div");
+    var right = document.createElementById("div");
+    this.base.setAttribute("style","width:800px;overflow:hidden;");
+    left.setAttribute("style", "width:400px;overflow:hidden;border:1px solid;");
+    right.setAttribute("style","width:400px;overflow:hidden;border:1px solid;");
     
-    // left interface
-    text    += '        <h4 style="width:400px">Models</h4>\n';
-    text    += this.lefttable.base;
-    text    += '        <br>\n';
-    text    += this.leftfinder.base;
-    
-    text    += '    </td>\n';
-    text    += '    <td style="vertical-align:Top;border:1px solid; width:400px">\n';
-    
-    // right interface
-    text    += '        <h4>Risk Factors</h4>\n';
-    text    += '        <div>\n';
-    text    += this.righttable.base;
-    text    += '            <br>\n';
-    text    += this.rightfinder.base;
-    text    += '        </div>\n';
-    
-    text    += '    </td>\n';
-    text    += '</tr></table>\n';
-    this.base = text;
+    var modeltitle = document.createElementById('h4')
+    modeltitle.appendChild(document.createTextNode("Models"));
+    left.appendChild(modeltitle);
+    left.appendChild(this.modellist.base);
+    left.appendChild(this.modelfinder.base);
+    var rftitle = document.createElementById('h4')
+    rftitle.appendChild(document.createTextNode("Risk Factors"));
+    right.appendChild(rftitle);
+    right.appendChild(this.CUIlist.base);
+    right.appendChild(this.CUIfinder.base);
     
     // add a CUI
     this.fetchCUI = function (CUI, vis = true) {
@@ -77,11 +71,11 @@ function whole_interface(own_div_id, init_riskfactors = []) {
                     
                     // store the data in the all_CUIs array
                     master.all_CUIs[CUI] = data[CUI]; 
-                    master.all_CUIs[CUI]["local_obj"] = new riskfactors_single(master, CUI); 
+                    master.all_CUIs[CUI]["local_obj"] = new riskfactor_single(master, CUI); 
                     
                     // show the CUI
                     master.vis_CUIs.push(CUI); 
-                    master.righttable.push(master.all_CUIs[CUI]["local_obj"]);
+                    master.CUIlist.push(master.all_CUIs[CUI]["local_obj"]);
                 }
             });
             // TODO add a memory variable to make sure that the CUIs are added in the right order
@@ -155,7 +149,7 @@ function whole_interface(own_div_id, init_riskfactors = []) {
                                 }
                                 // show the model
                                 master.vis_models.push(id); 
-                                master.lefttable.push(master.all_models[id]["local_obj"]);
+                                master.modellist.push(master.all_models[id]["local_obj"]);
                             }
                         }
                         
@@ -177,15 +171,10 @@ function whole_interface(own_div_id, init_riskfactors = []) {
         return(data);
     }
     
-    $('#'+own_div_id).html(this.base);
-    // add model list placeholders
-    $('#allmodels').after(this.lefttable.titles);
-    $(this.lefttable.titles).after(this.lefttable.scores);
-    // add CUI list placeholders
-    $('#allriskfactors').after(this.righttable.buttons);
-    $(this.righttable.buttons).after(this.righttable.names);
-    $(this.righttable.names).after(this.righttable.values);
-    $(this.righttable.values).after(this.righttable.unit_names);
+    this.base.appendChild(left);
+    this.base.appendChild(right);
+    $('#'+own_div_id).appendChild(this.base);
+    
     // iterate through given risk factors and add them
     for (CUI in init_riskfactors) {
         this.fetchCUI(CUI);
