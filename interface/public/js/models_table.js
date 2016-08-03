@@ -204,6 +204,7 @@ function model_list(master) {
                         
                         // display if possible
                         if (model in master.all_models) {
+                            console.log(data[model]);
                             // clean up the score
                             var score = (parseFloat(data[model]['score']) == NaN) ? data[model]['score'] : parseFloat(data[model]['score']) ; // NaN untested
                             if (typeof(score) == "number") {

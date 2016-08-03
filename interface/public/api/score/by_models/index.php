@@ -19,12 +19,18 @@ $posted_array = json_decode($str_json, true);
 
 // guarantee that model ids were sent
 if ( (!isset($posted_array['models'])) or (empty($posted_array['models'])) ) {
-    $ans['error'] = 'no models sent';
-    die(json_encode($ans));
+    if ( (!isset($_GET['models'])) or (empty($_GET['models'])) ) {
+        $ans['error'] = 'no models sent';
+        die(json_encode($ans));
+    }
+    // store 'models' element in its own variables from the query string
+    $models = $_GET['models'];
+}
+else {
+    // store 'models' element in its own variables from the cURL style input
+    $models = $posted_array['models'];
 }
 
-// store 'models' element in its own variables
-$models = $posted_array['models'];
 $CUIs['models'] = null;  
 
 // clean input, then expand CUIs via derived CUIs
