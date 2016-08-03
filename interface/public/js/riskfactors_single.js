@@ -100,31 +100,6 @@ function riskfactor_single(master,CUI) {
     units.appendChild(p);
     this.units = $(units);
     
-    /*
-    var units = "";
-    if (CUI == 'C28421') { // Sex
-        inputdata = 'type="radio" value="male" onchange="the_interface.fetchmodels()" checked> Male</input>  <input type="radio" name="'+CUI+'" value="female"> Female<p></p';
-    } else if (master.all_CUIs[CUI]['datatype'].toLowerCase() == 'float') {
-        inputdata = 'type="number" onchange="the_interface.fetchmodels()" placeholder="Float" style="width:50px"';
-        units += master.all_CUIs[CUI]['units'];
-    } else if (master.all_CUIs[CUI]['datatype'].toLowerCase() == 'int' || master.all_CUIs[CUI]['datatype'].toLowerCase() == 'integer') {
-        inputdata = 'type="number" onchange="the_interface.fetchmodels()" placeholder="Integer" style="width:50px';
-        units += master.all_CUIs[CUI]['units'];
-    } else /*if (master.all_CUIs[CUI]['datatype'].toUpperCase() == 'BOOL')*//* {
-        inputdata = 'type = "checkbox" onchange="the_interface.fetchmodels()" ';
-    } */
-    /*
-    // input
-    var text = '<div style= "text-align:center; height:30px;">';
-    text +=    '    <input name = "' + CUI + '" ' + inputdata + ' ></input> ';
-    text +=    '</div>';
-    this.input = $(text);
-    
-    // units
-    var text = '<div style= "text-align:center; height:30px;">' + units + '</div>';
-    this.units = $(text);
-    */
-    
     // value
     var elem = this.input[0].getElementsByTagName("input")[0];
     if (elem == null) {

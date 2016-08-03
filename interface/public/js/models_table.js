@@ -40,6 +40,7 @@ function model_list(master) {
     
     // makes a CUI visible in the table
     this.push = function (model_obj) {
+        this.vis_models.push(model_obj.model); 
         model_obj.show(this, this.head);
         this.head = model_obj;
     }
@@ -110,8 +111,9 @@ function model_list(master) {
                                     master.all_models[id]["local_obj"] = new model_single(master, id);
                                 }
                                 // show the model
-                                master.vis_models.push(id); 
-                                master.push(master.all_models[id]["local_obj"]);
+                                if (vis) {
+                                    master.push(master.all_models[id]["local_obj"]);
+                                }
                             }
                         }
                         

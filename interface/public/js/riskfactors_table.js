@@ -51,6 +51,7 @@ function riskfactor_list(master) {
     
     // makes a CUI visible in the table
     this.push = function (CUI_obj) {
+        this.vis_CUIs.push(CUI_obj.CUI); 
         CUI_obj.show(this, this.head);
         this.head = CUI_obj;
     }
@@ -86,8 +87,9 @@ function riskfactor_list(master) {
                     master.all_CUIs[CUI]["local_obj"] = new riskfactor_single(master, CUI); 
                     
                     // show the CUI
-                    master.vis_CUIs.push(CUI); 
-                    master.push(master.all_CUIs[CUI]["local_obj"]);
+                    if (vis) {
+                        master.push(master.all_CUIs[CUI]["local_obj"]);
+                    }
                 }
             });
             // TODO add a memory variable to make sure that the CUIs are added in the right order
