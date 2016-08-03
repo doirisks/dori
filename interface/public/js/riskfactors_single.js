@@ -30,15 +30,15 @@ function riskfactor_single(master,CUI) {
     var inputdata = "";
     var units = "";
     if (CUI == 'C28421') { // Sex
-        inputdata = 'type="radio" value="male" checked> Male</input>  <input type="radio" name="'+CUI+'" value="female"> Female<p></p';
+        inputdata = 'type="radio" value="male" onchange="the_interface.fetchmodels()" checked> Male</input>  <input type="radio" name="'+CUI+'" value="female"> Female<p></p';
     } else if (master.all_CUIs[CUI]['datatype'].toLowerCase() == 'float') {
         inputdata = 'type="number" onchange="the_interface.fetchmodels()" placeholder="Float" style="width:50px"';
         units += master.all_CUIs[CUI]['units'];
     } else if (master.all_CUIs[CUI]['datatype'].toLowerCase() == 'int' || master.all_CUIs[CUI]['datatype'].toLowerCase() == 'integer') {
-        inputdata = 'type="number" placeholder="Integer" style="width:50px';
+        inputdata = 'type="number" onchange="the_interface.fetchmodels()" placeholder="Integer" style="width:50px';
         units += master.all_CUIs[CUI]['units'];
     } else /*if (master.all_CUIs[CUI]['datatype'].toUpperCase() == 'BOOL')*/ {
-        inputdata = 'type = "checkbox" ';
+        inputdata = 'type = "checkbox" onchange="the_interface.fetchmodels()" ';
     } 
     
     // input
@@ -50,6 +50,47 @@ function riskfactor_single(master,CUI) {
     // units
     var text = '<div style= "text-align:center; height:30px;">' + units + '</div>';
     this.units = $(text);
+    
+    // value
+    var elem = this.input[0].getElementsByTagName("input")[0];
+    if (elem == null) {
+        this.value = null;
+        console.log("no element");
+    } else if (elem.type == "checkbox") {
+        this.value = elem.checked;
+    } else if (elem.type == "number") {
+        console.log("handling a number...");
+        // handle blank numbers 
+        if (elem.value == "") {
+            console.log("artificially set value");
+            // sets val to harmonic mean of default lower + 1 and default upper + 1
+            var val = 0;
+            if (master.all_CUIs[this.CUI]['CUI'] == "C0804405") {       // age
+                val = 55;
+            } else if (master.all_CUIs[this.CUI]['CUI'] == "C0488055") {          // sysBP
+                val = 120;
+            } else if (master.all_CUIs[this.CUI]['CUI'] == "C0488052") {          // diaBP
+                val = 80;
+            } else if (master.all_CUIs[this.CUI]['CUI'] == "C0364708") {          // totchol
+                val = 180;
+            } else if (master.all_CUIs[this.CUI]['CUI'] == "C0364221") {          // hdlchol
+                val = 60;
+            } else if (master.all_CUIs[this.CUI]['CUI'] == "C1542867") {          // bmi
+                val = 23;
+            } else {
+                // sets val to geometric mean of default lower + 1 and upper + 1
+                val = (((master.all_CUIs[this.CUI]['defaultlower'] + 1) * (master.all_CUIs[this.CUI]['defaultupper'] + 1)) ** 0.5);
+            }
+            elem.value = (Math.round(val * 10) / 10).toString();
+        }
+        this.value = Number(elem.value);
+    } else if (elem.type == "radio") {
+        this.value = elem.checked; // note that this will return true if MALE is checked for sex
+    } else {
+        console.log("unknown type error");
+        this.value = null;
+    }
+    console.log(CUI, this.value);
     
     // previous and next in the table
     this.prev = null;
@@ -110,6 +151,8 @@ function riskfactor_single(master,CUI) {
     
     // provide the value of the CUI
     this.getVal = function (numbfill = false) {
+        return this.value;
+        /*
         var elem = this.input[0].getElementsByTagName("input")[0];
         if (elem == null) {
             console.log("requested value from hidden CUI");
@@ -134,5 +177,6 @@ function riskfactor_single(master,CUI) {
             console.log("unknown type error");
             return null;
         }
+        */
     }
 }
