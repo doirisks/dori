@@ -38,6 +38,8 @@ $CUIs = array();
 $CUI_vals = [];
 prep_CUIs($CUIs,$CUI_vals,$posted_array);
 
+die(json_encode($CUI_vals));
+
 # debugging
 #echo json_encode($CUI_vals) . "\n";
 

@@ -136,7 +136,7 @@
             
             // bools
             if ($datum['datatype'] == 'bool') { 
-                if ( $datum['CUI'] == 'C28421' ) {
+                if ( $datum['CUI'] == 'C28421' ) { // special treatment for the gender CUI?
                     // no action
                     // TODO: make sure 'male' or 'female' is indicated?
                 } else if (is_bool($arg)) {
@@ -230,7 +230,8 @@
         if (in_array('C28421', $CUIs)) {
             array_push($CUIs,'C0086582');               //male sex CUI
             //array_push($CUIs,'');                       //female sex CUI
-            if (strcasecmp($CUI_vals['C28421'],'male') == 0) {
+            if ((strcasecmp($CUI_vals['C28421'],'male') == 0) or ($CUI_vals['C28421'] === true) ) {
+            // boolean true => male
                 $CUI_vals['C0086582'] = true;
                 //$CUI_vals['???'] = false;               //female sex
             }
