@@ -12,22 +12,95 @@ function riskfactor_single(master,CUI) {
     
     //TODO this.val = ;
     
+    this.height = 30;
+    
     var text = '<div id="' + this.id + '">\n';
     // button - removal button
-    var text = '<div style="text-align:center; height:30px;">';
+    var text = '<div style="text-align:center; height:' + this.height.toString() + 'px;">';
     text +=    '    <button id = "remove' + CUI + '" onclick=the_interface.righttable.pop(master.all_CUIs["'+CUI+'"]["local_obj"]) >-</button>'; //TODO
     text +=    '</div>';
     this.button = $(text);
     
     // rf - name of risk factor CUI displayed w/link
-    var text = '<div style= "text-align:center; height:30px; overflow:visible;">';
+    var text = '<div style= "text-align:center; height:' + this.height.toString() + 'px; overflow:visible;">';
     var riskname = toTitleCase(master.all_CUIs[CUI]['name1']);
     text +=    '    <a href="CUIquery.php?CUI=' + CUI + '" >'+riskname+'</a>'; // TODO link destination
     text +=    '</div>';
     this.rf = $(text);
     
-    // interpret the datatype and units
-    var inputdata = "";
+    // input - display the correct type of input for the CUI
+    var input = document.createElement("div");
+    input.setAttribute("style","text-align:center; height:" + this.height.toString() + "px; overflow:visible;");
+    // Sex CUI
+    if (CUI == 'C28421') { 
+        var input1 = document.createElement("input");
+        input1.setAttribute("type","radio");
+        input1.setAttribute("value","male");
+        input1.setAttribute("checked","checked");
+        input1.setAttribute("name",CUI);
+        var input2 = document.createElement("input");
+        input2.setAttribute("type","radio");
+        input2.setAttribute("value","female");
+        input2.setAttribute("checked","checked");
+        input2.setAttribute("name",CUI);
+        
+        var _this = this;
+        $(input1).change(function(){            // add event listener
+            _this.changefunc();
+        });
+        
+        input.appendChild(input1);
+        input.appendChild(document.createTextNode(" Male "));
+        input.appendChild(input2);
+        input.appendChild(document.createTextNode(" Female"));
+    // floats
+    } else if (master.all_CUIs[CUI]['datatype'].toLowerCase() == 'float') {
+        var input1 = document.createElement("input");
+        input1.setAttribute("type","number");
+        input1.setAttribute("style","width:50px;text-align:center;");
+        
+        var _this = this;
+        $(input1).change(function(){            // add event listener
+            _this.changefunc();
+        });
+        
+        input.appendChild(input1);
+    // integers
+    } else if (master.all_CUIs[CUI]['datatype'].toLowerCase() == 'int' || master.all_CUIs[CUI]['datatype'].toLowerCase() == 'integer') {
+        var input1 = document.createElement("input");
+        input1.setAttribute("type","number");
+        input1.setAttribute("style","width:50px;text-align:center;");
+        
+        var _this = this;
+        $(input1).change(function(){            // add event listener
+            _this.changefunc();
+        });
+        
+        input.appendChild(input1);
+    } else /*if (master.all_CUIs[CUI]['datatype'].toLowerCase() == 'bool')*/ {
+        var input1 = document.createElement("input");
+        input1.setAttribute("type","checkbox");
+        
+        var _this = this;
+        $(input1).change(function(){            // add event listener
+            _this.changefunc();
+        });
+        
+        input.appendChild(input1);
+    }
+    this.input = $(input);
+    
+    // units - correctly display the units of the CUI
+    var units = document.createElement("div");
+    units.setAttribute("style",'text-align:center; height:' + this.height.toString() + 'px;');
+    var p = document.createElement("p");
+    if ( (master.all_CUIs[CUI]['units'] != null) && (master.all_CUIs[CUI]['datatype'].toLowerCase() == "float") ) {
+        p.appendChild(document.createTextNode(master.all_CUIs[CUI]['units']));
+    }
+    units.appendChild(p);
+    this.units = $(units);
+    
+    /*
     var units = "";
     if (CUI == 'C28421') { // Sex
         inputdata = 'type="radio" value="male" onchange="the_interface.fetchmodels()" checked> Male</input>  <input type="radio" name="'+CUI+'" value="female"> Female<p></p';
@@ -37,10 +110,10 @@ function riskfactor_single(master,CUI) {
     } else if (master.all_CUIs[CUI]['datatype'].toLowerCase() == 'int' || master.all_CUIs[CUI]['datatype'].toLowerCase() == 'integer') {
         inputdata = 'type="number" onchange="the_interface.fetchmodels()" placeholder="Integer" style="width:50px';
         units += master.all_CUIs[CUI]['units'];
-    } else /*if (master.all_CUIs[CUI]['datatype'].toUpperCase() == 'BOOL')*/ {
+    } else /*if (master.all_CUIs[CUI]['datatype'].toUpperCase() == 'BOOL')*//* {
         inputdata = 'type = "checkbox" onchange="the_interface.fetchmodels()" ';
-    } 
-    
+    } */
+    /*
     // input
     var text = '<div style= "text-align:center; height:30px;">';
     text +=    '    <input name = "' + CUI + '" ' + inputdata + ' ></input> ';
@@ -50,6 +123,7 @@ function riskfactor_single(master,CUI) {
     // units
     var text = '<div style= "text-align:center; height:30px;">' + units + '</div>';
     this.units = $(text);
+    */
     
     // value
     var elem = this.input[0].getElementsByTagName("input")[0];
@@ -87,7 +161,7 @@ function riskfactor_single(master,CUI) {
     } else if (elem.type == "radio") {
         this.value = elem.checked; // note that this will return true if MALE is checked for sex
     } else {
-        console.log("unknown type error");
+        console.log("unknown type error", elem.type);
         this.value = null;
     }
     console.log(CUI, this.value);
@@ -125,6 +199,8 @@ function riskfactor_single(master,CUI) {
             // show input
             $(prev.input).after(this.input);
             // show units
+            console.log(prev.units);
+            console.log(this.units);
             $(prev.units).after(this.units);
         }
     }
@@ -149,34 +225,12 @@ function riskfactor_single(master,CUI) {
         $("#" + this.id).remove();
     }
     
+    this.changefunc = function() {
+        this.master.master.fetchmodels();
+    }
+    
     // provide the value of the CUI
     this.getVal = function (numbfill = false) {
         return this.value;
-        /*
-        var elem = this.input[0].getElementsByTagName("input")[0];
-        if (elem == null) {
-            console.log("requested value from hidden CUI");
-            return null;
-        } else if (elem.type == "checkbox") {
-            return(elem.checked);
-        } else if (elem.type == "number") {
-            // handle blank numbers
-            if (elem.value == "") {
-                if ((numbfill) && (this.master.allCUIs[this.CUI]["defaultupper"] !== null) && (this.master.allCUIs[this.CUI]["defaultlower"] !== null)) {
-                    // fill in the number with the average of the default values
-                    var value = this.master.allCUIs[this.CUI]["defaultupper"] + this.master.allCUIs[this.CUI]["defaultlower"];
-                    value = value / 2;
-                    return(value);
-                }
-                return(null);
-            }
-            return(Number(elem.value));
-        } else if (elem.type == "radio") {
-            return(elem.checked); // note that this will return true if MALE is checked for sex
-        } else {
-            console.log("unknown type error");
-            return null;
-        }
-        */
     }
 }
