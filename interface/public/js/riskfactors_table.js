@@ -7,6 +7,11 @@
 function riskfactor_list(master) {
     this.master = master;
     
+    
+    this.all_CUIs = {};    // all data stored on CUIs 
+    this.vis_CUIs = [];    // list of visible CUIs
+    
+    
     this.base = document.createElement("div");
     this.base.setAttribute("style","width:400px");
     
@@ -56,5 +61,52 @@ function riskfactor_list(master) {
             this.head = CUI_obj.prev;
         }
         CUI_obj.remove();
+    }
+    
+    // add a CUI
+    this.fetchCUI = function (CUI, vis = true) {
+        // try to fetch the CUI
+        if (this.all_CUIs[CUI] == null){
+            // fetch and handle data from server
+            this.all_CUIs[CUI] = $.ajax({
+                url : "api/cui/by_cui/", 
+                data : {"CUIs": [CUI]},
+                master : this, 
+                headers: {"Content-Type": "application/json"},
+                success: function(reply) {
+                    // store the pertinent pointer
+                    var master = this.master; 
+                    
+                    // parse the reply
+                    var data = JSON.parse(reply);
+                    var CUI = Object.keys(data)[0];
+                    
+                    // store the data in the all_CUIs array
+                    master.all_CUIs[CUI] = data[CUI]; 
+                    master.all_CUIs[CUI]["local_obj"] = new riskfactor_single(master, CUI); 
+                    
+                    // show the CUI
+                    master.vis_CUIs.push(CUI); 
+                    master.push(master.all_CUIs[CUI]["local_obj"]);
+                }
+            });
+            // TODO add a memory variable to make sure that the CUIs are added in the right order
+        } else if ( this.all_CUIs[CUI]['CUI'] == CUI ) {
+            // browser already has CUI data, but it is hidden => unhide it!
+            this.vis_CUIs.push(CUI);
+            this.all_CUIs[CUI]['local_obj'].show();
+        } else {
+            // do nothing - CUI is either being gotten already or it is bad
+        }
+    }
+    
+    // get data from inputs
+    this.getInputData = function() {
+        var data = {};
+        for (i in this.vis_CUIs) {
+            var obj = this.all_CUIs[this.vis_CUIs[i]]["local_obj"];
+            data[this.vis_CUIs[i]] = obj.getVal();
+        }
+        return(data);
     }
 }
