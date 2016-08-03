@@ -20,7 +20,11 @@ function model_list(master) {
     var titletitle = $("<div style='float:left; width:300px; display:block; overflow:hidden;'></div>");
     titletitle.append($('<p>Models</p>'));
     var scoretitle = $("<div style='float:left; width:75px; display:block;'></div>"); 
-    scoretitle.append($('<p>Score</p>'));
+    scoretitle.append($('<button>Score</button>'));
+    var _this = this;
+    scoretitle.click(function() {
+        _this.master.scoremodels();
+    });
     
     var titlebar = $("<div style='float:clear'></div>");
     titlebar.append(titletitle);
@@ -53,6 +57,7 @@ function model_list(master) {
         model_obj.remove();
     }
     
+    // get models from the server based on data
     this.fetchmodels = function(CUIs, vis = true) {
         // request to check for new models
         $.ajax({
@@ -106,6 +111,10 @@ function model_list(master) {
                                     data[id]['inpdatatype'] = JSON.parse(data[id]['inpdatatype']);
                                     data[id]['upper'] = JSON.parse(data[id]['upper']);
                                     data[id]['lower'] = JSON.parse(data[id]['lower']);
+                                    data[id]['mustnotCUI'] = JSON.parse(data[id]['mustnotCUI']);
+                                    data[id]['mustnot'] = JSON.parse(data[id]['mustnot']);
+                                    data[id]['mustCUI'] = JSON.parse(data[id]['mustCUI']);
+                                    data[id]['must'] = JSON.parse(data[id]['must']);
                                     
                                     master.all_models[id] = data[id];
                                     master.all_models[id]["local_obj"] = new model_single(master, id);
@@ -124,5 +133,91 @@ function model_list(master) {
                 
             }
         });
+    }
+    
+    
+    this.scoremodels = function(CUIs) {
+        console.log("models beings scored...");
+        console.log(CUIs);
+        var data = CUIs;
+        data['models'] = [];
+        for (var id in this.vis_models) {
+            var model = this.vis_models[id];
+            var valid = true
+            // validate each model
+            for (var i in model['inpCUI']) {
+                var CUI = model['inpCUI'][i];
+                var mustCUIcounter = 0;
+                if ((this.master.CUIlist.all_CUIs[CUI]['datatype'] == 'float') || 
+                    (this.master.CUIlist.all_CUIs[CUI]['datatype'] == 'int') || 
+                    (this.master.CUIlist.all_CUIs[CUI]['datatype'] == 'integer') ) 
+                {
+                    // check for CUIs outside of boundaries
+                        if ((model['upper'][i] != null) && (data[CUI] > model['upper'][i])) valid = false;
+                        if ((model['upper'][i] != null) && (data[CUI] < model['lower'][i])) valid = false;
+                }
+                // TODO implement population checks with CUI expansion HERE or on the SERVER
+                
+                /*if ((this.master.CUIlist.all_CUIs[CUI]['datatype'].toLowerCase() == 'bool') || 
+                    (this.master.CUIlist.all_CUIs[CUI]['datatype'].toLowerCase() == 'boolean') ) 
+                {
+                    if (data[CUI] === true){
+                        // check for banned CUIs
+                        for (var j in model['mustnot']){
+                            if (CUI == model['mustnot'][j]) valid = false;
+                        }
+                    }
+                    // increment the necessary conditions satisfied if applicable
+                    for (k in model['mustCUI']) {
+                        if (CUI == model['mustCUI'][k]) mustCUIcounter += 1;
+                    }
+                }
+                if (mustCUIcounter < model['mustCUI'].length) valid = false;
+                */
+                // TODO anything else to check locally?
+            }
+            if (valid) {
+                data['models'].push(model)
+            }
+        }
+        if (data['models'].length == 0) console.log("no models are being sent!");
+        else 
+        {
+            console.log(data['models']);
+            console.log(this.all_models);
+            // request for model scores
+            $.ajax({
+                url : "api/score/by_models",
+                data : data,
+                master: this,
+                headers: {"Content-Type": "application/json"},
+                success: function(reply) {
+                    // store the pertinent pointer
+                    var master = this.master; 
+                    
+                    // parse the reply
+                    var data = JSON.parse(reply);
+                    console.log(data);
+                    
+                    // record scores on all models
+                    for (var model in data) {
+                        
+                        // display if possible
+                        if (model in master.all_models) {
+                            // clean up the score
+                            var score = (parseFloat(data[model]['score']) == NaN) ? data[model]['score'] : parseFloat(data[model]['score']) ; // NaN untested
+                            if (typeof(score) == "number") {
+                                score = (Math.round(score*1000)/10).toString() + "%";
+                            }
+                            $(master.all_models[model]['local_obj'].score).html(score);
+                        // otherwise report
+                        } else {
+                            console.log(data[model]);
+                        }
+                    }
+                }
+            
+            });
+        }
     }
 }

@@ -48,6 +48,7 @@ function whole_interface(own_div_id, init_riskfactors = []) {
         this.CUIlist.fetchCUI(CUI, vis);
     }
     
+    // fetch models from data
     this.fetchmodels = function () {
         this.modellist.fetchmodels(this.getInputData());
     }
@@ -55,6 +56,12 @@ function whole_interface(own_div_id, init_riskfactors = []) {
     // returns data from risk factor inputs
     this.getInputData = function() {
         return(this.CUIlist.getInputData());
+    }
+    
+    // score visible models 
+    this.scoremodels = function() {
+        var CUIs = this.getInputData();
+        this.modellist.scoremodels(CUIs);
     }
     
     this.base.appendChild(left);

@@ -108,10 +108,8 @@ function riskfactor_single(master,CUI) {
     } else if (elem.type == "checkbox") {
         this.value = elem.checked;
     } else if (elem.type == "number") {
-        console.log("handling a number...");
         // handle blank numbers 
         if (elem.value == "") {
-            console.log("artificially set value");
             // sets val to harmonic mean of default lower + 1 and default upper + 1
             var val = 0;
             if (master.all_CUIs[this.CUI]['CUI'] == "C0804405") {       // age
@@ -139,7 +137,6 @@ function riskfactor_single(master,CUI) {
         console.log("unknown type error", elem.type);
         this.value = null;
     }
-    console.log(CUI, this.value);
     
     // previous and next in the table
     this.prev = null;
@@ -174,8 +171,6 @@ function riskfactor_single(master,CUI) {
             // show input
             $(prev.input).after(this.input);
             // show units
-            console.log(prev.units);
-            console.log(this.units);
             $(prev.units).after(this.units);
         }
     }
