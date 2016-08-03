@@ -136,7 +136,7 @@
             
             // bools
             if ($datum['datatype'] == 'bool') { 
-                if ( $datum['CUI'] == 'C28421' ) { // special treatment for the gender CUI?
+                if ( $datum['CUI'] == 'C28421' ) { 
                     // no action
                     // TODO: make sure 'male' or 'female' is indicated?
                 } else if (is_bool($arg)) {

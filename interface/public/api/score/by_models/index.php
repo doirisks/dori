@@ -25,20 +25,20 @@ if ( (!isset($posted_array['models'])) or (empty($posted_array['models'])) ) {
     }
     // store 'models' element in its own variables from the query string
     $models = $_GET['models'];
+    $posted_CUIs = $_GET;
 }
 else {
     // store 'models' element in its own variables from the cURL style input
     $models = $posted_array['models'];
+    $posted_CUIs = $posted_array;
 }
 
-$CUIs['models'] = null;  
+$posted_CUIs['models'] = null;  
 
 // clean input, then expand CUIs via derived CUIs
 $CUIs = array();
 $CUI_vals = [];
-prep_CUIs($CUIs,$CUI_vals,$posted_array);
-
-die(json_encode($CUI_vals));
+prep_CUIs($CUIs,$CUI_vals,$posted_CUIs);
 
 # debugging
 #echo json_encode($CUI_vals) . "\n";
