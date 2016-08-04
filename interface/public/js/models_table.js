@@ -78,6 +78,14 @@ function model_list(master) {
         }
     }
     
+    // set risk scores for all models to blank
+    this.clearscores = function() {
+        for (var i in this.vis_models) {
+            var model = this.vis_models[i];
+            $(master.all_models[model]['local_obj'].score).text("");
+        }
+    }
+    
     // get models from the server based on data
     this.fetchmodels = function(CUIs, vis = true) {
         //for (var CUI in CUIs) {

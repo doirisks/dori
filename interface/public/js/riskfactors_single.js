@@ -195,6 +195,7 @@ function riskfactor_single(master,CUI) {
     // function called on change of value
     this.changefunc = function() {
         this.master.master.fetchmodels();
+        this.master.master.clearscores();
     }
     // function called on removal
     this.removefunc = function() {

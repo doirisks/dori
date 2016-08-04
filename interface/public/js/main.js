@@ -66,6 +66,11 @@ function whole_interface(own_div_id, init_riskfactors = []) {
         this.modellist.scoremodels(CUIs);
     }
     
+    // clear the visible scores
+    this.clearscores = function() {
+        this.modellist.clearscores();
+    }
+    
     this.base.appendChild(left);
     this.base.appendChild(centerline);
     this.base.appendChild(right);
