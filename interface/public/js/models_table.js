@@ -51,10 +51,16 @@ function model_list(master) {
     
     // remove a model from the table
     this.pop = function (model_obj) {
-        var index = this.vis_models.indexOf(model_obj);
-        if (index > -1) {
-            this.vis_models.splice(index, 1); 
+        // TODO make it so that the entire list is not rebuilt every time...
+        var model = model_obj.model;
+        var vis_models = [];
+        for (var i in this.vis_models) {
+            if (this.vis_models[i] != model) {
+                vis_models.push(this.vis_models[i]);
+            }
         }
+        console.log(vis_models);
+        this.vis_models = vis_models;
         
         if (this.head == model_obj) {
             this.head = model_obj.prev;
@@ -86,7 +92,9 @@ function model_list(master) {
                 var supported_models = [];          // used after the ajax request is sent
                 var new_ids = [];
                 for (var id in data) {
-                    supported_models.push(id);
+                    if ((data[id] != null) && (data[id]['id'] == id)) {
+                        supported_models.push(id);
+                    }
                     // log any error messages
                     if (id == "error") {
                         console.log("error: " + data["error"]);
@@ -149,7 +157,8 @@ function model_list(master) {
                             stillgood = true;
                         }
                     }
-                    if (!stillgood) {
+                    if ((!stillgood) && (model != null)) { // TODO model was "undefined" here... figure out how it got that way
+                        console.log(model, " is no longer good!");
                         master.pop(master.all_models[model]['local_obj']);
                     }
                 }
