@@ -170,7 +170,7 @@ function model_list(master) {
             for (var i in model['inpCUI']) {
                 var CUI = model['inpCUI'][i];
                 var mustCUIcounter = 0;
-                if ((this.master.CUIlist.all_CUIs[CUI]['datatype'] == 'float') || 
+                if ((this.master.CUIlist.all_CUIs[CUI]['datatype'] == 'float') ||       // if risk factor is a numeric
                     (this.master.CUIlist.all_CUIs[CUI]['datatype'] == 'int') || 
                     (this.master.CUIlist.all_CUIs[CUI]['datatype'] == 'integer') ) 
                 {
@@ -197,6 +197,16 @@ function model_list(master) {
                 if (mustCUIcounter < model['mustCUI'].length) valid = false;
                 */
                 // TODO anything else to check locally?
+            }
+            // make sure that the model is visible
+            if (valid) {
+                valid = false;
+                for (var i in this.vis_models) {
+                    if (this.vis_models[i] == model) {
+                        valid = true;
+                        break;
+                    }
+                }
             }
             if (valid) {
                 data['models'].push(model)
