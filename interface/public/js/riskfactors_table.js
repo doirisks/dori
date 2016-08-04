@@ -61,7 +61,7 @@ function riskfactor_list(master) {
         if (this.head == CUI_obj) {
             this.head = CUI_obj.prev;
         }
-        CUI_obj.remove();
+        CUI_obj.hide();
     }
     
     // add a CUI

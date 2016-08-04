@@ -8,18 +8,16 @@ function riskfactor_single(master,CUI) {
     this.master = master;
     this.CUI = CUI;
     this.id = CUI;
-    //TODO this.datatype = master.;
-    
-    //TODO this.val = ;
     
     this.height = 30;
     
-    var text = '<div id="' + this.id + '">\n';
-    // button - removal button
-    var text = '<div style="text-align:center; height:' + this.height.toString() + 'px;">';
-    text +=    '    <button id = "remove' + CUI + '" onclick=the_interface.righttable.pop(master.all_CUIs["'+CUI+'"]["local_obj"]) >-</button>'; //TODO
-    text +=    '</div>';
-    this.button = $(text);
+    var button = $('<button >-</button>');
+    var _this = this;
+    button.click(function() {
+        _this.removefunc();
+    });
+    this.button = $('<div style="text-align:center;height:' + this.height.toString() + 'px;">');
+    this.button.append(button);
     
     // rf - name of risk factor CUI displayed w/link
     var text = '<div style= "text-align:center; height:' + this.height.toString() + 'px; overflow:visible;">';
@@ -195,9 +193,16 @@ function riskfactor_single(master,CUI) {
         $("#" + this.id).remove();
     }
     
+    // function called on change of value
     this.changefunc = function() {
         this.master.master.fetchmodels();
     }
+    // function called on removal
+    this.removefunc = function() {
+        this.master.pop(this);
+        this.master.master.fetchmodels();
+    }
+    
     
     // provide the value of the CUI
     if (elem == null) {
