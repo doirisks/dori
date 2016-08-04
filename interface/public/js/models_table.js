@@ -82,7 +82,7 @@ function model_list(master) {
     this.clearscores = function() {
         for (var i in this.vis_models) {
             var model = this.vis_models[i];
-            $(master.all_models[model]['local_obj'].score).text("");
+            $(this.all_models[model]['local_obj'].score).text("");
         }
     }
     

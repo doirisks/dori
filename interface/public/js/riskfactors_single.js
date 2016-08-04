@@ -201,6 +201,7 @@ function riskfactor_single(master,CUI) {
     this.removefunc = function() {
         this.master.pop(this);
         this.master.master.fetchmodels();
+        this.master.master.clearscores();
     }
     
     
