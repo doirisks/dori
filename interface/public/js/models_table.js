@@ -50,23 +50,32 @@ function model_list(master) {
     }
     
     // remove a model from the table
-    this.pop = function (model_obj) {
+    this.hide = function (ids_to_hide) {
         // TODO make it so that the entire list is not rebuilt every time...
-        var model = model_obj.model;
         var vis_models = [];
         for (var i in this.vis_models) {
-            if (this.vis_models[i] != model) {
+            var stillgood = true;
+            for (var j in ids_to_hide)
+                if (this.vis_models[i] == ids_to_hide[j]) {
+                    stillgood = false;
+                    break;
+                }
+            if (stillgood) {
                 vis_models.push(this.vis_models[i]);
             }
         }
         console.log(vis_models);
         this.vis_models = vis_models;
         
-        if (this.head == model_obj) {
-            this.head = model_obj.prev;
-        }
         
-        model_obj.hide();
+        for (var i in ids_to_hide) {
+            var id = ids_to_hide[i];
+            var model_obj = this.all_models[id]['local_obj'];
+            if (this.head == model_obj) {
+                this.head = model_obj.prev;
+            }
+            model_obj.hide();
+        }
     }
     
     // get models from the server based on data
@@ -149,6 +158,7 @@ function model_list(master) {
                     
                 }
                 // hide unsupported models
+                var to_hide = [];
                 for (var i in master.vis_models){
                     var model = master.vis_models[i];
                     var stillgood = false;
@@ -159,8 +169,11 @@ function model_list(master) {
                     }
                     if ((!stillgood) && (model != null)) { // TODO model was "undefined" here... figure out how it got that way
                         console.log(model, " is no longer good!");
-                        master.pop(master.all_models[model]['local_obj']);
+                        to_hide.push(model);
                     }
+                }
+                if (to_hide.length > 0) {
+                    master.hide(to_hide);
                 }
                 // TODO make models visible as appropriate
                 
