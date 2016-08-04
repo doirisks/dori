@@ -60,7 +60,7 @@ function model_single(master, model) {
         }
     }
     
-    this.hide = function () {
+    this.hide = function() {
         // adjust list pointers
         if (this.prev !== null) {
             this.prev.next = this.next;

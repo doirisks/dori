@@ -203,7 +203,7 @@ function riskfactor_single(master,CUI) {
     }
     
     
-    // provide the value of the CUI
+    // provide the value of the CUI (defined differently for different kinds of risk factors
     if (elem == null) {
         console.log("no input element in risk factor", this.CUI);
     } else if (elem.type == "checkbox") {

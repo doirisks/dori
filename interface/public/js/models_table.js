@@ -60,7 +60,7 @@ function model_list(master) {
             this.head = model_obj.prev;
         }
         
-        model_obj.remove();
+        model_obj.hide();
     }
     
     // get models from the server based on data
@@ -78,12 +78,13 @@ function model_list(master) {
                 
                 // parse the reply
                 var data = JSON.parse(reply);
+                console.log(data);
                 
                 // identify new ids
-                var supported_models = {};
+                var supported_models = [];          // used after the ajax request is sent
                 var new_ids = [];
                 for (var id in data) {
-                    supported_models[id] = true;
+                    supported_models.push(id);
                     // log any error messages
                     if (id == "error") {
                         console.log("error: " + data["error"]);
@@ -137,10 +138,18 @@ function model_list(master) {
                     });
                     
                 }
-                // hide unwanted models
+                // hide unsupported models
                 for (var i in master.vis_models){
-                    if (!(master.vis_models[i].model in supported_models)) {
-                        master.pop(master.vis_models[i]);
+                    var model = master.vis_models[i];
+                    var stillgood = false;
+                    for (var k in supported_models) {
+                        if (supported_models[k] == model) {
+                            stillgood = true;
+                            console.log(supported_models[k], model);
+                        }
+                    }
+                    if (!stillgood) {
+                        master.pop(master.all_models[model]['local_obj']);
                     }
                 }
                 // TODO make models visible as appropriate
