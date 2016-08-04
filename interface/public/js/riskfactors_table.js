@@ -117,7 +117,6 @@ function riskfactor_list(master) {
         var data = {};
         for (var i in this.vis_CUIs) {
             var CUI = this.vis_CUIs[i];
-            console.log(CUI);
             var obj = this.all_CUIs[CUI]["local_obj"];
             data[CUI] = obj.getVal();
         }

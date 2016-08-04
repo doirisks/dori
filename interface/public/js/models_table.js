@@ -81,7 +81,6 @@ function model_list(master) {
                 
                 // parse the reply
                 var data = JSON.parse(reply);
-                console.log(data);
                 
                 // identify new ids
                 var supported_models = [];          // used after the ajax request is sent
@@ -148,7 +147,6 @@ function model_list(master) {
                     for (var k in supported_models) {
                         if (supported_models[k] == model) {
                             stillgood = true;
-                            console.log(supported_models[k], model);
                         }
                     }
                     if (!stillgood) {
@@ -163,8 +161,6 @@ function model_list(master) {
     
     
     this.scoremodels = function(CUIs) {
-        console.log("models beings scored...");
-        console.log(CUIs);
         var data = CUIs;
         data['models'] = [];
         for (var id in this.vis_models) {
@@ -209,8 +205,6 @@ function model_list(master) {
         if (data['models'].length == 0) console.log("no models are being sent!");
         else 
         {
-            console.log(data['models']);
-            console.log(this.all_models);
             // request for model scores
             $.ajax({
                 url : "api/score/by_models",
