@@ -58,6 +58,16 @@ function riskfactor_list(master) {
     
     // remove a CUI from the table
     this.pop = function (CUI_obj) {
+        // TODO make it so that the entire list is not rebuilt every time...
+        var CUI = CUI_obj.CUI;
+        var vis_CUIs = [];
+        for (var i in this.vis_CUIs) {
+            if (this.vis_CUIs[i] != CUI) {
+                vis_CUIs.push(this.vis_CUIs[i]);
+            }
+        }
+        this.vis_CUIs = vis_CUIs;
+        
         if (this.head == CUI_obj) {
             this.head = CUI_obj.prev;
         }
@@ -105,9 +115,11 @@ function riskfactor_list(master) {
     // get data from inputs
     this.getInputData = function() {
         var data = {};
-        for (i in this.vis_CUIs) {
-            var obj = this.all_CUIs[this.vis_CUIs[i]]["local_obj"];
-            data[this.vis_CUIs[i]] = obj.getVal();
+        for (var i in this.vis_CUIs) {
+            var CUI = this.vis_CUIs[i];
+            console.log(CUI);
+            var obj = this.all_CUIs[CUI]["local_obj"];
+            data[CUI] = obj.getVal();
         }
         return(data);
     }

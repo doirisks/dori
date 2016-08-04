@@ -65,6 +65,9 @@ function model_list(master) {
     
     // get models from the server based on data
     this.fetchmodels = function(CUIs, vis = true) {
+        //for (var CUI in CUIs) {
+        //    console.log(this.master.CUIlist.all_CUIs[CUI]['name1']);
+        //}
         // request to check for new models
         $.ajax({
             url : "api/model/by_riskfactors/", 
@@ -72,7 +75,7 @@ function model_list(master) {
             master : this, 
             headers: {"Content-Type": "application/json"},
             success: function(reply) {
-                console.log("model request succeeded");
+                console.log("model request returned");
                 // store the pertinent pointer
                 var master = this.master; 
                 
