@@ -100,13 +100,12 @@ function riskfactor_single(master,CUI) {
     units.appendChild(p);
     this.units = $(units);
     
-    // value
+    // set the initial value of the risk factor if applicable
     var elem = this.input[0].getElementsByTagName("input")[0];
     if (elem == null) {
-        this.value = null;
         console.log("no element");
     } else if (elem.type == "checkbox") {
-        this.value = elem.checked;
+        //this.value = elem.checked;
     } else if (elem.type == "number") {
         // handle blank numbers 
         if (elem.value == "") {
@@ -129,13 +128,14 @@ function riskfactor_single(master,CUI) {
                 val = (((master.all_CUIs[this.CUI]['defaultlower'] + 1) * (master.all_CUIs[this.CUI]['defaultupper'] + 1)) ** 0.5);
             }
             elem.value = (Math.round(val * 10) / 10).toString();
+            //this.value = Number(val);
         }
         this.value = Number(elem.value);
     } else if (elem.type == "radio") {
-        this.value = elem.checked; // note that this will return true if MALE is checked for sex
+        //this.value = elem.checked; // note that this will return true if MALE is checked for sex
     } else {
         console.log("unknown type error", elem.type);
-        this.value = null;
+        //this.value = null;
     }
     
     // previous and next in the table
@@ -200,7 +200,24 @@ function riskfactor_single(master,CUI) {
     }
     
     // provide the value of the CUI
-    this.getVal = function (numbfill = false) {
-        return this.value;
+    if (elem == null) {
+        console.log("no input element in risk factor", this.CUI);
+    } else if (elem.type == "checkbox") {
+        this.getVal = function (numbfill = false) {
+            var elem = this.input[0].getElementsByTagName("input")[0];
+            return elem.checked;
+        }
+    } else if (elem.type == "number") {
+        this.getVal = function (numbfill = false) {
+            var elem = this.input[0].getElementsByTagName("input")[0];
+            return Number(elem.value);
+        }
+    } else if (elem.type == "radio") {
+        this.getVal = function (numbfill = false) {
+            var elem = this.input[0].getElementsByTagName("input")[0];
+            return elem.checked;   // note that this will return true if MALE is checked for sex
+        }
+    } else {
+        console.log("unknown type error in risk factor", this.CUI, elem.type);
     }
 }
