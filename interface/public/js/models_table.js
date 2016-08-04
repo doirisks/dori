@@ -26,7 +26,7 @@ function model_list(master) {
         _this.master.scoremodels();
     });
     
-    var titlebar = $("<div style='float:clear'></div>");
+    var titlebar = $("<div style='height:30px;float:clear'></div>");
     titlebar.append(titletitle);
     titlebar.append(scoretitle);
     
@@ -201,7 +201,7 @@ function model_list(master) {
                     
                     // record scores on all models
                     for (var model in data) {
-                        console.log(model);
+                        console.log(model, data[model]);
                         // display if possible
                         if (model in master.all_models) {
                             // clean up the score
@@ -209,10 +209,10 @@ function model_list(master) {
                             if (typeof(score) == "number") {
                                 score = (Math.round(score*1000)/10).toString() + "%";
                             }
-                            $(master.all_models[model]['local_obj'].score).html(score);
+                            $(master.all_models[model]['local_obj'].score).text(score);
                         // otherwise report
                         } else {
-                            console.log(data[model]);
+                            console.log(data[model], "unsupported model");
                         }
                     }
                 }

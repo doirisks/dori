@@ -10,13 +10,26 @@ function model_single(master, model) {
     this.model = model;
     
     // model identification
-    var text = '<div style= "text-align:center; height:45px; overflow:visible; width:350px;">';
-    text +=    '    <a href="scorequery.php?id='+this.model+'" >' + master.all_models[this.model]['outcometime'].toString() + 'Y Risk of '+master.all_models[this.model]['outcome']+'</a>'; // TODO link destination
-    text +=    '    <a href="scorequery.php?id='+master.all_models[this.model]['id']+'" ><br>from ' + master.all_models[this.model]['authors'][0] + " et al's " + master.all_models[this.model]['yearofpub'] +" Paper</a>"; // TODO link destination
-    text +=    '</div>';
-    this.title = $(text);
+    var titlespace = document.createElement('span');
+    titlespace.setAttribute("style", "display:block; text-align:center; height:45px; overflow:visible; width:300px;");
+    // link to outcome
+    var outcomelink = document.createElement('a');
+    outcomelink.appendChild(document.createTextNode(master.all_models[this.model]['outcometime'].toString() + 'Y Risk of '+master.all_models[this.model]['outcome']));
+    outcomelink.setAttribute("href", "https://www.google.com/?#q="+ master.all_models[this.model]['outcometime'].toString() + ' year risk of '+master.all_models[this.model]['outcome']);
+    // link to paper
+    var paperlink = document.createElement('a');
+    paperlink.appendChild(document.createTextNode(master.all_models[this.model]['authors'][0] + " et al's " + master.all_models[this.model]['yearofpub'] +" Paper"));
+    paperlink.setAttribute("href", "https://www.google.com/?#q="+ master.all_models[this.model]['DOI']);
     
-    this.score = $('<div style= "text-align:center; height:45px; width:50px"></div>');
+    titlespace.appendChild(outcomelink);
+    titlespace.appendChild(document.createElement("br"));
+    titlespace.appendChild(document.createTextNode('from '));
+    titlespace.appendChild(paperlink);
+    this.title = $(titlespace);
+    
+    
+    // score display
+    this.score = $('<span style= "display:block;text-align:center;height:45px;width:75px;"></span>');
     
     // previous and next in the table
     this.prev = null;
@@ -55,9 +68,6 @@ function model_single(master, model) {
         if (this.next !== null) {
             this.next.prev = this.prev;
         }
-        
-        // removes its CUI from vis_CUIs
-        //TODO
         
         // remove html
         $("#" + this.id).remove();
