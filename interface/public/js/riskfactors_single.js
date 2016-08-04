@@ -181,16 +181,15 @@ function riskfactor_single(master,CUI) {
         if (this.next !== null) {
             this.next.prev = this.prev;
         }
-        else {
-            // change head of table if appropriate
-            master.righttable.head = this.prev;
-        }
         
         // removes its CUI from vis_CUIs
         //TODO
         
         // remove html
-        $("#" + this.id).remove();
+        this.button.remove();
+        this.rf.remove();
+        this.input.remove();
+        this.units.remove();
     }
     
     // function called on change of value
