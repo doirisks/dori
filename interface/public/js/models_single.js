@@ -70,6 +70,7 @@ function model_single(master, model) {
         }
         
         // remove html
-        $("#" + this.id).remove();
+        this.title.remove();
+        this.score.remove();
     }
 }

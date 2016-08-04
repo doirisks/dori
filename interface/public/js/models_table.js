@@ -42,18 +42,24 @@ function model_list(master) {
     // the most recent addition
     this.head = null;
     
-    // makes a CUI visible in the table
+    // makes a model visible in the table
     this.push = function (model_obj) {
         this.vis_models.push(model_obj.model); 
         model_obj.show(this, this.head);
         this.head = model_obj;
     }
     
-    // remove a CUI from the table
+    // remove a model from the table
     this.pop = function (model_obj) {
+        var index = this.vis_models.indexOf(model_obj);
+        if (index > -1) {
+            this.vis_models.splice(index, 1); 
+        }
+        
         if (this.head == model_obj) {
             this.head = model_obj.prev;
         }
+        
         model_obj.remove();
     }
     
@@ -74,8 +80,10 @@ function model_list(master) {
                 var data = JSON.parse(reply);
                 
                 // identify new ids
+                var supported_models = {};
                 var new_ids = [];
-                for (id in data) {
+                for (var id in data) {
+                    supported_models[id] = true;
                     // log any error messages
                     if (id == "error") {
                         console.log("error: " + data["error"]);
@@ -102,7 +110,7 @@ function model_list(master) {
                             // TODO find a way to prevent extraneous multi-requesting of the same models
                             // TODO maybe just make a variable whole_interface.requesting models that 
                             // TODO will stall requests...
-                            for (id in data) {
+                            for (var id in data) {
                                 if (!(id in master.all_models)) {
                                     // parse the json encoded fields from the db
                                     data[id]['authors'] = JSON.parse(data[id]['authors']);
@@ -127,8 +135,14 @@ function model_list(master) {
                         }
                         
                     });
+                    
                 }
-                
+                // hide unwanted models
+                for (var i in master.vis_models){
+                    if (!(master.vis_models[i].model in supported_models)) {
+                        master.pop(master.vis_models[i]);
+                    }
+                }
                 // TODO make models visible as appropriate
                 
             }
