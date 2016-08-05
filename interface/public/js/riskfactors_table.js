@@ -109,7 +109,7 @@ function riskfactor_list(master) {
                         master.all_CUIs[CUI] = CUIs[CUI]; 
                         
                         // if the CUI was valid, make object and show
-                        if (master.all_CUIs[CUI]['CUI'] == CUI) {
+                        if ((master.all_CUIs[CUI]['CUI'] != null) && (master.all_CUIs[CUI]['CUI'] == CUI)) {
                             master.all_CUIs[CUI]["local_obj"] = new riskfactor_single(master, CUI); 
                             master.push(master.all_CUIs[CUI]["local_obj"]);
                         }
