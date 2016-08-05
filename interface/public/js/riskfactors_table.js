@@ -126,6 +126,10 @@ function riskfactor_list(master) {
                 // do nothing - CUI is either being gotten already or it is bad
             }
         }
+        // if no new CUIs were requested, check available models
+        if (new_CUIs.length == 0){
+            this.master.fetchmodels();
+        }
     }
     
     // get data from inputs
