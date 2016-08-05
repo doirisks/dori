@@ -6,8 +6,11 @@ $posted_array = json_decode($str_json, true);
 
 // make sure that request is valid
 if ( (!is_array($posted_array)) or (count($posted_array) == 0) ) {
-    $ans['error'] = 'improper request';
-    exit();
+    if ((!is_array($_GET['words'])) or (count($_GET['words']) == 0)) {
+        $ans['error'] = 'improper request';
+        exit();
+    }
+    $posted_array = $_GET['words'];
 }
 
 // get all valid keywords
