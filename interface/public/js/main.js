@@ -5,7 +5,11 @@
  */
 
 
-
+// toTitleCase(str) courtesy of Greg Dean on stackoverflow
+function toTitleCase(str)
+{ //
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
 
 /**
  * whole_interface
@@ -46,8 +50,8 @@ function whole_interface(own_div_id, init_riskfactors = []) {
     right.appendChild(this.CUIfinder.base);
     
     // add a CUI
-    this.fetchCUI = function (CUI, vis = true) {
-        this.CUIlist.fetchCUI(CUI, vis);
+    this.fetchCUIs = function (CUIs, vis = true) {
+        this.CUIlist.fetchCUIs(CUIs, vis);
     }
     
     // fetch models from data
@@ -77,9 +81,7 @@ function whole_interface(own_div_id, init_riskfactors = []) {
     $('#'+own_div_id).append(this.base);
     
     // iterate through given risk factors and add them
-    for (CUI in init_riskfactors) {
-        this.fetchCUI(CUI);
-    }
+    this.fetchCUIs(init_riskfactors);
 }
 
 

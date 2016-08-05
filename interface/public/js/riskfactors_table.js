@@ -75,13 +75,26 @@ function riskfactor_list(master) {
     }
     
     // add a CUI
-    this.fetchCUI = function (CUI, vis = true) {
-        // try to fetch the CUI
-        if (this.all_CUIs[CUI] == null){
+    this.fetchCUIs = function (CUIs, vis = true) { // TODO make "vis" meaningful
+        // ignore repeated CUIs
+        var new_CUIs = [];
+        var old_CUIs = [];
+        for (var CUI in CUIs) {
+            console.log(CUI);
+            if (this.all_CUIs[CUI] == null) {
+                this.all_CUIs[CUI] = CUI;
+                new_CUIs.push(CUI);
+            }
+            else {
+                old_CUIs.push(CUI);
+            }
+        }
+        // only send request if it has content
+        if (new_CUIs.length > 0){
             // fetch and handle data from server
             this.all_CUIs[CUI] = $.ajax({
                 url : "api/cui/by_cui/", 
-                data : {"CUIs": [CUI]},
+                data : {"CUIs": new_CUIs},
                 master : this, 
                 headers: {"Content-Type": "application/json"},
                 success: function(reply) {
@@ -89,26 +102,26 @@ function riskfactor_list(master) {
                     var master = this.master; 
                     
                     // parse the reply
-                    var data = JSON.parse(reply);
-                    var CUI = Object.keys(data)[0];
+                    var CUIs = JSON.parse(reply);
                     
-                    // store the data in the all_CUIs array
-                    master.all_CUIs[CUI] = data[CUI]; 
-                    master.all_CUIs[CUI]["local_obj"] = new riskfactor_single(master, CUI); 
-                    
-                    // show the CUI
-                    if (vis) {
+                    // store and show the data
+                    for (var CUI in CUIs) {
+                        master.all_CUIs[CUI] = CUIs[CUI]; 
+                        // make object and show
+                        master.all_CUIs[CUI]["local_obj"] = new riskfactor_single(master, CUI); 
                         master.push(master.all_CUIs[CUI]["local_obj"]);
                     }
                 }
             });
-            // TODO add a memory variable to make sure that the CUIs are added in the right order
-        } else if ( this.all_CUIs[CUI]['CUI'] == CUI ) {
-            // browser already has CUI data, but it is hidden => unhide it!
-            this.vis_CUIs.push(CUI);
-            this.all_CUIs[CUI]['local_obj'].show();
-        } else {
-            // do nothing - CUI is either being gotten already or it is bad
+        } 
+        for (var i in old_CUIs) {
+            var CUI = old_CUIs[i];
+            if ( this.all_CUIs[CUI]['CUI'] != null && this.all_CUIs[CUI]['CUI'] == CUI ) {
+                // browser already has CUI data, but it is hidden => unhide it!
+                this.push(this.all_CUIs[CUI]['local_obj']);
+            } else {
+                // do nothing - CUI is either being gotten already or it is bad
+            }
         }
     }
     
