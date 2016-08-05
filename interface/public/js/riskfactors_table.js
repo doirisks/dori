@@ -111,6 +111,9 @@ function riskfactor_list(master) {
                         master.all_CUIs[CUI]["local_obj"] = new riskfactor_single(master, CUI); 
                         master.push(master.all_CUIs[CUI]["local_obj"]);
                     }
+                    
+                    // recheck models
+                    master.master.fetchmodels();
                 }
             });
         } 
