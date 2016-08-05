@@ -4,8 +4,24 @@
  * js classes and procedures for the main demo interface
  */
 
+// object defaultcalculatorstyles: 
+defaultcalculatorstyles = {
+    // div styles
+    'div': {
+        "padding" : "0px 0px 0px 0px",
+    },
+};
 
-// toTitleCase(str) courtesy of Greg Dean on stackoverflow
+// function makeElem(tagname, style): returns an element with the desired styles as inline styles - overruling css
+function makeElem(tagname, styles) {
+    var elem = document.createElement(tagname);
+    
+    // TODO
+    
+}
+
+
+// function toTitleCase(str) (courtesy of Greg Dean on stackoverflow): renders text in a title style
 function toTitleCase(str)
 { //
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
