@@ -67,6 +67,8 @@ config['predictive_ability']['ucl'] = []
 
 config_name = 'config_a'
 
+config['config'] = config_name + '.json'
+
 # dump json config file
 import json
 with open(config_name + '.json','w') as output:
@@ -118,11 +120,13 @@ modvalues = [
     json.dumps(config['predictive_ability']['metric']),
     json.dumps(config['predictive_ability']['value']),
     json.dumps(config['predictive_ability']['lcl']),
-    json.dumps(config['predictive_ability']['ucl'])
+    json.dumps(config['predictive_ability']['ucl']),
+
+    config['config']
 ]
 
 
-columns = [models_table.DOI,models_table.papertitle, models_table.modeltitle, models_table.yearofpub,  models_table.authors, models_table.must, models_table.mustnot,models_table.mustCUI, models_table.mustnotCUI,  models_table.inpname, models_table.inpdesc, models_table.inpCUI,models_table.inpunits,models_table.inpdatatype, models_table.upper, models_table.lower, models_table.output, models_table.outcome,models_table.outcometime, models_table.outputCUI, models_table.outcomeCUI, models_table.filename,models_table.filepointer, models_table.datumname,models_table.datum, models_table.language,models_table.uncompiled,models_table.compiled,models_table.dependList,models_table.example, models_table.model_category,models_table.type,models_table.metric,models_table.value, models_table.lcl, models_table.ucl, models_table.numofinputs]
+columns = [models_table.DOI,models_table.papertitle, models_table.modeltitle, models_table.yearofpub,  models_table.authors, models_table.must, models_table.mustnot,models_table.mustCUI, models_table.mustnotCUI,  models_table.inpname, models_table.inpdesc, models_table.inpCUI,models_table.inpunits,models_table.inpdatatype, models_table.upper, models_table.lower, models_table.output, models_table.outcome,models_table.outcometime, models_table.outputCUI, models_table.outcomeCUI, models_table.filename,models_table.filepointer, models_table.datumname,models_table.datum, models_table.language,models_table.uncompiled,models_table.compiled,models_table.dependList,models_table.example, models_table.model_category,models_table.type,models_table.metric,models_table.value, models_table.lcl, models_table.ucl, models_table.config, models_table.numofinputs]
 # numofinputs was added after the fact!
 
 for i in range(len(modvalues)):
