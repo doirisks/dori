@@ -107,9 +107,16 @@ function riskfactor_list(master) {
                     // store and show the data
                     for (var CUI in CUIs) {
                         master.all_CUIs[CUI] = CUIs[CUI]; 
-                        // make object and show
-                        master.all_CUIs[CUI]["local_obj"] = new riskfactor_single(master, CUI); 
-                        master.push(master.all_CUIs[CUI]["local_obj"]);
+                        
+                        // if the CUI was valid, make object and show
+                        if (master.all_CUIs[CUI]['CUI'] == CUI) {
+                            master.all_CUIs[CUI]["local_obj"] = new riskfactor_single(master, CUI); 
+                            master.push(master.all_CUIs[CUI]["local_obj"]);
+                        }
+                        // otherwise, report
+                        else {
+                            console.log(master.all_CUIs[CUI]);
+                        }
                     }
                     
                     // recheck models
