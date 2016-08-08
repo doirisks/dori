@@ -3,8 +3,7 @@
 # dorihub.sh
 # by Ted M
 #
-# setup script for a ubuntu:14.04 docker container
-# apache2 and mysql must started in docker container (for now)
+# setup script for runnign dori in the doirisks/dori docker container
 
 # run setup scripts
 #cd /src/setup

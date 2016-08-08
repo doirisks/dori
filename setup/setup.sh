@@ -6,6 +6,7 @@ cd /src/setup
 
 ./dockerwriter.py
 
+# overwrites itself in the containers so that it will only be activated once
 echo "#cd /src/setup
 #./models.py
 #./CUIs.py
