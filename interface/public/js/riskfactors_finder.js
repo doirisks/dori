@@ -5,7 +5,6 @@
  **/
 function riskfactor_finder(master) {
     // identify the master
-    this.id = "newrf";
     this.master = master;
     
     // minimum length for autocomplete

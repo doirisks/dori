@@ -7,17 +7,13 @@
 function riskfactor_single(master,CUI) {
     this.master = master;
     this.CUI = CUI;
-    this.id = CUI;
+    var _this = this;
     
     this.height = 30;
     
-    var button = $('<button >-</button>');
-    var _this = this;
-    button.click(function() {
-        _this.removefunc();
-    });
-    this.button = $('<div style="text-align:center;height:' + this.height.toString() + 'px;">');
-    this.button.append(button);
+    this.button = $('<button >-</button>');
+    this.remover = $('<div style="text-align:center;height:' + this.height.toString() + 'px;">');
+    this.remover.append(this.button);
     
     // rf - name of risk factor CUI displayed w/link
     var text = '<div style= "text-align:center; height:' + this.height.toString() + 'px; overflow:visible;">';
@@ -44,6 +40,9 @@ function riskfactor_single(master,CUI) {
         
         var _this = this;
         $(input1).change(function(){            // add event listener
+            _this.changefunc();
+        });
+        $(input2).change(function(){            // add event listener
             _this.changefunc();
         });
         
@@ -152,8 +151,8 @@ function riskfactor_single(master,CUI) {
         
         // show content
         if (prev == null){
-            // show button
-            $(dest.buttons).html(this.button);
+            // show remover
+            $(dest.buttons).html(this.remover);
             // show rf
             $(dest.names).html(this.rf);
             // show input
@@ -162,8 +161,8 @@ function riskfactor_single(master,CUI) {
             $(dest.unit_names).html(this.units);
         }
         else {
-            // show button
-            $(prev.button).after(this.button);
+            // show remover
+            $(prev.remover).after(this.remover);
             // show rf
             $(prev.rf).after(this.rf);
             // show input
@@ -171,6 +170,12 @@ function riskfactor_single(master,CUI) {
             // show units
             $(prev.units).after(this.units);
         }
+        
+        // add event listener to the button
+        var _this = this;
+        this.button.click(function() {
+            _this.removefunc();
+        });
     }
     
     this.hide = function () {
@@ -186,7 +191,7 @@ function riskfactor_single(master,CUI) {
         //TODO
         
         // remove html
-        this.button.remove();
+        this.remover.remove();
         this.rf.remove();
         this.input.remove();
         this.units.remove();
