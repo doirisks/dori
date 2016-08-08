@@ -9,9 +9,11 @@ function model_single(master, model) {
     this.id = "model" + model;
     this.model = model;
     
+    this.height = 55;
+    
     // model identification
     var titlespace = document.createElement('span');
-    titlespace.setAttribute("style", "display:block; text-align:center; height:45px; overflow:visible; width:300px;");
+    titlespace.setAttribute("style", "display:block; text-align:center; height:" + this.height.toString() +"px; overflow:visible; width:300px;");
     // link to outcome
     var outcomelink = document.createElement('a');
     outcomelink.appendChild(document.createTextNode(master.all_models[this.model]['outcometime'].toString() + 'Y Risk of '+master.all_models[this.model]['outcome']));
@@ -29,7 +31,7 @@ function model_single(master, model) {
     
     
     // score display
-    this.score = $('<span style= "display:block;text-align:center;height:45px;width:75px;"></span>');
+    this.score = $('<span style= "display:block;text-align:center;height:' + this.height.toString() +'px;width:75px;"></span>');
     
     // previous and next in the table
     this.prev = null;
