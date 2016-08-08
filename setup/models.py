@@ -5,7 +5,7 @@ by Ted Morin
 
 builds the 'models' table in doiarchives from config.py files
 
-N.B: relies on "new_config_gener.py" files in model directories
+N.B: relies on "config_gener*.py" files in model directories
 """
 
 from connection_config import *
@@ -157,7 +157,7 @@ def run_scripts_in(mypath,recurs):
     notfiles.sort()
 ##############################################################################################################
     for f in onlyfiles:
-        if f[:5] == "new_c" and f[-3:] == '.py':        # change this line if lines are changed
+        if f[:12] == "config_gener" and f[-3:] == '.py':        # change this line if lines are changed
             thefile = os.path.join(mypath, f)
             #print(thefile)
             p = subprocess.Popen(['python', thefile], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
