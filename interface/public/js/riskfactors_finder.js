@@ -60,13 +60,26 @@ function riskfactor_finder(master) {
     }
     
     this.update_options_div = function (data) {
-        // iterate through responses, if any
-        if (data.length > 0) {
+        var newdata = [];
+        for (var i in data) {
+            var itisnew = true;
+            for (var j in this.master.CUIlist.vis_CUIs) {
+                if (data[i]['CUI'] == this.master.CUIlist.vis_CUIs[j]) {
+                    itisnew = false;
+                }
+            }
+            if (itisnew) {
+                newdata.push(data[i]);
+            }
+        }
+        
+        // iterate through responses, if any are new
+        if (newdata.length > 0) {
             // TODO make it so that the whole list is not built every time
             var $options = $(this.optionsdiv);
             $options.html("");
-            for (var i in data) {
-                var CUI = data[i];
+            for (var i in newdata) {
+                var CUI = newdata[i];
                 var option = document.createElement("p");
                 var button = document.createElement("button");
                 button['CUI'] = CUI['CUI'];
@@ -89,9 +102,8 @@ function riskfactor_finder(master) {
         }
         // otherwise, report
         else {
-            $(master.optionsdiv).text("no risk factors indicated");
+            $(this.optionsdiv).text("no risk factors indicated");
             // TODO add timeout so that this message disappears after a few seconds
-            console.log("no risk factors indicated");
         }
     }
     
