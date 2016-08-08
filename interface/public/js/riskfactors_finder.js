@@ -5,7 +5,6 @@
  **/
 function riskfactor_finder(master) {
     // identify the master
-    this.id = "newrf";
     this.master = master;
     
     // minimum length for autocomplete
@@ -20,7 +19,6 @@ function riskfactor_finder(master) {
     this.get = function(CUI) {
         var CUIs = {};
         CUIs[CUI] = CUI;
-        console.log(CUIs);
         this.master.fetchCUIs(CUIs);
     }
     
@@ -48,7 +46,6 @@ function riskfactor_finder(master) {
                     
                     // unpack reply
                     var data = JSON.parse(reply);
-                    console.log(data);
                     
                     // update the options div
                     master.update_options_div(data);
@@ -63,23 +60,33 @@ function riskfactor_finder(master) {
     }
     
     this.update_options_div = function (data) {
-        // iterate through responses, if any
-        if (data.length > 0) {
+        var newdata = [];
+        for (var i in data) {
+            var itisnew = true;
+            for (var j in this.master.CUIlist.vis_CUIs) {
+                if (data[i]['CUI'] == this.master.CUIlist.vis_CUIs[j]) {
+                    itisnew = false;
+                }
+            }
+            if (itisnew) {
+                newdata.push(data[i]);
+            }
+        }
+        
+        // iterate through responses, if any are new
+        if (newdata.length > 0) {
             // TODO make it so that the whole list is not built every time
             var $options = $(this.optionsdiv);
             $options.html("");
-            for (var i in data) {
-                var CUI = data[i];
-                console.log(CUI);
+            for (var i in newdata) {
+                var CUI = newdata[i];
                 var option = document.createElement("p");
                 var button = document.createElement("button");
                 button['CUI'] = CUI['CUI'];
                 var _this = this;
                 $(button).click(function(e) {
                     e.preventDefault();
-                    console.log(this);
                     var CUI = this['CUI'];
-                    console.log( CUI );
                     _this.get(CUI);
                 });
                 button.setAttribute("style","display:inline;");
@@ -90,14 +97,13 @@ function riskfactor_finder(master) {
                 // add the option to DOM
                 $options.append(option);
                 
-                console.log(CUI['CUI'], CUI['name1']);
+                //console.log(CUI['CUI'], CUI['name1']);
             }
         }
         // otherwise, report
         else {
-            $(master.optionsdiv).text("no risk factors indicated");
+            $(this.optionsdiv).text("no risk factors indicated");
             // TODO add timeout so that this message disappears after a few seconds
-            console.log("no risk factors indicated");
         }
     }
     

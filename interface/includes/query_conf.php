@@ -136,15 +136,21 @@
             
             // bools
             if ($datum['datatype'] == 'bool') { 
-                if ( $datum['CUI'] == 'C28421' ) { 
-                    // no action
-                    // TODO: make sure 'male' or 'female' is indicated?
-                } else if (is_bool($arg)) {
+                if (is_bool($arg)) {
                     // no action
                 } else if ( ($arg == "true") or ($arg === 1) ) {    // recognize improper forms of "true"
                     $arg = true;
                 } else if (($arg == "false") or ($arg === 0) ) {    // recognize improper forms of "false
                     $arg = false;
+                } else if ( $arg == 'C28421' ) {
+                    if (strcasecmp($arg, "male") == 0) {
+                        $arg = true;
+                    } else if (strcasecmp($arg, "female") == 0) {
+                        $arg = false;
+                    } else {
+                        $CUI_vals[$datum['CUI']] = 'bad boolean CUI: ' . $datum['CUI'] . " = " . (string)$arg ;  // identify a bad bool
+                        continue;
+                    }
                 } else {
                     $CUI_vals[$datum['CUI']] = 'bad boolean CUI: ' . $datum['CUI'] . " = " . (string)$arg ;  // identify a bad bool
                     continue;
@@ -230,7 +236,7 @@
         if (in_array('C28421', $CUIs)) {
             array_push($CUIs,'C0086582');               //male sex CUI
             //array_push($CUIs,'');                       //female sex CUI
-            if ((strcasecmp($CUI_vals['C28421'],'male') == 0) or ($CUI_vals['C28421'] === true) ) {
+            if ($CUI_vals['C28421']) {
             // boolean true => male
                 $CUI_vals['C0086582'] = true;
                 //$CUI_vals['???'] = false;               //female sex

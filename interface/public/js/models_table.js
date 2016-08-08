@@ -64,7 +64,6 @@ function model_list(master) {
                 vis_models.push(this.vis_models[i]);
             }
         }
-        console.log(vis_models);
         this.vis_models = vis_models;
         
         
@@ -98,7 +97,6 @@ function model_list(master) {
             master : this, 
             headers: {"Content-Type": "application/json"},
             success: function(reply) {
-                console.log("model request returned");
                 // store the pertinent pointer
                 var master = this.master; 
                 
@@ -183,7 +181,21 @@ function model_list(master) {
                 if (to_hide.length > 0) {
                     master.hide(to_hide);
                 }
-                // TODO make models visible as appropriate
+                
+                // show supported models
+                for (var i in supported_models) {
+                    var shown = false;
+                    for (var j in master.vis_models) {
+                        if (supported_models[i] == master.vis_models[j]) {
+                            shown = true;
+                            break;
+                        }
+                    }
+                    if ((!shown) && (typeof (master.all_models[supported_models[i]]) != undefined)) {
+                        var obj = master.all_models[supported_models[i]]["local_obj"];
+                        master.push(obj);
+                    }
+                }
                 
             }
         });
@@ -257,11 +269,9 @@ function model_list(master) {
                     
                     // parse the reply
                     var data = JSON.parse(reply);
-                    console.log(data);
                     
                     // record scores on all models
                     for (var model in data) {
-                        console.log(model, data[model]);
                         // display if possible
                         if (model in master.all_models) {
                             // clean up the score

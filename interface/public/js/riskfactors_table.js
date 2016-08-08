@@ -80,7 +80,6 @@ function riskfactor_list(master) {
         var new_CUIs = [];
         var old_CUIs = [];
         for (var CUI in CUIs) {
-            console.log(CUI);
             if (this.all_CUIs[CUI] == null) {
                 this.all_CUIs[CUI] = CUI;
                 new_CUIs.push(CUI);
@@ -127,8 +126,16 @@ function riskfactor_list(master) {
         for (var i in old_CUIs) {
             var CUI = old_CUIs[i];
             if ( this.all_CUIs[CUI]['CUI'] != null && this.all_CUIs[CUI]['CUI'] == CUI ) {
-                // browser already has CUI data, but it is hidden => unhide it!
-                this.push(this.all_CUIs[CUI]['local_obj']);
+                var shown = false;
+                for (var j in this.vis_CUIs) {
+                    if (CUI == this.vis_CUIs[j]) {
+                        // CUI is already shown
+                        shown = true;
+                    }
+                }
+                if (!shown) {
+                    this.push(this.all_CUIs[CUI]['local_obj']);
+                }
             } else {
                 // do nothing - CUI is either being gotten already or it is bad
             }
