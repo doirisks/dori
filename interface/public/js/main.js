@@ -72,7 +72,8 @@ function whole_interface(own_div_id, init_riskfactors = []) {
     
     // fetch models from data
     this.fetchmodels = function () {
-        this.modellist.fetchmodels(this.getInputData());
+        var CUIs = this.getInputData();
+        this.modellist.fetchmodels(CUIs);
     }
     
     // returns data from risk factor inputs
