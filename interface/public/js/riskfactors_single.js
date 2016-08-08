@@ -9,7 +9,7 @@ function riskfactor_single(master,CUI) {
     this.CUI = CUI;
     var _this = this;
     
-    this.height = 30;
+    this.height = 40;
     
     this.button = $('<button >-</button>');
     this.remover = $('<div style="text-align:center;height:' + this.height.toString() + 'px;">');

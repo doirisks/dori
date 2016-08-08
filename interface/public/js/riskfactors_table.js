@@ -80,7 +80,6 @@ function riskfactor_list(master) {
         var new_CUIs = [];
         var old_CUIs = [];
         for (var CUI in CUIs) {
-            console.log(CUI);
             if (this.all_CUIs[CUI] == null) {
                 this.all_CUIs[CUI] = CUI;
                 new_CUIs.push(CUI);
@@ -142,7 +141,6 @@ function riskfactor_list(master) {
     // get data from inputs
     this.getInputData = function() {
         var data = {};
-        console.log(this.vis_CUIs);
         for (var i in this.vis_CUIs) {
             var CUI = this.vis_CUIs[i];
             var obj = this.all_CUIs[CUI]["local_obj"];

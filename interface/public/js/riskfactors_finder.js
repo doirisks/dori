@@ -19,7 +19,6 @@ function riskfactor_finder(master) {
     this.get = function(CUI) {
         var CUIs = {};
         CUIs[CUI] = CUI;
-        console.log(CUIs);
         this.master.fetchCUIs(CUIs);
     }
     
@@ -47,7 +46,6 @@ function riskfactor_finder(master) {
                     
                     // unpack reply
                     var data = JSON.parse(reply);
-                    console.log(data);
                     
                     // update the options div
                     master.update_options_div(data);
@@ -69,16 +67,13 @@ function riskfactor_finder(master) {
             $options.html("");
             for (var i in data) {
                 var CUI = data[i];
-                console.log(CUI);
                 var option = document.createElement("p");
                 var button = document.createElement("button");
                 button['CUI'] = CUI['CUI'];
                 var _this = this;
                 $(button).click(function(e) {
                     e.preventDefault();
-                    console.log(this);
                     var CUI = this['CUI'];
-                    console.log( CUI );
                     _this.get(CUI);
                 });
                 button.setAttribute("style","display:inline;");
@@ -89,7 +84,7 @@ function riskfactor_finder(master) {
                 // add the option to DOM
                 $options.append(option);
                 
-                console.log(CUI['CUI'], CUI['name1']);
+                //console.log(CUI['CUI'], CUI['name1']);
             }
         }
         // otherwise, report
