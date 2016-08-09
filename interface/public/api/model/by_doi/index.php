@@ -5,16 +5,16 @@ $str_json = file_get_contents('php://input');
 $posted_array = json_decode($str_json, true);
 
 // make sure that request is valid
-if ( (!isset($posted_array['ids'])) or (!is_array($posted_array['ids'])) or (count($posted_array['ids']) == 0) ) {
-    if ( (!isset($_GET['ids'])) or (!is_array($_GET['ids'])) or (count($_GET['ids']) == 0) ) {
+if ( (!isset($posted_array['DOIs'])) or (!is_array($posted_array['DOIs'])) or (count($posted_array['DOIs']) == 0) ) {
+    if ( (!isset($_GET['DOIs'])) or (!is_array($_GET['DOIs'])) or (count($_GET['DOIs']) == 0) ) {
         $ans['error'] = 'improper request';
         echo json_encode($ans);
         exit();
     }
-    $DOIs = $_GET['ids'];
+    $DOIs = $_GET['DOIs'];
 }
 else {
-    $DOIs = $posted_array['ids'];
+    $DOIs = $posted_array['DOIs'];
 }
 
 // iterate through DOIs
