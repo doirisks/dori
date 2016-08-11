@@ -66,7 +66,7 @@ CREATE TABLE `models` (
   
   `output` varchar(255), /*output category*/
   `outcome` varchar(255),
-  `outcometime` varchar(3),
+  `outcometime` varchar(255),
   `outputCUI` varchar(255),
   `outcomeCUI` varchar(255),
   
