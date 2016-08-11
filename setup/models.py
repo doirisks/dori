@@ -221,17 +221,20 @@ def run_scripts_in(mypath,recurs):
                 ]
 
                 for i in range(len(modvalues)):
-                    if type(modvalues[i]) == type(u"asdf"):
-                        modvalues[i] = str(modvalues[i].replace("'","''"))
+                    try :
+                        modvalues[i] = int(modvalues[i])
+                    except :
+                        escaped = str(modvalues[i].replace("'","''"))
+                        modvalues[i] = """'""" + escaped + """'"""      # quoting for strings
 
                 modcolumns = ["DOI", "papertitle", "modeltitle", "yearofpub", "authors", "must", "mustnot", "mustCUI", "mustnotCUI", "inpname", "inpdesc", "inpCUI", "inpunits", "inpdatatype", "upper", "lower", "output", "outcome", "outcometime", "outputCUI", "outcomeCUI", "filename", "filepointer", "datumname", "datum", "language", "uncompiled", "compiled", "dependList", "example", "model_category", "type", "metric", "value", "lcl", "ucl", "config", "numofinputs"]
                 
                 # credit to Peter Otten: https://mail.python.org/pipermail/tutor/2010-December/080701.html
 
-                columns = ", ".join(modcolumns)
-                values_template = ", ".join(["'%s'"] * len(modcolumns))
+                columns = """`, `""".join(modcolumns)
+                values_template = """, """.join(["%s"] * len(modcolumns)) # strings are quoted previously
 
-                sql = "INSERT INTO models (%s) values (%s)" % (columns, values_template)
+                sql = """INSERT INTO models (`%s`) values (%s)""" % (columns, values_template)
                 values = tuple(modvalues)
                 
                 newtxt = sql % values + ";\n"
