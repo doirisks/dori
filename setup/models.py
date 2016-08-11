@@ -222,7 +222,7 @@ def run_scripts_in(mypath,recurs):
 
                 for i in range(len(modvalues)):
                     if type(modvalues[i]) == type("asdf"):
-                        modvalues[i] = modvalues[i].replace("'","''")
+                        modvalues[i] = str(modvalues[i].replace("'","''"))
 
                 modcolumns = ["DOI", "papertitle", "modeltitle", "yearofpub", "authors", "must", "mustnot", "mustCUI", "mustnotCUI", "inpname", "inpdesc", "inpCUI", "inpunits", "inpdatatype", "upper", "lower", "output", "outcome", "outcometime", "outputCUI", "outcomeCUI", "filename", "filepointer", "datumname", "datum", "language", "uncompiled", "compiled", "dependList", "example", "model_category", "type", "metric", "value", "lcl", "ucl", "config", "numofinputs"]
                 
