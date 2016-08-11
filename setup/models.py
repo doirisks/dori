@@ -159,11 +159,11 @@ def run_scripts_in(mypath,recurs):
         # identify "config_gener" files
         if f[:12] == "config_gener" and f[-3:] == '.py':
             thefile = os.path.join(mypath, f)
-            if thefile[-1] == "\n":
-                thefile = thefile[:-1]
             #print(thefile)
             p = subprocess.Popen(['python', thefile], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             configfile, errors = p.communicate()    # expects the full configfile name returned
+            if configfile[-1] == "\n":
+                configfile = configfile[:-1]
             print errors    # print any errors
             with open(os.path.join(mypath, configfile), 'r') as inpfile :
                 config = json.load(inpfile)
