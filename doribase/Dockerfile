@@ -31,5 +31,6 @@ RUN DEBIAN_FRONTEND=noninteractive /bin/miniconda/bin/conda install -y -c r r
 
 # install non-automatic python libraries
 RUN DEBIAN_FRONTEND=noninteractive /bin/miniconda/bin/conda install -y numpy
+RUN DEBIAN_FRONTEND=noninteractive /bin/miniconda/bin/conda install -y MySQL-python
 RUN DEBIAN_FRONTEND=noninteractive yes | /bin/miniconda/bin/pip install sql # I do not like this hack
 
