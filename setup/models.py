@@ -169,10 +169,7 @@ def run_scripts_in(mypath,recurs):
                 config = json.load(inpfile)
                 
                 # build the query
-                
-                # dump sql config file 
                 import sql
-                models_table = sql.Table('models')
 
                 modvalues = [
                     config['id']['DOI'],
