@@ -84,6 +84,7 @@ import json
 with open(config_name + '.json','w') as output:
     json.dump(config,output)
 
+print config['config']
 # dump sql config file 
 import sql
 models_table = sql.Table('models')
