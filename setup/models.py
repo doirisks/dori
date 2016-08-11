@@ -155,20 +155,95 @@ def run_scripts_in(mypath,recurs):
     onlyfiles.sort()
     notfiles = [f for f in os.listdir(mypath) if ( not os.path.isfile(os.path.join(mypath, f)) and f[0] != '.' )]
     notfiles.sort()
-##############################################################################################################
     for f in onlyfiles:
-        if f[:12] == "config_gener" and f[-3:] == '.py':        # change this line if lines are changed
+        # identify "config_gener" files
+        if f[:12] == "config_gener" and f[-3:] == '.py':
             thefile = os.path.join(mypath, f)
             #print(thefile)
             p = subprocess.Popen(['python', thefile], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            newtxt, newerr = p.communicate()
-            text += newtxt + newerr
-            count += 1
+            configfile, errors = p.communicate()    # expects the full configfile name returned
+            print errors    # print any errors
+            with open(os.path.join(mypath, configfile), 'r') as inpfile :
+                config = json.load(inpfile)
+                
+                # build the query
+                
+                # dump sql config file 
+                import sql
+                models_table = sql.Table('models')
+
+                modvalues = [
+                    config['id']['DOI'],
+                    config['id']['papertitle'],
+                    config['id']['modeltitle'],
+                    config['id']['yearofpub'],
+                    json.dumps(config['id']['authors']),
+                    
+                    json.dumps(config['population']['must']),
+                    json.dumps(config['population']['mustnot']),
+                    json.dumps(config['population']['mustCUI']),
+                    json.dumps(config['population']['mustnotCUI']),
+                    
+                    json.dumps(config['input']['name']),
+                    json.dumps(config['input']['description']),
+                    json.dumps(config['input']['CUI']),
+                    json.dumps(config['input']['units']),
+                    json.dumps(config['input']['datatype']),
+                    json.dumps(config['input']['upper']),
+                    json.dumps(config['input']['lower']),
+                    
+                    config['output']['name'],
+                    config['output']['outcomeName'],
+                    config['output']['outcomeTime'],
+                    config['output']['CUI'],
+                    config['output']['outcomeCUI'],
+                    
+                    json.dumps(config['data']['filename']),
+                    json.dumps(config['data']['fileurl']),
+                    json.dumps(config['data']['datumname']),
+                    json.dumps(config['data']['datum']),
+                    
+                    config['model']['language'],
+                    json.dumps(config['model']['uncompiled']),
+                    json.dumps(config['model']['compiled']),
+                    config['model']['dependList'],
+                    json.dumps(config['model']['example']),
+                    
+                    json.dumps(config['model_category']),
+                    json.dumps(config['predictive_ability']['type']),
+                    json.dumps(config['predictive_ability']['metric']),
+                    json.dumps(config['predictive_ability']['value']),
+                    json.dumps(config['predictive_ability']['lcl']),
+                    json.dumps(config['predictive_ability']['ucl']),
+
+                    config['config'],
+                    
+                    len(config['input']['CUI'])
+                ]
+
+                for i in range(len(modvalues)):
+                    if type(modvalues[i]) == type("asdf"):
+                        modvalues[i] = modvalues[i].replace("'","''")
+
+                modcolumns = ["DOI", "papertitle", "modeltitle", "yearofpub", "authors", "must", "mustnot", "mustCUI", "mustnotCUI", "inpname", "inpdesc", "inpCUI", "inpunits", "inpdatatype", "upper", "lower", "output", "outcome", "outcometime", "outputCUI", "outcomeCUI", "filename", "filepointer", "datumname", "datum", "language", "uncompiled", "compiled", "dependList", "example", "model_category", "type", "metric", "value", "lcl", "ucl", "config", "numofinputs"]
+                
+                # credit to Peter Otten: https://mail.python.org/pipermail/tutor/2010-December/080701.html
+
+                columns = ", ".join(modcolumns)
+                values_template = ", ".join(["'%s'"] * len(modcolumns))
+
+                sql = "INSERT INTO models (%s) values (%s)" % (columns, values_template)
+                values = tuple(modvalues)
+                
+                newtxt = sql % values + ";\n"
+                
+                text += newtxt
+                count += 1
     
     for d in notfiles:
         text += run_scripts_in(os.path.join(mypath,d),recurs+1)
     
-    #print(count)
+    print(count)
     #print
     return(text)
 
