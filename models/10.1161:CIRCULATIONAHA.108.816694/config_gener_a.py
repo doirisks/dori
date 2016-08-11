@@ -75,4 +75,4 @@ import json
 with open(config_name + '.json','w') as output:
     json.dump(config,output)
 
-print config['config']
+print config['config'],
