@@ -66,7 +66,7 @@ CREATE TABLE `models` (
   
   `output` varchar(255), /*output category*/
   `outcome` varchar(255),
-  `outcometime` varchar(3),
+  `outcometime` varchar(8),
   `outputCUI` varchar(255),
   `outcomeCUI` varchar(255),
   
@@ -143,10 +143,10 @@ elif 1 < len(sys.argv):                         # more than one argument
             print 'ERROR: directory invalid'
 """
 
-# runs scripts and returns the sql query as output
+# runs scripts and returns the a list of "rows" for the db
 def run_scripts_in(mypath,recurs):
     if recurs == DEPTH: return ""
-    text = ""
+    rows = []
     count = 0
     #print mypath
     os.chdir(mypath)
@@ -219,42 +219,33 @@ def run_scripts_in(mypath,recurs):
                     
                     len(config['input']['CUI'])
                 ]
-
-                for i in range(len(modvalues)):
-                    try :
-                        modvalues[i] = int(modvalues[i])
-                    except :
-                        escaped = str(modvalues[i].replace("'","''"))
-                        modvalues[i] = """'""" + escaped + """'"""      # quoting for strings
-
-                modcolumns = ["DOI", "papertitle", "modeltitle", "yearofpub", "authors", "must", "mustnot", "mustCUI", "mustnotCUI", "inpname", "inpdesc", "inpCUI", "inpunits", "inpdatatype", "upper", "lower", "output", "outcome", "outcometime", "outputCUI", "outcomeCUI", "filename", "filepointer", "datumname", "datum", "language", "uncompiled", "compiled", "dependList", "example", "model_category", "type", "metric", "value", "lcl", "ucl", "config", "numofinputs"]
+                rows.append(modvalues)
                 
-                # credit to Peter Otten: https://mail.python.org/pipermail/tutor/2010-December/080701.html
-
-                columns = """`, `""".join(modcolumns)
-                values_template = """, """.join(["%s"] * len(modcolumns)) # strings are quoted previously
-
-                sql = """INSERT INTO models (`%s`) values (%s)""" % (columns, values_template)
-                values = tuple(modvalues)
+                # make sure that the outcome time is short enough
+                if len(modvalues[18]) > 8:
+                    modvalues[18] = modvalues[18][:8]
                 
-                newtxt = sql % values + ";\n"
-                
-                text += newtxt
                 count += 1
     
     for d in notfiles:
-        text += run_scripts_in(os.path.join(mypath,d),recurs+1)
+        rows += run_scripts_in(os.path.join(mypath,d),recurs+1)
     
-    print(count)
-    #print
-    return(text)
+    #print(count)
+    return(rows)
 
-# run the scripts and build query
-insert_query = run_scripts_in(START,0)
-insert_query += "COMMIT\n"
+# run the scripts and collect values
+insert_rows = run_scripts_in(START,0)
 
+# build a template
+modcolumns = ["DOI", "papertitle", "modeltitle", "yearofpub", "authors", "must", "mustnot", "mustCUI", "mustnotCUI", "inpname", "inpdesc", "inpCUI", "inpunits", "inpdatatype", "upper", "lower", "output", "outcome", "outcometime", "outputCUI", "outcomeCUI", "filename", "filepointer", "datumname", "datum", "language", "uncompiled", "compiled", "dependList", "example", "model_category", "type", "metric", "value", "lcl", "ucl", "config", "numofinputs"]
+columns = """`, `""".join(modcolumns)
+values_template = """', '""".join(["""'%s'"""] * len(modcolumns)) # strings are quoted previously
+inserttemplate = """INSERT INTO models (`%s`) values ('%s')""" % (columns, values_template)
 
-cur3.execute(insert_query)
+for row in insert_rows:
+    cur3.execute(inserttemplate, *row)
+
+cur3.execute("COMMIT")
 
 # clear result sets (https://github.com/farcepest/MySQLdb1/issues/28)
 #while cur3.nextset():
