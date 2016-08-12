@@ -10,7 +10,7 @@ config = {}
 config['id'] = {}
 config['id']['DOI'] = '10.1007/s11606-007-0498-4'
 config['id']['papertitle'] = 'Prediction of One-Year Survival in High-Risk Patients with Acute Coronary Syndromes: Results from the SYNERGY Trial'
-config['id']['modeltitle'] = '30 Day Mortality Risk'
+config['id']['modeltitle'] = '30 Day Mortality Risk - Table 3'
 config['id']['yearofpub'] = '2008'
 config['id']['authors'] = ["Mahaffey, Kenneth W.", "Yang, Qinghong ", "Pieper, Karen S. ", "Antman, Elliott M.", "White, Harvey D.", "Goodman, Shaun G.", "Cohen, Marc", "Kleiman, Neal S.", "Langer, Anatoly", "Aylward, Philip E.", "Col, Jacques J.", "Reist, Craig ", "Ferguson, James J.", "Califf, Robert M."]
 
@@ -18,32 +18,63 @@ config['id']['authors'] = ["Mahaffey, Kenneth W.", "Yang, Qinghong ", "Pieper, K
 config['population'] = {}
 config['population']['must'] = ['Acute Coronary Syndrome']  # TODO Synergy had fairly complex selection criteria.
                                                             # Inclusion Criteria are all risk factors - unnecessary?
-config['population']['mustnot'] = [''] 
+                                                            # No code for "at least two out of 3"
+config['population']['mustnot'] = ['known or suspected pregnancy', 'elevated international normalized ratio (>1.5)', 'past or present bleeding disorder'] 
+# dis-qualification criteria which could not be "CUIed":
+    #'recent (<48 hours) or planned spinal or epidural anesthesia or puncture', 
+    #'PCI or thrombolytic therapy within the preceding 24 hours', 
+    #'contraindications to unfractionated heparin or LMWH', 
+    #'increased risk for bleeding complications due to recent stroke or surgery', 
+    #'creatinine clearance less than 30 mL/min',  
 config['population']['mustCUI'] = ['C0948089'] 
-config['population']['mustnotCUI'] = [''] 
+config['population']['mustnotCUI'] = ['C0032961 or C0425965', 'C0853225', 'C1458140']
 
 # human and machine readable input descriptions
 config['input'] = {}
 config['input']['name'] = [
+    'Age',
     'Heart Rate', 
     'Weight',
-    'Create Clearance',
+    'Creatin Clearance',
     'Systolic BP',
     'Diastolic BP',
-    "*inclusion criteria*",
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
+    
+    "ST Segment Changes",
+    'Current Smoker',
+    'Enoxaparin User',
+    'Unfractionated Heparin User', 
+    'Baseline Rales',
+    'T-wave inversion on baseline ECG',
+    'Enrollment at a Latin American site',
+    'Prior Congestive Heart Failure',
+    'Prior Myocardial Infarction',
+    'Prior Percutaneous Coronary Intervention',
+    'Cardiac Biomarkers'
 ]
-config['input']['description'] = ['Age', 'Diastolic Blood Pressure', 'Platelets','Albumin','History of Coronary Heart Failure', 'History of Stroke or TIA', 'Asian Ethnicity', 'Black Ethnicity', 'Warfarin', 'Rivaroxaban']
-config['input']['CUI'] = ['C0804405', 'C0488052', 'C1977245', 'C0363892', 'C0018802', 'C0038454 or C0007787', 'C0078988', 'C0005680', 'C1532949', 'C1739768']
-config['input']['units'] = ['years', 'mmHg', '10^9/L', 'g/dL',  '', '', '', '', '', '']
-config['input']['datatype'] = ['float', 'float', 'float', 'float', 'bool', 'bool', 'bool', 'bool', 'bool', 'bool'] 
-config['input']['upper'] = ['', '', '', '', '', '', '', '', '', '']
-config['input']['lower'] = ['18', '', '', '', '', '', '', '', '', '']
+config['input']['description'] = ['Age', 'Heart Rate', 'Weight','Creatin Clearance - Cockcroft-Gault Formula','Systolic BP','Diastolic BP', "ST Segment Changes", 'Current Smoker', 'Enoxaparin User', 'Unfractionated Heparin User',  'Baseline Rales', 'T-wave inversion on baseline ECG', 'Enrollment at a Latin American site', 'Prior Congestive Heart Failure', 'Prior Myocardial Infarction', 'Prior Percutaneous Coronary Intervention', 'Cardiac Biomarkers']
+config['input']['CUI'] = [
+    'C0804405',
+    'C0488794',
+    'C0043100',
+    'C1507751',
+    'C0488055',
+    'C0488052',
+    'C0232326',
+    'C3173209',
+    'C0206460',
+    'C2825026',
+    'C0034642',
+    'C0520888',
+    'C1553378',
+    'C0018802',
+    'C2926063',
+    'C1532338',
+    'C2735102'
+]
+config['input']['units'] = ['years', 'bpm', 'kg', 'mL/min', 'mmHg', 'mmHg', '', '', '', '', '', '', '', '', '', '']
+config['input']['datatype'] = ['float', 'float', 'float', 'float', 'float', 'float', 'bool', 'bool', 'bool', 'bool', 'bool', 'bool', 'bool', 'bool', 'bool', 'bool', 'bool'] 
+config['input']['upper'] = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+config['input']['lower'] = ['30', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
 
 # human and machine readable output descriptions
 config['output'] = {}
@@ -58,7 +89,7 @@ config['data'] = {}
 config['data']['filename'] = [''] 
 config['data']['fileurl'] = ['']  
 config['data']['datumname'] = ['Sample Size']  
-config['data']['datum'] = ['9922'] 
+config['data']['datum'] = ['9978'] 
 
 # model function and dependencies
 config['model'] = {}
