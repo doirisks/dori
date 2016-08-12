@@ -1,5 +1,5 @@
 """
-model_b.py
+model_c.py
 by Ted Morin
 
 contains a function to predict 2.5?-year Intracranial Bleeding risks using Cox Model from
